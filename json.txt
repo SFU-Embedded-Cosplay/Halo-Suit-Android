@@ -11,7 +11,25 @@
     "head temperature":(double),
     "armpits temperature":(double),
     "crotch temperature":(double),
-    "water temperature":(double)
+    "water temperature":(double),
+    "flow rate":(int),
+    "configuration": {
+        "android":(MAC Address(string)),
+        "glass":(MAC Address(string)),
+    }
+    "warnings": {
+        "critical high body temperature": (string),
+        "high body temperature": (string),
+        "critical low body temperature": (string),
+        "low body temperature": (string),
+        "critical high head temperature": (string),
+        "high head temperature": (string),
+        "critical low head temperature": (string),
+        "low head temperature": (string),
+        "high water temperature": (string),
+        "low water temperature": (string),
+        "low flow temperature": (string),
+    }
 }
     
     
