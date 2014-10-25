@@ -12,4 +12,4 @@
 *.rar
 
 #####ETC######################
-*Makefile
+*/Makefile
