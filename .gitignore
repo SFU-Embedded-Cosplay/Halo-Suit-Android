@@ -1,0 +1,14 @@
+# git ignore for halo project repository
+
+#####Compiled Source##########
+*.out
+*.o
+*server_Host
+*server_Target
+
+#####Compresses Files#########
+*.zip
+*.tar
+*.rar
+
+
