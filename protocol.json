@@ -1,0 +1,11 @@
+{
+    "command":"status",
+    "number":0,
+    "source":"Beaglebone",
+    "destination":"android phone",
+    "temperature":22,
+    "cooling rate":10,
+    "streaming":"on",
+    "lights":"on",
+    "peltier":"off"
+}
