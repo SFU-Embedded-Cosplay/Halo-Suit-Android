@@ -1,3 +1,6 @@
+/*
+   beagleblue.c
+*/ 
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
@@ -11,7 +14,7 @@
 #include <string.h>
 #include <pthread.h>
 
-#include "beagleblue.h"
+#include <beagleblue.h>
 //this is hard coded on both ends
 #define ANDROID_PORT 1
 #define GLASS_PORT 2
