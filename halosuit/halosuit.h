@@ -10,8 +10,8 @@ typedef enum _Relay {
 } Relay;
 
 typedef enum _PinState {
-	OFF,
-	ON
+	LOW,
+	HIGH
 } PinState;
 
 typedef enum _Location {
@@ -24,7 +24,10 @@ typedef enum _Location {
 void halosuit_init(); //sets up the file descriptors
 void halosuit_exit(); //closes the file descriptors
 
-void halosuit_relay_switch(Relay, PinState);
-int halosuit_relay_value(Relay);
+//on success returns 0, -1 on failure
+int halosuit_relay_switch(Relay, PinState);
 
-double halosuit_temperature_value(Location);
+//changes value to relays value and returns 0 on success and -1 on failure
+int halosuit_relay_value(Relay, int *value);
+
+int halosuit_temperature_value(Location, double *temp);
