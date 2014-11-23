@@ -13,6 +13,9 @@
 #include <stdbool.h>
 #include <string.h>
 #include <pthread.h>
+#include <sys/time.h>
+#include <sys/types.h>
+
 
 #include <beagleblue.h>
 //this is hard coded on both ends
