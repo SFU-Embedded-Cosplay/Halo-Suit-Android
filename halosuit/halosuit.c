@@ -1,6 +1,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <stdio.h>
 #include <unistd.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -23,8 +24,8 @@ static double analog_to_temperature(char *string)
 {  
 	int value = atoi(string); 
 	double millivolts = (value / 4096.0) * 1800;  
-	double temperature = (millivolts - 500.0) / 10.0;  
-	return temperature;  
+	double temp = (millivolts - 500.0) / 10.0;  
+	return temp;  
 }
 
 void halosuit_init()
@@ -124,36 +125,42 @@ void halosuit_exit()
 	}
 }
 
-int halosuit_relay_switch(Relay r, PinState ps)
+int halosuit_relay_switch(int r, int ps)
 {
 	if (is_initialized) {
 		if (ps == HIGH) {
 			write(relay[r], "1", 1);
+			lseek(relay[r], 0, 0);
 		} else if (ps == LOW) {
 			write(relay[r], "0", 1);
+			lseek(relay[r], 0, 0);
+		} else {
+			return -1;
 		}
 		return 0;
 	}
 	return -1;
 }
 
-int halosuit_relay_value(Relay r, int *value)
+int halosuit_relay_value(int r, int *value)
 {
 	if (is_initialized) {
 		char buf[2] = { 0 };
 		read(relay[r], buf, 1);
 		*value = atoi(buf);
+		lseek(relay[r], 0, 0);
 		return 0;
 	}
 	return -1;
 }
 
-int halosuit_temperature_value(Location l, double *temp)
+int halosuit_temperature_value(int location, double *temp)
 {
 	if (is_initialized) {
 		char buf[5] = { 0 };
-		read(temperature[l], buf, 4);
+		read(temperature[location], buf, 4);
 		*temp = analog_to_temperature(buf);
+		lseek(temperature[location], 0, 0);
 		return 0;
 	}
 	return -1;
