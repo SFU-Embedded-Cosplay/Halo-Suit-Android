@@ -3,8 +3,8 @@
 #include <string.h>
 #include <math.h>
 
-#include "beagleblue/beagleblue.h"
-#include "halosuit/halosuit.h"
+#include <beagleblue.h>
+#include <halosuit.h>
 
 void callback(char *buf)
 {

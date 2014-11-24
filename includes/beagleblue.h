@@ -3,8 +3,7 @@
  *
  */
 
-#define TIMEOUT_SEC 5
-#define TIMEOUT_USEC 0
+#define TIMEOUT 5 //represents a given timeout in seconds. timeouts occur on the send thread which forces a reconnect
 #define BUFFER_SIZE 1024
 
 int beagleblue_glass_send(char *); //sends char buffer with int specifying the number of characters returns the number of bytes sent

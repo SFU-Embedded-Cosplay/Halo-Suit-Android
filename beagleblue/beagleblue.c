@@ -32,7 +32,8 @@ static bool android_is_sending = false;
 static bool glass_is_sending = false;
 
 static bool beagleblue_is_done;
-static bool beagleblue_is_connected = false;
+static bool android_is_connected = false;
+static bool glass_is_connected = false;
 
 static pthread_t android_recv_thread_id;
 static pthread_t android_send_thread_id;
@@ -86,76 +87,108 @@ static void beagleblue_connect(int *sock, int *client, uint8_t channel)
     *client = accept(*sock, (struct sockaddr *)&rem_addr, &opt);
 
     ba2str( &rem_addr.rc_bdaddr, buf );
-    fprintf(stdout, "accepted connection from %s", buf);
+    fprintf(stdout, "accepted connection from %s\n", buf);
     fflush(stdout);
 }
 
 static void *android_recv_thread(void *callback)
 {
 	void (*on_receive)(char *) = callback;
-	fd_set fds;
+	fd_set file_descriptors;
 	//init up here
 	while(!beagleblue_is_done) {
-		memset(android_recv_buffer, 0, BUFFER_SIZE); //clear the buffer
+		while(android_is_connected) {
+			memset(android_recv_buffer, 0, BUFFER_SIZE); //clear the buffer
 
-		struct timeval timeout;
-		timeout.tv_sec = TIMEOUT_SEC;
-		timeout.tv_usec = TIMEOUT_USEC;
-
-		FD_ZERO(&fds);
-		FD_SET(android_client, &fds);
-		select(FD_SETSIZE, &fds, NULL, NULL, &timeout);
-
-		if (FD_ISSET(android_client, &fds)) {
-			recv(android_client, android_recv_buffer, 16, 0);
-			on_receive(android_recv_buffer);
+			if (recv(android_client, android_recv_buffer, 16, MSG_DONTWAIT) != -1) {
+				on_receive(android_recv_buffer);
+			}
 		}
 	}
+	return NULL;
 }
 
 static void *android_send_thread()
 {
 	while(!beagleblue_is_done) {
-		if (android_is_sending) {
-			send(android_client, android_send_buffer, strlen(android_send_buffer), 0);
-			android_is_sending = false;
-			pthread_mutex_unlock(&android_send_mutex);
+		while(android_is_connected) {
+			if (android_is_sending) {
+				int start_time = time(NULL);
+				int current_time = start_time;
+				while (current_time - start_time < TIMEOUT) {
+					if(send(android_client, android_send_buffer, strlen(android_send_buffer), MSG_DONTWAIT) == -1) {
+						current_time = time(NULL);
+					} else {
+						break;
+					}
+				}
+				if (current_time - start_time == TIMEOUT) {
+					printf("Android Timed Out\n");
+					fflush(stdout);
+					android_is_connected = false;
+					close(android_sock);
+					close(android_client);
+					set_bluetooth_mode(SCAN_PAGE);
+					beagleblue_connect(&android_sock, &android_client, ANDROID_PORT);
+					set_bluetooth_mode(SCAN_DISABLED);
+					android_is_connected = true;
+				}
+				android_is_sending = false;
+				pthread_mutex_unlock(&android_send_mutex);
+			}
 		}
 	}
+	return NULL;
 }
 
 static void *glass_recv_thread(void *callback)
 {
 	void (*on_receive)(char *) = callback;
-	fd_set fds;
+	fd_set file_descriptors;
 	//init up here
 	while(!beagleblue_is_done) {
-		memset(glass_recv_buffer, 0, BUFFER_SIZE); //clear the buffer
+		while(glass_is_connected) {
+			memset(glass_recv_buffer, 0, BUFFER_SIZE); //clear the buffer
 
-		struct timeval timeout;
-		timeout.tv_sec = TIMEOUT_SEC;
-		timeout.tv_usec = TIMEOUT_USEC;
-
-		FD_ZERO(&fds);
-		FD_SET(glass_client, &fds);
-		select(FD_SETSIZE, &fds, NULL, NULL, &timeout);
-
-		if (FD_ISSET(glass_client, &fds)) {
-			recv(glass_client, glass_recv_buffer, BUFFER_SIZE, MSG_DONTWAIT);
-			on_receive(glass_recv_buffer);
+			if (recv(glass_client, glass_recv_buffer, BUFFER_SIZE, MSG_DONTWAIT) != -1) {
+				on_receive(glass_recv_buffer);
+			}
 		}
 	}
+	return NULL;
 }
 
 static void *glass_send_thread()
 {
 	while(!beagleblue_is_done) {
-		if (glass_is_sending) {
-			send(glass_client, glass_send_buffer, strlen(glass_send_buffer), 0);
-			android_is_sending = false;	
-			pthread_mutex_unlock(&glass_send_mutex);
+		while(android_is_connected) {
+			if (glass_is_sending) {
+				int start_time = time(NULL);
+				int current_time = start_time;
+				while (current_time - start_time < TIMEOUT) {
+					if(send(glass_client, glass_send_buffer, strlen(glass_send_buffer), MSG_DONTWAIT) == -1) {
+						current_time = time(NULL);
+					} else {
+						break;
+					}
+				}
+				if (current_time - start_time == TIMEOUT) {
+					printf("Glass Timed Out\n");
+					fflush(stdout);
+					glass_is_connected = false;
+					close(glass_sock);
+					close(glass_client);
+					set_bluetooth_mode(SCAN_PAGE);
+					beagleblue_connect(&glass_sock, &glass_client, GLASS_PORT);
+					set_bluetooth_mode(SCAN_DISABLED);
+					glass_is_connected = true;
+				}
+				glass_is_sending = false;
+				pthread_mutex_unlock(&glass_send_mutex);
+			}
 		}
 	}
+	return NULL;
 }
 
 void beagleblue_init(void (*on_receive)(char *))
@@ -164,12 +197,14 @@ void beagleblue_init(void (*on_receive)(char *))
 	set_bluetooth_mode(SCAN_INQUIRY | SCAN_PAGE);
 	printf("Bluetooth Discoverable\n");
 	beagleblue_connect(&android_sock, &android_client, ANDROID_PORT);
+	android_is_connected = true;
 	//beagleblue_connect(&glass_sock, &glass_client, GLASS_PORT);
-	set_bluetooth_mode(SCAN_DISABLED);
 	pthread_create(&android_send_thread_id, NULL, &android_send_thread, NULL);
 	pthread_create(&android_recv_thread_id, NULL, &android_recv_thread, on_receive);
-	//pthread_create(&glass_send_thread_id, NULL, &glass_send_thread, NULL);
-	//pthread_create(&glass_recv_thread_id, NULL, &glass_recv_thread, on_receive);
+	// pthread_create(&glass_send_thread_id, NULL, &glass_send_thread, NULL);
+	// pthread_create(&glass_recv_thread_id, NULL, &glass_recv_thread, on_receive);
+	//beagleblue_connect(&glass_sock, &glass_client, GLASS_PORT);
+	set_bluetooth_mode(SCAN_DISABLED);
 	return;
 }
 
