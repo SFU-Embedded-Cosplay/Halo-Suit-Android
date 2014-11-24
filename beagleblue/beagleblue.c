@@ -216,24 +216,30 @@ void beagleblue_exit()
 
 int beagleblue_glass_send(char *buf)
 {
-	//gets unlocked inside the glass send thread
-	pthread_mutex_lock(&glass_send_mutex);
+	if (glass_is_connected) {
+		//gets unlocked inside the glass send thread
+		pthread_mutex_lock(&glass_send_mutex);
 		memset(glass_send_buffer, 0, BUFFER_SIZE);
 		strncpy(glass_send_buffer, buf, BUFFER_SIZE);
 		glass_is_sending = true;
 		//needs to be thread safe
 
-	return 0;
+		return 0;
+	}
+	return -1;
 }
 
 int beagleblue_android_send(char *buf)
 {
-	//gets unlock inside android send thread
-	pthread_mutex_lock(&android_send_mutex);
-	memset(android_send_buffer, 0, BUFFER_SIZE);
+	if (android_is_connected) {
+		//gets unlock inside android send thread
+		pthread_mutex_lock(&android_send_mutex);
+		memset(android_send_buffer, 0, BUFFER_SIZE);
 		strncpy(android_send_buffer, buf, BUFFER_SIZE);
 		android_is_sending = true; //modify to be thread safe
-	return 0;
+		return 0;
+	}
+	return -1;
 }
 
 void beagleblue_join()
