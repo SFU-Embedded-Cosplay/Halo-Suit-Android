@@ -7,7 +7,11 @@
     "head fans":("on","off"),
     "water pump":("on","off"),
     "water fan":("on","off"),
-    "peltier":("on","off")
+    "peltier":("on","off"),
+    "head temperature":(double),
+    "arpits temperature":(double),
+    "crotch temperature":(double),
+    "water temperature":(double)
 }
     
     
