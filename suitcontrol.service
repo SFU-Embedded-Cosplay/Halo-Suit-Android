@@ -1,0 +1,12 @@
+[Unit]
+Description=runs a server controls pins via bluetooth commands
+
+[Service]
+WorkingDirectory=/usr/bin/
+ExecStart=./suitcontroller_Host.c
+SyslogIdentifier=suitcontroller
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
