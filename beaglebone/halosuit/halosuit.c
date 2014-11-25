@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#include "halosuit.h"
+#include <halosuit/halosuit.h>
 
 #define NUMBER_OF_RELAYS 8
 #define NUMBER_OF_TEMP_SENSORS 4

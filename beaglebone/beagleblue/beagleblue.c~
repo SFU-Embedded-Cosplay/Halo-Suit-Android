@@ -216,17 +216,14 @@ void beagleblue_exit()
 
 int beagleblue_glass_send(char *buf)
 {
-	if (glass_is_connected) {
-		//gets unlocked inside the glass send thread
-		pthread_mutex_lock(&glass_send_mutex);
+	//gets unlocked inside the glass send thread
+	pthread_mutex_lock(&glass_send_mutex);
 		memset(glass_send_buffer, 0, BUFFER_SIZE);
 		strncpy(glass_send_buffer, buf, BUFFER_SIZE);
 		glass_is_sending = true;
 		//needs to be thread safe
 
-		return 0;
-	}
-	return -1;
+	return 0;
 }
 
 int beagleblue_android_send(char *buf)

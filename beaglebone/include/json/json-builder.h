@@ -34,7 +34,7 @@
 /* Requires json.h from json-parser
  * https://github.com/udp/json-parser
  */
-#include <json.h>
+#include <json/json.h>
 
 #ifdef __cplusplus
 extern "C"
