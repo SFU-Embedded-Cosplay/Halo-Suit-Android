@@ -9,7 +9,7 @@
     "water fan":("on","off"),
     "peltier":("on","off"),
     "head temperature":(double),
-    "arpits temperature":(double),
+    "armpits temperature":(double),
     "crotch temperature":(double),
     "water temperature":(double)
 }
