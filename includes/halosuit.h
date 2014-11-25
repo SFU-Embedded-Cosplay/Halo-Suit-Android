@@ -1,3 +1,9 @@
+/*
+    halosuit.h
+*/
+#ifndef HALOSUIT
+#define HALOSUIT
+
 #define	LIGHTS            	0	//GPIO 66
 #define	LIGHTS_AUTO       	1 	//GPIO 67
 #define	HEADLIGHTS_WHITE  	2   //GPIO 68  
@@ -27,3 +33,5 @@ int halosuit_relay_switch(int relay, int state);
 int halosuit_relay_value(int relay, int *value);
 
 int halosuit_temperature_value(int location, double *temp);
+
+#endif

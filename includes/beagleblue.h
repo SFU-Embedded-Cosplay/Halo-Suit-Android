@@ -2,6 +2,8 @@
  * beagleblue.h
  *
  */
+#ifndef BEAGLEBLUE
+#define BEAGLEBLUE
 
 #define TIMEOUT 5 //represents a given timeout in seconds. timeouts occur on the send thread which forces a reconnect
 #define BUFFER_SIZE 1024
@@ -16,3 +18,5 @@ void beagleblue_join(); //waits for threads to join
  * Hey guys let me know what you think of this given functionality
  * I can easily change anything
  */
+
+#endif

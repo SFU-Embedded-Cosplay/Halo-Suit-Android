@@ -5,6 +5,6 @@
 #ifndef PARSER
 #define PARSER
 
-void Parser_parse(char* jsonText);
+void parser_parse(char* jsonText);
 
 #endif

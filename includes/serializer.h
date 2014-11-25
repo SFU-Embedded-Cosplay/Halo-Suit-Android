@@ -6,8 +6,6 @@
 #ifndef SERIALIZER
 #define SERIALIZER
 
-#define STATUS_FREQUENCY 500 // in msec
-
-void* Serializer_serialize();
+void serializer_serialize();
 
 #endif
