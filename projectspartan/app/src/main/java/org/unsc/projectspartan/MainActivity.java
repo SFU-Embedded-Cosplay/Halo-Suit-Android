@@ -27,10 +27,10 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
-        tv0 = (TextView) findViewById(R.id.temp0);
-        tv1 = (TextView) findViewById(R.id.temp1);
-        tv2 = (TextView) findViewById(R.id.temp2);
-        tv3 = (TextView) findViewById(R.id.temp3);
+        tv0 = (TextView) findViewById(R.id.head_temp);
+        tv1 = (TextView) findViewById(R.id.armpits_temp);
+        tv2 = (TextView) findViewById(R.id.crotch_temp);
+        tv3 = (TextView) findViewById(R.id.water_temp);
         mDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
         new connectToHost().start();
@@ -70,10 +70,10 @@ public class MainActivity extends Activity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                tv0.setText(String.format(" %.1f", temp0));
-                                tv1.setText(String.format(" %.1f", temp1));
-                                tv2.setText(String.format(" %.1f", temp2));
-                                tv3.setText(String.format(" %.1f", temp3));
+                                tv0.setText(String.format("Head    %4.1f C", temp0));
+                                tv1.setText(String.format("Armpits %4.1f C", temp1));
+                                tv2.setText(String.format("Crotch  %4.1f C", temp2));
+                                tv3.setText(String.format("Water   %4.1f C", temp3));
                             }
                         });
                     }
@@ -135,10 +135,9 @@ public class MainActivity extends Activity {
         }
     }
 
-    public void headlightsOn(View view) {
+    public void whiteHeadlightsOn(View view) {
         try {
             JSONObject j = new JSONObject();
-            j.put("head lights red", "on");
             j.put("head lights white", "on");
             mSocket.getOutputStream().write(j.toString().getBytes());
         } catch (Exception e) {
@@ -146,10 +145,9 @@ public class MainActivity extends Activity {
         }
     }
 
-    public void headlightsOff(View view) {
+    public void whiteHeadlightsOff(View view) {
         try {
             JSONObject j = new JSONObject();
-            j.put("head lights red", "off");
             j.put("head lights white", "off");
             mSocket.getOutputStream().write(j.toString().getBytes());
         } catch (Exception e) {
@@ -157,12 +155,29 @@ public class MainActivity extends Activity {
         }
     }
 
-    public void coolingOn(View view) {
+    public void redHeadlightsOn(View view) {
         try {
             JSONObject j = new JSONObject();
-            j.put("peltier", "on");
-            j.put("water fan", "on");
-            j.put("water pump", "on");
+            j.put("head lights red", "on");
+            mSocket.getOutputStream().write(j.toString().getBytes());
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void redHeadlightsOff(View view) {
+        try {
+            JSONObject j = new JSONObject();
+            j.put("head lights red", "off");
+            mSocket.getOutputStream().write(j.toString().getBytes());
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void headFanOn(View view) {
+        try {
+            JSONObject j = new JSONObject();
             j.put("head fans", "on");
             mSocket.getOutputStream().write(j.toString().getBytes());
         } catch (Exception e) {
@@ -170,13 +185,52 @@ public class MainActivity extends Activity {
         }
     }
 
-    public void coolingOff(View view) {
+    public void headFanOff(View view) {
+        try {
+            JSONObject j = new JSONObject();
+            j.put("head fans", "off");
+            mSocket.getOutputStream().write(j.toString().getBytes());
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void pumpOn(View view) {
+        try {
+            JSONObject j = new JSONObject();
+            j.put("water pump", "on");
+            j.put("water fan", "on");
+            mSocket.getOutputStream().write(j.toString().getBytes());
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void pumpOff(View view) {
+        try {
+            JSONObject j = new JSONObject();
+            j.put("water pump", "off");
+            j.put("water fan", "off");
+            mSocket.getOutputStream().write(j.toString().getBytes());
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void peltierOn(View view) {
+        try {
+            JSONObject j = new JSONObject();
+            j.put("peltier", "on");
+            mSocket.getOutputStream().write(j.toString().getBytes());
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void peltierOff(View view) {
         try {
             JSONObject j = new JSONObject();
             j.put("peltier", "off");
-            j.put("water fan", "off");
-            j.put("water pump", "off");
-            j.put("head fans", "off");
             mSocket.getOutputStream().write(j.toString().getBytes());
         } catch (Exception e) {
 
