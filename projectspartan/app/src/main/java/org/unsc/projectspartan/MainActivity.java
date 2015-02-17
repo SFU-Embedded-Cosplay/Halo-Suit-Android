@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.UUID;
 
 
 public class MainActivity extends Activity {
@@ -31,6 +32,7 @@ public class MainActivity extends Activity {
         tv1 = (TextView) findViewById(R.id.armpits_temp);
         tv2 = (TextView) findViewById(R.id.crotch_temp);
         tv3 = (TextView) findViewById(R.id.water_temp);
+
         mDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
         new connectToHost().start();
@@ -42,11 +44,13 @@ public class MainActivity extends Activity {
             try {
                 Method m = mDevice.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
                 mSocket = (BluetoothSocket) m.invoke(mDevice, 1);
+//                mSocket = mDevice.createInsecureRfcommSocketToServiceRecord(UUID.fromString("00000000-0000-0000-0000-00000000ABCD"));
                 mSocket.connect();
-                //Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_LONG).show();
                 new receivingThread().start();
             } catch (Exception e) {
-
+                int x = 0;
+                //Toast.makeText(getApplicationContext(), "Did Not Connect", Toast.LENGTH_LONG).show();
             }
         }
     }
