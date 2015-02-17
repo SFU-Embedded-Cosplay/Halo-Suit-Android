@@ -20,16 +20,19 @@
             android:layout_height="match_parent" />
             <Button
                 android:id="@+id/menubutton2"
+                android:onClick="lighting"
                 android:text="@string/menu_item_2"
                 android:layout_width="600px"
                 android:layout_height="match_parent" />
             <Button
                 android:id="@+id/menubutton3"
+                android:onClick="radar"
                 android:text="@string/menu_item_3"
                 android:layout_width="600px"
                 android:layout_height="match_parent" />
             <Button
                 android:id="@+id/menubutton4"
+                android:onClick="settings"
                 android:text="@string/menu_item_4"
                 android:layout_width="600px"
                 android:layout_height="match_parent" />
