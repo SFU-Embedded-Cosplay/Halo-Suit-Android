@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,13 +44,14 @@ public class MainActivity extends Activity {
         public void run() {
             try {
                 Method m = mDevice.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
-                mSocket = (BluetoothSocket) m.invoke(mDevice, 1);
+                Log.d("Device", mDevice.getName() + " " + mDevice.getAddress());
+                mSocket = (BluetoothSocket) m.invoke(mDevice, Integer.valueOf(3));
 //                mSocket = mDevice.createInsecureRfcommSocketToServiceRecord(UUID.fromString("00000000-0000-0000-0000-00000000ABCD"));
                 mSocket.connect();
                 Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_LONG).show();
                 new receivingThread().start();
             } catch (Exception e) {
-                int x = 0;
+                Log.e("", e.getLocalizedMessage());
                 //Toast.makeText(getApplicationContext(), "Did Not Connect", Toast.LENGTH_LONG).show();
             }
         }
