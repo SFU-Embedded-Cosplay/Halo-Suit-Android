@@ -1,10 +1,103 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.haloproject.projectspartanv2.SettingsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <ListView
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/btdevices"
+        android:layout_alignParentStart="true"
+        android:headerDividersEnabled="false"
+        android:background="#aa000000"
+        android:layout_alignBottom="@+id/radioGroup"
+        android:layout_below="@+id/switch1" />
 
-</FrameLayout>
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:paddingTop="16dp"
+        android:id="@+id/switch1"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/btdevices"
+        android:textOn="Bluetooth On"
+        android:textOff="Bluetooth Off"
+        android:text="Bluetooth" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lock Configuration"
+        android:id="@+id/configure"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Discovery"
+        android:id="@+id/discover"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/switch1" />
+
+    <RadioGroup
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/discover"
+        android:layout_toEndOf="@+id/btdevices"
+        android:layout_above="@+id/configure"
+        android:id="@+id/radioGroup">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set BeagleBone"
+            android:id="@+id/setbeaglebone"
+            android:checked="false" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Bluetooth"
+            android:id="@+id/beaglebone"
+            android:layout_gravity="center_horizontal"
+            android:textSize="20dp" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set Google Glass"
+            android:id="@+id/setgoogleglass"
+            android:checked="false" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Bluetooth"
+            android:id="@+id/googleglass"
+            android:layout_gravity="center_horizontal"
+            android:textSize="20dp" />
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10px"
+        android:paddingLeft="20px"
+        android:text="Bluetooth Devices"
+        android:id="@+id/textView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:textSize="20dp" />
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/connected"
+        android:layout_below="@+id/btdevices"
+        android:layout_alignParentStart="true"
+        android:checked="false"
+        android:text="Connected" />
+
+</RelativeLayout>
