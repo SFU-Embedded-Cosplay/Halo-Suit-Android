@@ -1,5 +1,7 @@
 package com.haloproject.projectspartanv2;
 
+import android.bluetooth.BluetoothSocket;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.os.Handler;
@@ -11,20 +13,25 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.haloproject.projectspartanv2.R;
+
+import org.json.JSONObject;
 
 
 public class MainActivity extends ActionBarActivity {
     static private FragmentManager mFragmentManager;
+    private BluetoothSocket mSocket;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new LoadFragment())
-                    .commit();
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.container, new MainFragment())
+                        .commit();
         }
         mFragmentManager = getSupportFragmentManager();
     }
@@ -75,33 +82,12 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    static public class LoadFragment extends Fragment {
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            // Inflate the layout for this fragment
-            return inflater.inflate(R.layout.fragment_load, container, false);
-        }
-
-        @Override
-        public void onStart() {
-            super.onStart();
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mFragmentManager.beginTransaction().replace(R.id.container, new MainFragment()).commit();
-                }
-            }, 1000);
-        }
-    }
-
     static public class LightingFragment extends Fragment {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             // Inflate the layout for this fragment
-            return inflater.inflate(R.layout.fragment_main, container, false);
+            return inflater.inflate(R.layout.fragment_lighting, container, false);
         }
     }
 
@@ -110,7 +96,7 @@ public class MainActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             // Inflate the layout for this fragment
-            return inflater.inflate(R.layout.fragment_main, container, false);
+            return inflater.inflate(R.layout.fragment_radar, container, false);
         }
     }
 
@@ -127,7 +113,7 @@ public class MainActivity extends ActionBarActivity {
     static public class CoolingFragment extends Fragment {
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.fragment_settings, container, false);
+            return inflater.inflate(R.layout.fragment_cooling, container, false);
         }
     }
 
@@ -137,4 +123,6 @@ public class MainActivity extends ActionBarActivity {
             return inflater.inflate(R.layout.fragment_settings, container, false);
         }
     }
+
+
 }
