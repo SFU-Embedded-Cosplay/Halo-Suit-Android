@@ -28,13 +28,11 @@ public class AndroidBlue {
     private BluetoothSocket mSocket;
     private BluetoothAdapter mAdapter;
     private ArrayAdapter<BluetoothDevice> mDevices;
-    private BluetoothDevice mDevice;
     private final int REQUEST_ENABLE_BT = 13;
     private ArrayAdapter<String> mDeviceStrings;
     private Runnable onConnect;
     private Runnable onReceive;
     private BluetoothDevice mBeagleBone;
-    private BluetoothDevice mGoogleGlass;
     private JSONObject mJSON;
     private Handler mHandler;
     static private AndroidBlue mAndroidBlue = null;
@@ -141,14 +139,6 @@ public class AndroidBlue {
         return false;
     }
 
-    public boolean setDevice(int pos) {
-        if (pos < mDevices.getCount()) {
-            mDevice = mDevices.getItem(pos);
-            return true;
-        }
-        return false;
-    }
-
     public boolean setBeagleBone(int pos) {
         if (pos < mDevices.getCount()) {
             mBeagleBone = mDevices.getItem(pos);
@@ -157,20 +147,17 @@ public class AndroidBlue {
         return false;
     }
 
-    public boolean setGoogleGlass(int pos) {
-        if (pos < mDevices.getCount()) {
-            mGoogleGlass = mDevices.getItem(pos);
+    public boolean setBeagleBone(String device) {
+        try {
+            mBeagleBone = mAdapter.getRemoteDevice(device);
             return true;
+        } catch (IllegalArgumentException e) {
+            return false;
         }
-        return false;
     }
 
     public BluetoothDevice getBeagleBone() {
         return mBeagleBone;
-    }
-
-    public BluetoothDevice getGoogleGlass() {
-        return mGoogleGlass;
     }
 
     public void connect() {
@@ -180,18 +167,33 @@ public class AndroidBlue {
     public boolean sendConfiguration() {
         if (isConnected()) {
             try {
-                JSONObject configuration = new JSONObject();
-                if (mGoogleGlass != null) {
-                    JSONObject googleglass = new JSONObject();
-                    googleglass.put("glass", mGoogleGlass.getAddress());
-                    configuration.put("configuration", googleglass);
+                if (mBeagleBone != null) {
+                    JSONObject configuration = new JSONObject();
+
+                    JSONObject android = new JSONObject();
+                    android.put("android", mAdapter.getAddress());
+                    configuration.put("configuration", android);
+
+                    mSocket.getOutputStream().write(configuration.toString().getBytes());
                 }
+            } catch (Exception e) {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
 
-                JSONObject android = new JSONObject();
-                android.put("android", mAdapter.getAddress());
-                configuration.put("configuration", android);
-
-                mSocket.getOutputStream().write(configuration.toString().getBytes());
+    public boolean sendDeConfiguration() {
+        if (isConnected()) {
+            try {
+                if (mBeagleBone != null) {
+                    JSONObject deconfiguration = new JSONObject();
+                    JSONObject android = new JSONObject();
+                    android.put("android", "delete");
+                    deconfiguration.put("configuration", android);
+                    mSocket.getOutputStream().write(deconfiguration.toString().getBytes());
+                }
             } catch (Exception e) {
                 return false;
             }
@@ -203,10 +205,10 @@ public class AndroidBlue {
     private class ConnectRunnable implements Runnable {
         @Override
         public void run() {
-            if (mDevice != null) {
+            if (mBeagleBone != null) {
                 try {
-                    Method m = mDevice.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
-                    mSocket = (BluetoothSocket) m.invoke(mDevice, 3);
+                    Method m = mBeagleBone.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
+                    mSocket = (BluetoothSocket) m.invoke(mBeagleBone, 3);
 
                     mSocket.connect();
 
@@ -217,7 +219,7 @@ public class AndroidBlue {
                     mActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(mContext, "Could Not Connect to " + mDevice, Toast.LENGTH_LONG).show();
+                            Toast.makeText(mContext, "Could Not Connect to " + mBeagleBone, Toast.LENGTH_LONG).show();
                         }
                     });
 

@@ -1,10 +1,13 @@
 package com.haloproject.projectspartanv2;
 
+import android.bluetooth.BluetoothAdapter;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,7 +19,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +30,7 @@ public class MainActivity extends ActionBarActivity {
     static private AndroidBlue mAndroidBlue;
     final int TOTAL_SWIPE_FRAGMENTS = 4;
     static private int currentFragment; //-1 means its at main menu
+    static private SharedPreferences mPreferences;
     private float x1, x2, y1, y2;
 
     @Override
@@ -43,6 +46,14 @@ public class MainActivity extends ActionBarActivity {
         AndroidBlue.setContext(getApplicationContext());
         AndroidBlue.setActivity(this);
         mAndroidBlue = AndroidBlue.getInstance();
+        mPreferences = getPreferences(MODE_PRIVATE);
+        if (mPreferences.contains("bluetooth")) {
+            String device = mPreferences.getString("bluetooth", "");
+            if (mAndroidBlue.setBeagleBone(device)) {
+                mAndroidBlue.connect();
+                Log.d("conected", "misplelling");
+            }
+        }
         currentFragment = -1;
     }
 
@@ -87,7 +98,7 @@ public class MainActivity extends ActionBarActivity {
     private Fragment swipeFragment(int fragment) {
         switch (fragment) {
             case 0:
-                return new CoolingFragment();
+                return new VitalsFragment();
             case 1:
                 return new LightingFragment();
             case 2:
@@ -178,10 +189,10 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    static public class CoolingFragment extends Fragment {
+    static public class VitalsFragment extends Fragment {
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            final View view = inflater.inflate(R.layout.fragment_cooling, container, false);
+            final View view = inflater.inflate(R.layout.fragment_vitals, container, false);
 
             mAndroidBlue.setOnReceive(new Runnable() {
                 @Override
@@ -202,10 +213,10 @@ public class MainActivity extends ActionBarActivity {
 
     static public class SettingsFragment extends Fragment {
         private ListView btdevices;
-        //private ArrayAdapter<BluetoothDevice> mArrayAdapter;
         private Switch switch1;
         private Button discover;
         private Button configure;
+        private Button deconfigure;
         private View view;
         private RadioButton connected;
 
@@ -228,18 +239,8 @@ public class MainActivity extends ActionBarActivity {
             btdevices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                    RadioGroup group = ((RadioGroup) view.findViewById(R.id.radioGroup));
-                    RadioButton bb   = ((RadioButton) group.findViewById(R.id.setbeaglebone));
-                    RadioButton gg   = ((RadioButton) group.findViewById(R.id.setgoogleglass));
-                    if (bb.isChecked()) {
-                        mAndroidBlue.setBeagleBone(position);
-                        ((TextView)view.findViewById(R.id.beaglebone)).setText(mAndroidBlue.getBeagleBone().getAddress());
-                        if (mAndroidBlue.setDevice(position)) {
-                            mAndroidBlue.connect();
-                        }
-                    } else if (gg.isChecked()) {
-                        mAndroidBlue.setGoogleGlass(position);
-                        ((TextView)view.findViewById(R.id.googleglass)).setText(mAndroidBlue.getGoogleGlass().getAddress());
+                    if (mAndroidBlue.setBeagleBone(position)) {
+                        mAndroidBlue.connect();
                     }
                 }
             });
@@ -283,10 +284,22 @@ public class MainActivity extends ActionBarActivity {
             configure.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mAndroidBlue.sendConfiguration();
+                    if (mAndroidBlue.sendConfiguration()) {
+                        mPreferences.edit().putString("bluetooth", mAndroidBlue.getBeagleBone().getAddress()).commit();
+                    }
                 }
             });
-
+            deconfigure = (Button) view.findViewById(R.id.deconfigure);
+            deconfigure.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mAndroidBlue.sendDeConfiguration()) {
+                        if (mPreferences.contains("bluetooth")) {
+                            mPreferences.edit().remove("bluetooth").commit();
+                        }
+                    }
+                }
+            });
             return view;
         }
 
