@@ -1,10 +1,8 @@
 package com.haloproject.projectspartanv2;
 
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.Fragment;
+import android.app.FragmentManager;
+import android.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ListView;
@@ -33,26 +30,26 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mFragmentManager = getFragmentManager();
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
-                getSupportFragmentManager().beginTransaction()
+                mFragmentManager.beginTransaction()
                         .add(R.id.container, new MainFragment())
                         .commit();
         }
         AndroidBlue.setContext(getApplicationContext());
         AndroidBlue.setActivity(this);
         mAndroidBlue = AndroidBlue.getInstance();
-        mFragmentManager = getSupportFragmentManager();
     }
 
     public void tempCool(View view) {
-        getSupportFragmentManager().beginTransaction()
+        mFragmentManager.beginTransaction()
                 .replace(R.id.container, new CoolingFragment())
                 .addToBackStack("test").commit();
     }
 
     public void settings(View view) {
-        getSupportFragmentManager().beginTransaction()
+        mFragmentManager.beginTransaction()
                 .replace(R.id.container, new SettingsFragment())
                 .addToBackStack("test").commit();
     }

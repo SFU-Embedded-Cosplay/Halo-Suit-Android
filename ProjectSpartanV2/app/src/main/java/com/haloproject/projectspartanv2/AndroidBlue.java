@@ -2,7 +2,6 @@ package com.haloproject.projectspartanv2;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
@@ -178,7 +177,7 @@ public class AndroidBlue {
             if (mDevice != null) {
                 try {
                     Method m = mDevice.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
-                    mSocket = (BluetoothSocket) m.invoke(mDevice, 2);
+                    mSocket = (BluetoothSocket) m.invoke(mDevice, 3);
 
                     mSocket.connect();
 
