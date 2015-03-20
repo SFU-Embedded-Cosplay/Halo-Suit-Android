@@ -190,15 +190,24 @@ public class MainActivity extends ActionBarActivity {
     }
 
     static public class VitalsFragment extends Fragment {
+        TextView headtemp;
+        TextView armpitstemp;
+        TextView crotchtemp;
+        TextView watertemp;
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             final View view = inflater.inflate(R.layout.fragment_vitals, container, false);
-
+            headtemp = (TextView) view.findViewById(R.id.headtemp);
+            armpitstemp = (TextView) view.findViewById(R.id.armpitstemp);
+            crotchtemp = (TextView) view.findViewById(R.id.crotchtemp);
+            watertemp = (TextView) view.findViewById(R.id.watertemp);
             mAndroidBlue.setOnReceive(new Runnable() {
                 @Override
                 public void run() {
-                    TextView headtemp = (TextView) view.findViewById(R.id.headtemp);
                     headtemp.setText(String.format("%.2f", mAndroidBlue.headTemperature.getValue()));
+                    armpitstemp.setText(String.format("%.2f", mAndroidBlue.armpitsTemperature.getValue()));
+                    crotchtemp.setText(String.format("%.2f", mAndroidBlue.crotchTemperature.getValue()));
+                    watertemp.setText(String.format("%.2f", mAndroidBlue.waterTemperature.getValue()));
                 }
             });
             return view;
