@@ -1,13 +1,16 @@
-package com.haloproject.projectspartanv2;
+package com.haloproject.bluetooth;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
@@ -29,9 +32,11 @@ public class AndroidBlue {
     private final int REQUEST_ENABLE_BT = 13;
     private ArrayAdapter<String> mDeviceStrings;
     private Runnable onConnect;
+    private Runnable onReceive;
     private BluetoothDevice mBeagleBone;
     private BluetoothDevice mGoogleGlass;
     private JSONObject mJSON;
+    private Handler mHandler;
     static private AndroidBlue mAndroidBlue = null;
     static private Context mContext;
     static private Activity mActivity;
@@ -40,6 +45,12 @@ public class AndroidBlue {
     public final Temperature crotchTemperature;
     public final Temperature armpitsTemperature;
     public final Temperature waterTemperature;
+    public final Switch redHeadLight;
+    public final Switch whiteHeadLight;
+    public final Switch peltier;
+    public final Switch waterPump;
+    public final Switch headFans;
+    public final Switch mainLights;
 
 
     protected AndroidBlue() {
@@ -52,17 +63,35 @@ public class AndroidBlue {
         crotchTemperature = new Temperature("crotch temperature");
         armpitsTemperature = new Temperature("armpits temperature");
         waterTemperature = new Temperature("water temperature");
+        redHeadLight = new Switch("head lights red");
+        whiteHeadLight = new Switch("head lights white");
+        peltier = new Switch("peltier");
+        waterPump = new Switch("water pump");
+        headFans = new Switch("head fans");
+        mainLights = new Switch("lights") {
+            public void auto() {
+                try {
+                    JSONObject switchObject = new JSONObject();
+                    switchObject.put(this.location, "auto");
+                    mSocket.getOutputStream().write(switchObject.toString().getBytes());
+                } catch (Exception e) {
+
+                }
+            }
+        };
+
+        mHandler = new Handler(Looper.getMainLooper());
     }
 
-    static void setContext(Context context) {
+    static public void setContext(Context context) {
         mContext = context;
     }
 
-    static void setActivity(Activity activity) {
+    static public void setActivity(Activity activity) {
         mActivity = activity;
     }
 
-    static AndroidBlue getInstance() {
+    static public AndroidBlue getInstance() {
         if (mContext != null && mActivity != null) {
             if (mAndroidBlue == null) {
                 mAndroidBlue = new AndroidBlue();
@@ -164,7 +193,7 @@ public class AndroidBlue {
 
                 mSocket.getOutputStream().write(configuration.toString().getBytes());
             } catch (Exception e) {
-
+                return false;
             }
             return true;
         }
@@ -181,7 +210,7 @@ public class AndroidBlue {
 
                     mSocket.connect();
 
-                    new Thread(onConnect).start();
+                    mHandler.post(onConnect);
                     new Thread(new ConnectedRunnable()).start();
                 } catch (Exception e) {
 
@@ -207,9 +236,8 @@ public class AndroidBlue {
                 try {
                     mBytes = new byte[528];
                     mSocket.getInputStream().read(mBytes);
-                    Log.d("Bytes", Arrays.toString(mBytes));
                     mJSON = new JSONObject(new String(mBytes));
-                    Log.d("JSON", mJSON.toString());
+                    mHandler.post(onReceive);
                 } catch (Exception e) {
 
                 }
@@ -220,6 +248,13 @@ public class AndroidBlue {
 
     public void setOnConnect(Runnable onConnect) {
         this.onConnect = onConnect;
+    }
+    public void setOnReceive(Runnable onReceive) {
+        this.onReceive = onReceive;
+    }
+
+    public void destroyOnReceive() {
+        this.onReceive = null;
     }
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -241,13 +276,42 @@ public class AndroidBlue {
             this.location = location;
         }
 
-        String location;
+        protected String location;
 
         public double getValue() {
             try {
                 return mJSON.getDouble(location);
             } catch (Exception e) {
                 return -1000.0;
+            }
+        }
+    }
+
+    //used for turning things on or off on the beaglebone
+    public class Switch {
+        public Switch(String location) {
+            this.location = location;
+        }
+
+        protected String location;
+
+        public void on() {
+            try {
+                JSONObject switchObject = new JSONObject();
+                switchObject.put(location, "on");
+                mSocket.getOutputStream().write(switchObject.toString().getBytes());
+            } catch (Exception e) {
+
+            }
+        }
+
+        public void off() {
+            try {
+                JSONObject switchObject = new JSONObject();
+                switchObject.put(location, "off");
+                mSocket.getOutputStream().write(switchObject.toString().getBytes());
+            } catch (Exception e) {
+
             }
         }
     }

@@ -1,14 +1,14 @@
 package com.haloproject.projectspartanv2;
 
 import android.support.annotation.Nullable;
-import android.app.FragmentManager;
-import android.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -21,48 +21,109 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.haloproject.projectspartanv2.AndroidBlue;
+import com.haloproject.bluetooth.AndroidBlue;
 
 public class MainActivity extends ActionBarActivity {
     static private FragmentManager mFragmentManager;
     static private AndroidBlue mAndroidBlue;
+    final int TOTAL_SWIPE_FRAGMENTS = 4;
+    static private int currentFragment; //-1 means its at main menu
+    private float x1, x2, y1, y2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mFragmentManager = getFragmentManager();
         setContentView(R.layout.activity_main);
+        mFragmentManager = getSupportFragmentManager();
         if (savedInstanceState == null) {
-                mFragmentManager.beginTransaction()
-                        .add(R.id.container, new MainFragment())
-                        .commit();
+            mFragmentManager.beginTransaction()
+                    .add(R.id.container, new MainFragment())
+                    .commit();
         }
         AndroidBlue.setContext(getApplicationContext());
         AndroidBlue.setActivity(this);
         mAndroidBlue = AndroidBlue.getInstance();
+        currentFragment = -1;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                x1 = event.getX();
+                y1 = event.getY();
+                break;
+            case MotionEvent.ACTION_UP:
+                x2 = event.getX();
+                y2 = event.getY();
+                if (x2 - x1 > 600) {
+                    if (currentFragment != -1 && currentFragment > 0) {
+                        currentFragment -= 1;
+                        mFragmentManager.beginTransaction()
+                                .replace(R.id.container, swipeFragment(currentFragment))
+                                .commit();
+                    }
+                } else if (x1 - x2 > 600) {
+                    if (currentFragment != -1 && currentFragment < TOTAL_SWIPE_FRAGMENTS) {
+                        currentFragment += 1;
+                        mFragmentManager.beginTransaction()
+                                .replace(R.id.container, swipeFragment(currentFragment))
+                                .commit();
+                    }
+                } else if (y2 - y1 > 400) {
+                    if (mFragmentManager.getBackStackEntryCount() != 0) {
+                        currentFragment = -1;
+                        mFragmentManager.popBackStack();
+                        mFragmentManager.beginTransaction()
+                                .replace(R.id.container, new MainFragment())
+                                .commit();
+                    }
+                }
+                break;
+        }
+        return true;
+    }
+
+    private Fragment swipeFragment(int fragment) {
+        switch (fragment) {
+            case 0:
+                return new CoolingFragment();
+            case 1:
+                return new LightingFragment();
+            case 2:
+                return new RadarFragment();
+            case 3:
+                return new SettingsFragment();
+            default:
+                return new MainFragment();
+        }
     }
 
     public void tempCool(View view) {
+        currentFragment = 0;
         mFragmentManager.beginTransaction()
-                .replace(R.id.container, new CoolingFragment())
+                .replace(R.id.container, swipeFragment(currentFragment))
                 .addToBackStack("test").commit();
     }
 
     public void settings(View view) {
+        currentFragment = 3;
         mFragmentManager.beginTransaction()
-                .replace(R.id.container, new SettingsFragment())
+                .replace(R.id.container, swipeFragment(currentFragment))
                 .addToBackStack("test").commit();
     }
 
     public void lighting(View view) {
+        currentFragment = 1;
         mFragmentManager.beginTransaction()
-                .replace(R.id.container, new LightingFragment())
+                .replace(R.id.container, swipeFragment(currentFragment))
                 .addToBackStack("test").commit();
     }
 
     public void radar(View view) {
+        currentFragment = 2;
         mFragmentManager.beginTransaction()
-                .replace(R.id.container, new RadarFragment())
+                .replace(R.id.container, swipeFragment(currentFragment))
                 .addToBackStack("test").commit();
     }
 
@@ -111,6 +172,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            currentFragment = -1;
             // Inflate the layout for this fragment
             return inflater.inflate(R.layout.fragment_main, container, false);
         }
@@ -121,27 +183,20 @@ public class MainActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             final View view = inflater.inflate(R.layout.fragment_cooling, container, false);
 
-            new Thread(new Runnable() {
+            mAndroidBlue.setOnReceive(new Runnable() {
                 @Override
                 public void run() {
-                    while (true) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                TextView headtemp = (TextView) view.findViewById(R.id.headtemp);
-                                Log.d("Temp", Double.toString(mAndroidBlue.headTemperature.getValue()));
-                                headtemp.setText(String.format("%.2f", mAndroidBlue.headTemperature.getValue()));
-                            }
-                        });
-                        try {
-                            Thread.sleep(4000);
-                        } catch (Exception e) {
-
-                        }
-                    }
+                    TextView headtemp = (TextView) view.findViewById(R.id.headtemp);
+                    headtemp.setText(String.format("%.2f", mAndroidBlue.headTemperature.getValue()));
                 }
-            }).start();
+            });
             return view;
+        }
+
+        @Override
+        public void onDestroyView() {
+            super.onDestroyView();
+            mAndroidBlue.destroyOnReceive();
         }
     }
 
@@ -231,6 +286,7 @@ public class MainActivity extends ActionBarActivity {
                     mAndroidBlue.sendConfiguration();
                 }
             });
+
             return view;
         }
 
