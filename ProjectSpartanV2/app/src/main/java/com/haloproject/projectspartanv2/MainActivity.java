@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,7 +28,6 @@ import com.haloproject.projectspartanv2.AndroidBlue;
 
 public class MainActivity extends ActionBarActivity {
     static private FragmentManager mFragmentManager;
-    private BluetoothSocket mSocket;
     static private AndroidBlue mAndroidBlue;
 
     @Override
@@ -39,7 +39,9 @@ public class MainActivity extends ActionBarActivity {
                         .add(R.id.container, new MainFragment())
                         .commit();
         }
-        mAndroidBlue = new AndroidBlue(this, getApplicationContext());
+        AndroidBlue.setContext(getApplicationContext());
+        AndroidBlue.setActivity(this);
+        mAndroidBlue = AndroidBlue.getInstance();
         mFragmentManager = getSupportFragmentManager();
     }
 
@@ -130,7 +132,8 @@ public class MainActivity extends ActionBarActivity {
                             @Override
                             public void run() {
                                 TextView headtemp = (TextView) view.findViewById(R.id.headtemp);
-                                headtemp.setText(String.format("%f", AndroidBlue.Tempurature.HEAD.getValue()));
+                                Log.d("Temp", Double.toString(mAndroidBlue.headTemperature.getValue()));
+                                headtemp.setText(String.format("%.2f", mAndroidBlue.headTemperature.getValue()));
                             }
                         });
                         try {

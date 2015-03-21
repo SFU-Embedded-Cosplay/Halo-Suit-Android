@@ -2,6 +2,7 @@ package com.haloproject.projectspartanv2;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
@@ -14,7 +15,9 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 /**
  * Created by Adam Brykajlo on 18/02/15.
@@ -25,23 +28,49 @@ public class AndroidBlue {
     private ArrayAdapter<BluetoothDevice> mDevices;
     private BluetoothDevice mDevice;
     private final int REQUEST_ENABLE_BT = 13;
-    private Context mContext;
-    private Activity mActivity;
     private ArrayAdapter<String> mDeviceStrings;
     private Runnable onConnect;
     private BluetoothDevice mBeagleBone;
     private BluetoothDevice mGoogleGlass;
-    static private JSONObject mJSON;
+    private JSONObject mJSON;
+    static private AndroidBlue mAndroidBlue = null;
+    static private Context mContext;
+    static private Activity mActivity;
+
+    public final Temperature headTemperature;
+    public final Temperature crotchTemperature;
+    public final Temperature armpitsTemperature;
+    public final Temperature waterTemperature;
 
 
-    public AndroidBlue(Activity activity, Context context) {
+    protected AndroidBlue() {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
-        mContext = context;
-        mActivity = activity;
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         mContext.registerReceiver(mReceiver, filter);
         mDevices = new ArrayAdapter<BluetoothDevice>(mContext, android.R.layout.simple_list_item_1);
         mDeviceStrings = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1);
+        headTemperature = new Temperature("head temperature");
+        crotchTemperature = new Temperature("crotch temperature");
+        armpitsTemperature = new Temperature("armpits temperature");
+        waterTemperature = new Temperature("water temperature");
+    }
+
+    static void setContext(Context context) {
+        mContext = context;
+    }
+
+    static void setActivity(Activity activity) {
+        mActivity = activity;
+    }
+
+    static AndroidBlue getInstance() {
+        if (mContext != null && mActivity != null) {
+            if (mAndroidBlue == null) {
+                mAndroidBlue = new AndroidBlue();
+            }
+            return mAndroidBlue;
+        }
+        return null;
     }
 
     public boolean isEnabled() {
@@ -149,7 +178,7 @@ public class AndroidBlue {
             if (mDevice != null) {
                 try {
                     Method m = mDevice.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
-                    mSocket = (BluetoothSocket) m.invoke(mDevice, 3);
+                    mSocket = (BluetoothSocket) m.invoke(mDevice, 2);
 
                     mSocket.connect();
 
@@ -174,17 +203,21 @@ public class AndroidBlue {
 
         @Override
         public void run() {
-            mBytes = new byte[528];
+
             while (isConnected()) {
                 try {
+                    mBytes = new byte[528];
                     mSocket.getInputStream().read(mBytes);
-                    mJSON = new JSONObject(mBytes.toString());
+                    Log.d("Bytes", Arrays.toString(mBytes));
+                    mJSON = new JSONObject(new String(mBytes));
+                    Log.d("JSON", mJSON.toString());
                 } catch (Exception e) {
 
                 }
             }
         }
     }
+
 
     public void setOnConnect(Runnable onConnect) {
         this.onConnect = onConnect;
@@ -204,27 +237,19 @@ public class AndroidBlue {
         }
     };
 
-    public enum Tempurature {
-        HEAD("head temperature"),
-        BODY("body temperature"),
-        CROTCH("crotch temperature"),
-        ARMPITS("armpits temperature"),
-        WATER("water temperature");
-
-
-        private Tempurature(String location) {
+    public class Temperature {
+        public Temperature(String location) {
             this.location = location;
         }
 
-        private String location;
+        String location;
 
         public double getValue() {
             try {
                 return mJSON.getDouble(location);
             } catch (Exception e) {
-
+                return -1000.0;
             }
-            return 0;
         }
     }
 }
