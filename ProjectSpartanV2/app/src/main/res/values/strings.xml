@@ -4,9 +4,10 @@
     <string name="app_name">ProjectSpartanV2</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="menu_item_1">Temperature and Cooling</string>
+    <string name="menu_item_0">Vitals</string>
+    <string name="menu_item_1">Cooling</string>
     <string name="menu_item_2">Lighting</string>
-    <string name="menu_item_3">GPS and Radar</string>
+    <string name="menu_item_3">Radar</string>
     <string name="menu_item_4">Settings</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

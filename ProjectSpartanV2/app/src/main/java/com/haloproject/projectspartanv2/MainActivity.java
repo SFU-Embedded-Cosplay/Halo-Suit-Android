@@ -28,7 +28,7 @@ import com.haloproject.bluetooth.AndroidBlue;
 public class MainActivity extends ActionBarActivity {
     static private FragmentManager mFragmentManager;
     static private AndroidBlue mAndroidBlue;
-    final int TOTAL_SWIPE_FRAGMENTS = 4;
+    final int TOTAL_SWIPE_FRAGMENTS = 5;
     static private int currentFragment; //-1 means its at main menu
     static private SharedPreferences mPreferences;
     private float x1, x2, y1, y2;
@@ -51,7 +51,6 @@ public class MainActivity extends ActionBarActivity {
             String device = mPreferences.getString("bluetooth", "");
             if (mAndroidBlue.setBeagleBone(device)) {
                 mAndroidBlue.connect();
-                Log.d("conected", "misplelling");
             }
         }
         currentFragment = -1;
@@ -77,6 +76,7 @@ public class MainActivity extends ActionBarActivity {
                 } else if (x1 - x2 > 600) {
                     if (currentFragment != -1 && currentFragment < TOTAL_SWIPE_FRAGMENTS) {
                         currentFragment += 1;
+                        mFragmentManager.popBackStack();
                         mFragmentManager.beginTransaction()
                                 .replace(R.id.container, swipeFragment(currentFragment))
                                 .commit();
@@ -86,7 +86,7 @@ public class MainActivity extends ActionBarActivity {
                         currentFragment = -1;
                         mFragmentManager.popBackStack();
                         mFragmentManager.beginTransaction()
-                                .replace(R.id.container, new MainFragment())
+                                .replace(R.id.container, swipeFragment(currentFragment))
                                 .commit();
                     }
                 }
@@ -100,42 +100,47 @@ public class MainActivity extends ActionBarActivity {
             case 0:
                 return new VitalsFragment();
             case 1:
-                return new LightingFragment();
+                return new CoolingFragment();
             case 2:
-                return new RadarFragment();
+                return new LightingFragment();
             case 3:
+                return new RadarFragment();
+            case 4:
                 return new SettingsFragment();
             default:
                 return new MainFragment();
         }
     }
 
-    public void tempCool(View view) {
-        currentFragment = 0;
+    private void openCurrentFragment() {
         mFragmentManager.beginTransaction()
                 .replace(R.id.container, swipeFragment(currentFragment))
                 .addToBackStack("test").commit();
     }
 
-    public void settings(View view) {
-        currentFragment = 3;
-        mFragmentManager.beginTransaction()
-                .replace(R.id.container, swipeFragment(currentFragment))
-                .addToBackStack("test").commit();
+    public void vitals(View view) {
+        currentFragment = 0;
+        openCurrentFragment();
+    }
+
+    public void cooling(View view) {
+        currentFragment = 1;
+        openCurrentFragment();
     }
 
     public void lighting(View view) {
-        currentFragment = 1;
-        mFragmentManager.beginTransaction()
-                .replace(R.id.container, swipeFragment(currentFragment))
-                .addToBackStack("test").commit();
+        currentFragment = 2;
+        openCurrentFragment();
     }
 
     public void radar(View view) {
-        currentFragment = 2;
-        mFragmentManager.beginTransaction()
-                .replace(R.id.container, swipeFragment(currentFragment))
-                .addToBackStack("test").commit();
+        currentFragment = 3;
+        openCurrentFragment();
+    }
+
+    public void settings(View view) {
+        currentFragment = 4;
+        openCurrentFragment();
     }
 
     @Override
@@ -160,6 +165,25 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    static public class MainFragment extends Fragment {
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            currentFragment = -1;
+            // Inflate the layout for this fragment
+            return inflater.inflate(R.layout.fragment_main, container, false);
+        }
+    }
+
+    static public class CoolingFragment extends Fragment {
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View view = inflater.inflate(R.layout.fragment_cooling, container, false);
+            return view;
+        }
+    }
+
     static public class LightingFragment extends Fragment {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -178,16 +202,6 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-
-    static public class MainFragment extends Fragment {
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            currentFragment = -1;
-            // Inflate the layout for this fragment
-            return inflater.inflate(R.layout.fragment_main, container, false);
-        }
-    }
 
     static public class VitalsFragment extends Fragment {
         TextView headtemp;
