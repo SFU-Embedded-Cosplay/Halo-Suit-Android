@@ -9,6 +9,7 @@
 #include <json/parser.h>
 #include <json/json.h>
 #include <halosuit/halosuit.h>
+//#include <testcode/automationtestdata.h>
 
 void parser_parse(char* json_text)
 {
