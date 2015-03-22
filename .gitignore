@@ -6,10 +6,14 @@
 *server_Host
 *server_Target
 
-#####Compresses Files#########
+##########Log Files###########
+log.txt
+
+#####Compressed Files#########
 *.zip
 *.tar
 *.rar
 
 #####ETC######################
 *.swp
+
