@@ -1,7 +1,7 @@
 package com.haloproject.projectspartanv2;
 
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
+import android.bluetooth.BluetoothAdapter;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.Fragment;
@@ -11,62 +11,136 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.haloproject.projectspartanv2.AndroidBlue;
+import com.haloproject.bluetooth.AndroidBlue;
 
 public class MainActivity extends ActionBarActivity {
     static private FragmentManager mFragmentManager;
     static private AndroidBlue mAndroidBlue;
+    final int TOTAL_SWIPE_FRAGMENTS = 5;
+    static private int currentFragment; //-1 means its at main menu
+    static private SharedPreferences mPreferences;
+    private float x1, x2, y1, y2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mFragmentManager = getSupportFragmentManager();
         if (savedInstanceState == null) {
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.container, new MainFragment())
-                        .commit();
+            mFragmentManager.beginTransaction()
+                    .add(R.id.container, new MainFragment())
+                    .commit();
         }
         AndroidBlue.setContext(getApplicationContext());
         AndroidBlue.setActivity(this);
         mAndroidBlue = AndroidBlue.getInstance();
-        mFragmentManager = getSupportFragmentManager();
+        mPreferences = getPreferences(MODE_PRIVATE);
+        if (mPreferences.contains("bluetooth")) {
+            String device = mPreferences.getString("bluetooth", "");
+            if (mAndroidBlue.setBeagleBone(device)) {
+                mAndroidBlue.connect();
+            }
+        }
+        currentFragment = -1;
     }
 
-    public void tempCool(View view) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, new CoolingFragment())
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                x1 = event.getX();
+                y1 = event.getY();
+                break;
+            case MotionEvent.ACTION_UP:
+                x2 = event.getX();
+                y2 = event.getY();
+                if (x2 - x1 > 600) {
+                    if (currentFragment != -1 && currentFragment > 0) {
+                        currentFragment -= 1;
+                        mFragmentManager.beginTransaction()
+                                .replace(R.id.container, swipeFragment(currentFragment))
+                                .commit();
+                    }
+                } else if (x1 - x2 > 600) {
+                    if (currentFragment != -1 && currentFragment < TOTAL_SWIPE_FRAGMENTS) {
+                        currentFragment += 1;
+                        mFragmentManager.popBackStack();
+                        mFragmentManager.beginTransaction()
+                                .replace(R.id.container, swipeFragment(currentFragment))
+                                .commit();
+                    }
+                } else if (y2 - y1 > 400) {
+                    if (mFragmentManager.getBackStackEntryCount() != 0) {
+                        currentFragment = -1;
+                        mFragmentManager.popBackStack();
+                        mFragmentManager.beginTransaction()
+                                .replace(R.id.container, swipeFragment(currentFragment))
+                                .commit();
+                    }
+                }
+                break;
+        }
+        return true;
+    }
+
+    private Fragment swipeFragment(int fragment) {
+        switch (fragment) {
+            case 0:
+                return new VitalsFragment();
+            case 1:
+                return new CoolingFragment();
+            case 2:
+                return new LightingFragment();
+            case 3:
+                return new RadarFragment();
+            case 4:
+                return new SettingsFragment();
+            default:
+                return new MainFragment();
+        }
+    }
+
+    private void openCurrentFragment() {
+        mFragmentManager.beginTransaction()
+                .replace(R.id.container, swipeFragment(currentFragment))
                 .addToBackStack("test").commit();
     }
 
-    public void settings(View view) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, new SettingsFragment())
-                .addToBackStack("test").commit();
+    public void vitals(View view) {
+        currentFragment = 0;
+        openCurrentFragment();
+    }
+
+    public void cooling(View view) {
+        currentFragment = 1;
+        openCurrentFragment();
     }
 
     public void lighting(View view) {
-        mFragmentManager.beginTransaction()
-                .replace(R.id.container, new LightingFragment())
-                .addToBackStack("test").commit();
+        currentFragment = 2;
+        openCurrentFragment();
     }
 
     public void radar(View view) {
-        mFragmentManager.beginTransaction()
-                .replace(R.id.container, new RadarFragment())
-                .addToBackStack("test").commit();
+        currentFragment = 3;
+        openCurrentFragment();
+    }
+
+    public void settings(View view) {
+        currentFragment = 4;
+        openCurrentFragment();
     }
 
     @Override
@@ -91,6 +165,25 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    static public class MainFragment extends Fragment {
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            currentFragment = -1;
+            // Inflate the layout for this fragment
+            return inflater.inflate(R.layout.fragment_main, container, false);
+        }
+    }
+
+    static public class CoolingFragment extends Fragment {
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View view = inflater.inflate(R.layout.fragment_cooling, container, false);
+            return view;
+        }
+    }
+
     static public class LightingFragment extends Fragment {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -110,50 +203,43 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-    static public class MainFragment extends Fragment {
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            // Inflate the layout for this fragment
-            return inflater.inflate(R.layout.fragment_main, container, false);
-        }
-    }
-
-    static public class CoolingFragment extends Fragment {
+    static public class VitalsFragment extends Fragment {
+        TextView headtemp;
+        TextView armpitstemp;
+        TextView crotchtemp;
+        TextView watertemp;
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            final View view = inflater.inflate(R.layout.fragment_cooling, container, false);
-
-            new Thread(new Runnable() {
+            final View view = inflater.inflate(R.layout.fragment_vitals, container, false);
+            headtemp = (TextView) view.findViewById(R.id.headtemp);
+            armpitstemp = (TextView) view.findViewById(R.id.armpitstemp);
+            crotchtemp = (TextView) view.findViewById(R.id.crotchtemp);
+            watertemp = (TextView) view.findViewById(R.id.watertemp);
+            mAndroidBlue.setOnReceive(new Runnable() {
                 @Override
                 public void run() {
-                    while (true) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                TextView headtemp = (TextView) view.findViewById(R.id.headtemp);
-                                Log.d("Temp", Double.toString(mAndroidBlue.headTemperature.getValue()));
-                                headtemp.setText(String.format("%.2f", mAndroidBlue.headTemperature.getValue()));
-                            }
-                        });
-                        try {
-                            Thread.sleep(4000);
-                        } catch (Exception e) {
-
-                        }
-                    }
+                    headtemp.setText(String.format("%.2f", mAndroidBlue.headTemperature.getValue()));
+                    armpitstemp.setText(String.format("%.2f", mAndroidBlue.armpitsTemperature.getValue()));
+                    crotchtemp.setText(String.format("%.2f", mAndroidBlue.crotchTemperature.getValue()));
+                    watertemp.setText(String.format("%.2f", mAndroidBlue.waterTemperature.getValue()));
                 }
-            }).start();
+            });
             return view;
+        }
+
+        @Override
+        public void onDestroyView() {
+            super.onDestroyView();
+            mAndroidBlue.destroyOnReceive();
         }
     }
 
     static public class SettingsFragment extends Fragment {
         private ListView btdevices;
-        //private ArrayAdapter<BluetoothDevice> mArrayAdapter;
         private Switch switch1;
         private Button discover;
         private Button configure;
+        private Button deconfigure;
         private View view;
         private RadioButton connected;
 
@@ -176,18 +262,8 @@ public class MainActivity extends ActionBarActivity {
             btdevices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                    RadioGroup group = ((RadioGroup) view.findViewById(R.id.radioGroup));
-                    RadioButton bb   = ((RadioButton) group.findViewById(R.id.setbeaglebone));
-                    RadioButton gg   = ((RadioButton) group.findViewById(R.id.setgoogleglass));
-                    if (bb.isChecked()) {
-                        mAndroidBlue.setBeagleBone(position);
-                        ((TextView)view.findViewById(R.id.beaglebone)).setText(mAndroidBlue.getBeagleBone().getAddress());
-                        if (mAndroidBlue.setDevice(position)) {
-                            mAndroidBlue.connect();
-                        }
-                    } else if (gg.isChecked()) {
-                        mAndroidBlue.setGoogleGlass(position);
-                        ((TextView)view.findViewById(R.id.googleglass)).setText(mAndroidBlue.getGoogleGlass().getAddress());
+                    if (mAndroidBlue.setBeagleBone(position)) {
+                        mAndroidBlue.connect();
                     }
                 }
             });
@@ -231,7 +307,20 @@ public class MainActivity extends ActionBarActivity {
             configure.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mAndroidBlue.sendConfiguration();
+                    if (mAndroidBlue.sendConfiguration()) {
+                        mPreferences.edit().putString("bluetooth", mAndroidBlue.getBeagleBone().getAddress()).commit();
+                    }
+                }
+            });
+            deconfigure = (Button) view.findViewById(R.id.deconfigure);
+            deconfigure.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mAndroidBlue.sendDeConfiguration()) {
+                        if (mPreferences.contains("bluetooth")) {
+                            mPreferences.edit().remove("bluetooth").commit();
+                        }
+                    }
                 }
             });
             return view;
