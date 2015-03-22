@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00.0 C"
+        android:id="@+id/headtemp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:textSize="40dp"
+        android:background="#a7000000" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/halo_armor" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00.0 C"
+        android:id="@+id/armpitstemp"
+        android:textSize="40dp"
+        android:background="#a7000000"
+        android:layout_below="@+id/headtemp"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="47dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/crotchtemp"
+        android:textSize="40dp"
+        android:background="#a7000000"
+        android:layout_marginTop="70dp"
+        android:layout_below="@+id/armpitstemp"
+        android:layout_alignEnd="@+id/armpitstemp"
+        android:text="00.0 C" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00.0 C"
+        android:id="@+id/watertemp"
+        android:textSize="40dp"
+        android:background="#a7000000"
+        android:layout_below="@+id/crotchtemp"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Water"
+        android:id="@+id/textView5"
+        android:textSize="40dp"
+        android:background="#a7000000"
+        android:layout_above="@+id/watertemp"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="000 BPM"
+        android:id="@+id/heartrate"
+        android:textSize="55dp"
+        android:background="#a7000000"
+        android:layout_alignTop="@+id/imageView"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>

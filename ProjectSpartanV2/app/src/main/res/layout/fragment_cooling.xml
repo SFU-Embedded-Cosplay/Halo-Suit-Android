@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <TextView
+    <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/headtemp"
+        android:text="Peltier"
+        android:id="@+id/switch2"
         android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/switch3"
+        android:background="#aa000000" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Water Pump"
+        android:id="@+id/switch3"
+        android:layout_centerVertical="true"
         android:layout_alignParentStart="true"
-        android:textSize="40dp"
-        android:background="#a7000000" />
+        android:background="#aa000000" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Head Fans"
+        android:id="@+id/switch4"
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/switch3"
+        android:background="#aa000000" />
 </RelativeLayout>

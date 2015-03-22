@@ -12,12 +12,21 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="fill_parent">
-        <Button
-            android:id="@+id/menubutton1"
-            android:onClick="tempCool"
-            android:text="@string/menu_item_1"
-            android:layout_width="600px"
-            android:layout_height="match_parent" />
+            <Button
+                android:id="@+id/menubutton0"
+                android:onClick="vitals"
+                android:text="@string/menu_item_0"
+                android:layout_width="600px"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/menubutton1"
+                android:onClick="cooling"
+                android:text="@string/menu_item_1"
+                android:layout_width="600px"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical" />
+
             <Button
                 android:id="@+id/menubutton2"
                 android:onClick="lighting"
