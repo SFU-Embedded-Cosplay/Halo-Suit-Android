@@ -15,8 +15,10 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -39,16 +41,16 @@ public class AndroidBlue {
     static private Context mContext;
     static private Activity mActivity;
 
-    public final Temperature headTemperature;
-    public final Temperature crotchTemperature;
-    public final Temperature armpitsTemperature;
-    public final Temperature waterTemperature;
+    public final BeagleDoubleHandler headTemperature;
+    public final BeagleDoubleHandler crotchTemperature;
+    public final BeagleDoubleHandler armpitsTemperature;
+    public final BeagleDoubleHandler waterTemperature;
     public final Switch redHeadLight;
     public final Switch whiteHeadLight;
     public final Switch peltier;
     public final Switch waterPump;
     public final Switch headFans;
-    public final Switch mainLights;
+    public final AutoSwitch mainLights;
 
 
     protected AndroidBlue() {
@@ -57,26 +59,16 @@ public class AndroidBlue {
         mContext.registerReceiver(mReceiver, filter);
         mDevices = new ArrayAdapter<BluetoothDevice>(mContext, android.R.layout.simple_list_item_1);
         mDeviceStrings = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1);
-        headTemperature = new Temperature("head temperature");
-        crotchTemperature = new Temperature("crotch temperature");
-        armpitsTemperature = new Temperature("armpits temperature");
-        waterTemperature = new Temperature("water temperature");
+        headTemperature = new BeagleDoubleHandler("head temperature");
+        crotchTemperature = new BeagleDoubleHandler("crotch temperature");
+        armpitsTemperature = new BeagleDoubleHandler("armpits temperature");
+        waterTemperature = new BeagleDoubleHandler("water temperature");
         redHeadLight = new Switch("head lights red");
         whiteHeadLight = new Switch("head lights white");
         peltier = new Switch("peltier");
         waterPump = new Switch("water pump");
         headFans = new Switch("head fans");
-        mainLights = new Switch("lights") {
-            public void auto() {
-                try {
-                    JSONObject switchObject = new JSONObject();
-                    switchObject.put(this.location, "auto");
-                    mSocket.getOutputStream().write(switchObject.toString().getBytes());
-                } catch (Exception e) {
-
-                }
-            }
-        };
+        mainLights = new AutoSwitch("lights");
 
         mHandler = new Handler(Looper.getMainLooper());
     }
@@ -240,7 +232,9 @@ public class AndroidBlue {
                     mSocket.getInputStream().read(mBytes);
                     mJSON = new JSONObject(new String(mBytes));
                     mHandler.post(onReceive);
-                } catch (Exception e) {
+                } catch (IOException e) {
+
+                } catch (JSONException e) {
 
                 }
             }
@@ -273,8 +267,8 @@ public class AndroidBlue {
         }
     };
 
-    public class Temperature {
-        public Temperature(String location) {
+    public class BeagleDoubleHandler {
+        public BeagleDoubleHandler(String location) {
             this.location = location;
         }
 
@@ -282,13 +276,52 @@ public class AndroidBlue {
 
         public double getValue() {
             try {
-                return mJSON.getDouble(location);
+                return mJSON.getDouble(location); //get double could accept and integer because double is bigger than an integer. thus this code will work for both ints and doubles
             } catch (Exception e) {
                 return -1000.0;
             }
         }
     }
 
+    public class BeagleIntegerHandler {
+        public BeagleIntegerHandler(String location) {
+            this.location = location;
+        }
+
+        protected String location;
+
+        public int getValue() {
+            try {
+                return mJSON.getInt(location); //get double could accept and integer because double is bigger than an integer. thus this code will work for both ints and doubles
+            } catch (Exception e) {
+                return -1;
+            }
+        }
+    }
+
+    public class AutoSwitch extends Switch {
+        public AutoSwitch(String location) {
+            super(location);
+        }
+
+        public void auto() {
+            try {
+                JSONObject switchObject = new JSONObject();
+                switchObject.put(location, "auto");
+                mSocket.getOutputStream().write(switchObject.toString().getBytes());
+            } catch (Exception e) {
+
+            }
+        }
+
+        public boolean isAuto() {
+            try {
+                return mJSON.getString(location).equals("auto");
+            } catch (Exception e) {
+                return false;
+            }
+        }
+    }
     //used for turning things on or off on the beaglebone
     public class Switch {
         public Switch(String location) {
@@ -314,6 +347,14 @@ public class AndroidBlue {
                 mSocket.getOutputStream().write(switchObject.toString().getBytes());
             } catch (Exception e) {
 
+            }
+        }
+
+        public boolean isOn() {
+            try {
+                return mJSON.getString(location).equals("on");
+            } catch (Exception e) {
+                return false;
             }
         }
     }

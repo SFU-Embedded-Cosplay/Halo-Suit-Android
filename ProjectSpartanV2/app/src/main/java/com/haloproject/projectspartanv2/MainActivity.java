@@ -1,13 +1,11 @@
 package com.haloproject.projectspartanv2;
 
-import android.bluetooth.BluetoothAdapter;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -176,10 +174,42 @@ public class MainActivity extends ActionBarActivity {
     }
 
     static public class CoolingFragment extends Fragment {
+        Switch peltier;
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.fragment_cooling, container, false);
+            Switch waterpump = (Switch) view.findViewById(R.id.waterpump);
+            peltier = (Switch) view.findViewById(R.id.peltier);
+            waterpump.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        mAndroidBlue.waterPump.on();
+                    } else {
+                        mAndroidBlue.waterPump.off();
+                    }
+                }
+            });
+
+            mAndroidBlue.setOnReceive(new Runnable() {
+                @Override
+                public void run() {
+                    peltier.setChecked(mAndroidBlue.peltier.isOn());
+                }
+            });
+
+            Switch headfans = (Switch) view.findViewById(R.id.headfans);
+            headfans.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        mAndroidBlue.headFans.on();
+                    } else {
+                        mAndroidBlue.headFans.off();
+                    }
+                }
+            });
             return view;
         }
     }
@@ -189,7 +219,30 @@ public class MainActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             // Inflate the layout for this fragment
-            return inflater.inflate(R.layout.fragment_lighting, container, false);
+            View view = inflater.inflate(R.layout.fragment_lighting, container, false);
+            Button on = (Button) view.findViewById(R.id.on);
+            Button off = (Button) view.findViewById(R.id.off);
+            Button auto = (Button) view.findViewById(R.id.auto);
+            on.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAndroidBlue.mainLights.on();
+                }
+            });
+            off.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAndroidBlue.mainLights.off();
+                }
+            });
+            auto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAndroidBlue.mainLights.auto();
+                }
+            });
+            //Switch whiteheadlights = (Switch) view.findViewById()
+            return view;
         }
     }
 

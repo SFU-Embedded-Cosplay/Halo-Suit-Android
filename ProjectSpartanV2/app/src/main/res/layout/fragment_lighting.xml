@@ -14,7 +14,7 @@
     <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Switch"
+        android:text="white head lights"
         android:id="@+id/switch5"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
@@ -22,16 +22,33 @@
     <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Switch"
+        android:text="red head lights"
         android:id="@+id/switch6"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true" />
 
-    <SeekBar
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/seekBar"
+        android:text="on"
+        android:id="@+id/on"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="off"
+        android:id="@+id/off"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/on" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AUTO"
+        android:id="@+id/auto"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/off" />
 
 </RelativeLayout>
