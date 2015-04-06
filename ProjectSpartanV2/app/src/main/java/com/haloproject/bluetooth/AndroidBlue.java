@@ -358,6 +358,8 @@ public class AndroidBlue {
         }
     }
 
+    //turn switched auto or off
+    //TODO ask chris if we can information about on or off state
     public class BeagleAutoOffSwitch extends BeagleInputHandler {
         public BeagleAutoOffSwitch(String location) {
             super(location);
@@ -380,6 +382,7 @@ public class AndroidBlue {
         }
     }
 
+    //turns things on or off or auto
     public class BeagleAutoSwitch extends BeagleInputHandler {
         public BeagleAutoSwitch(String location) {
             super(location);
@@ -409,6 +412,7 @@ public class AndroidBlue {
             return isStateSet("off");
         }
     }
+
     //used for turning things on or off on the beaglebone
     public class BeagleSwitch extends BeagleInputHandler {
         public BeagleSwitch(String location) {
