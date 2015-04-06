@@ -2,7 +2,6 @@ package com.haloproject.bluetooth;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
@@ -11,7 +10,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -19,9 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 /**
  * Created by Adam Brykajlo on 18/02/15.
@@ -30,10 +26,8 @@ public class AndroidBlue {
     private BluetoothSocket mSocket;
     private BluetoothAdapter mAdapter;
     private ArrayAdapter<BluetoothDevice> mDevices;
-    private final int REQUEST_ENABLE_BT = 13;
+    private final int REQUEST_ENABLE_BT = 42;
     private ArrayAdapter<String> mDeviceStrings;
-    private Runnable onConnect;
-    private Runnable onReceive;
     private BluetoothDevice mBeagleBone;
     private JSONObject mJSON;
     private Handler mHandler;
@@ -41,17 +35,24 @@ public class AndroidBlue {
     static private Context mContext;
     static private Activity mActivity;
 
-    public final BeagleDoubleHandler headTemperature;
-    public final BeagleDoubleHandler crotchTemperature;
-    public final BeagleDoubleHandler armpitsTemperature;
-    public final BeagleDoubleHandler waterTemperature;
-    public final Switch redHeadLight;
-    public final Switch whiteHeadLight;
-    public final Switch peltier;
-    public final Switch waterPump;
-    public final Switch headFans;
-    public final AutoSwitch mainLights;
+    private Runnable onDisconnect;
+    private Runnable onReceive;
 
+    public final BeagleDoubleOutput headTemperature;
+    public final BeagleDoubleOutput crotchTemperature;
+    public final BeagleDoubleOutput armpitsTemperature;
+    public final BeagleDoubleOutput waterTemperature;
+
+    public final BeagleIntegerOutput flowRate;
+    public final BeagleIntegerOutput heartRate;
+    public final BeagleIntegerOutput mainBattery;
+
+    public final BeagleSwitch redHeadLight;
+    public final BeagleSwitch whiteHeadLight;
+    public final BeagleAutoOffSwitch peltier;
+    public final BeagleSwitch waterPump;
+    public final BeagleSwitch headFans;
+    public final BeagleAutoSwitch mainLights;
 
     protected AndroidBlue() {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -59,16 +60,22 @@ public class AndroidBlue {
         mContext.registerReceiver(mReceiver, filter);
         mDevices = new ArrayAdapter<BluetoothDevice>(mContext, android.R.layout.simple_list_item_1);
         mDeviceStrings = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1);
-        headTemperature = new BeagleDoubleHandler("head temperature");
-        crotchTemperature = new BeagleDoubleHandler("crotch temperature");
-        armpitsTemperature = new BeagleDoubleHandler("armpits temperature");
-        waterTemperature = new BeagleDoubleHandler("water temperature");
-        redHeadLight = new Switch("head lights red");
-        whiteHeadLight = new Switch("head lights white");
-        peltier = new Switch("peltier");
-        waterPump = new Switch("water pump");
-        headFans = new Switch("head fans");
-        mainLights = new AutoSwitch("lights");
+
+        headTemperature = new BeagleDoubleOutput("head temperature");
+        crotchTemperature = new BeagleDoubleOutput("crotch temperature");
+        armpitsTemperature = new BeagleDoubleOutput("armpits temperature");
+        waterTemperature = new BeagleDoubleOutput("water temperature");
+
+        flowRate = new BeagleIntegerOutput("flow rate");
+        heartRate = new BeagleIntegerOutput("heart rate");
+        mainBattery = new BeagleIntegerOutput("main battery");
+
+        redHeadLight = new BeagleSwitch("head lights red");
+        whiteHeadLight = new BeagleSwitch("head lights white");
+        peltier = new BeagleAutoOffSwitch("peltier");
+        waterPump = new BeagleSwitch("water pump");
+        headFans = new BeagleSwitch("head fans");
+        mainLights = new BeagleAutoSwitch("lights");
 
         mHandler = new Handler(Looper.getMainLooper());
     }
@@ -204,7 +211,6 @@ public class AndroidBlue {
 
                     mSocket.connect();
 
-                    mHandler.post(onConnect);
                     new Thread(new ConnectedRunnable()).start();
                 } catch (Exception e) {
 
@@ -225,7 +231,6 @@ public class AndroidBlue {
 
         @Override
         public void run() {
-
             while (isConnected()) {
                 try {
                     mBytes = new byte[528];
@@ -242,15 +247,16 @@ public class AndroidBlue {
     }
 
 
-    public void setOnConnect(Runnable onConnect) {
-        this.onConnect = onConnect;
+    public void setOnDisconnect(Runnable onDisconnect) {
+        this.onDisconnect = onDisconnect;
     }
     public void setOnReceive(Runnable onReceive) {
         this.onReceive = onReceive;
     }
 
-    public void destroyOnReceive() {
+    public void changeUI() {
         this.onReceive = null;
+        this.onDisconnect = null;
     }
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -266,13 +272,13 @@ public class AndroidBlue {
             }
         }
     };
-
-    public class BeagleDoubleHandler {
-        public BeagleDoubleHandler(String location) {
+    
+    public class BeagleDoubleOutput {
+        public BeagleDoubleOutput(String location) {
             this.location = location;
         }
 
-        protected String location;
+        private String location;
 
         public double getValue() {
             try {
@@ -283,12 +289,12 @@ public class AndroidBlue {
         }
     }
 
-    public class BeagleIntegerHandler {
-        public BeagleIntegerHandler(String location) {
+    public class BeagleIntegerOutput {
+        public BeagleIntegerOutput(String location) {
             this.location = location;
         }
 
-        protected String location;
+        private String location;
 
         public int getValue() {
             try {
@@ -299,63 +305,103 @@ public class AndroidBlue {
         }
     }
 
-    public class AutoSwitch extends Switch {
-        public AutoSwitch(String location) {
-            super(location);
-        }
-
-        public void auto() {
-            try {
-                JSONObject switchObject = new JSONObject();
-                switchObject.put(location, "auto");
-                mSocket.getOutputStream().write(switchObject.toString().getBytes());
-            } catch (Exception e) {
-
-            }
-        }
-
-        public boolean isAuto() {
-            try {
-                return mJSON.getString(location).equals("auto");
-            } catch (Exception e) {
-                return false;
-            }
-        }
-    }
-    //used for turning things on or off on the beaglebone
-    public class Switch {
-        public Switch(String location) {
+    abstract private class BeagleInputHandler {
+        private BeagleInputHandler(String location) {
             this.location = location;
         }
 
         protected String location;
 
-        public void on() {
+        protected void setState(String state) {
             try {
                 JSONObject switchObject = new JSONObject();
-                switchObject.put(location, "on");
+                switchObject.put(location, state);
                 mSocket.getOutputStream().write(switchObject.toString().getBytes());
             } catch (Exception e) {
 
             }
         }
 
-        public void off() {
+        protected boolean isStateSet(String state) {
             try {
-                JSONObject switchObject = new JSONObject();
-                switchObject.put(location, "off");
-                mSocket.getOutputStream().write(switchObject.toString().getBytes());
-            } catch (Exception e) {
-
-            }
-        }
-
-        public boolean isOn() {
-            try {
-                return mJSON.getString(location).equals("on");
+                return mJSON.getString(location).equals(state);
             } catch (Exception e) {
                 return false;
             }
+        }
+    }
+
+    public class BeagleAutoOffSwitch extends BeagleInputHandler {
+        public BeagleAutoOffSwitch(String location) {
+            super(location);
+        }
+
+        public void auto() {
+            setState("auto");
+        }
+
+        public void off() {
+            setState("off");
+        }
+
+        public boolean isAuto() {
+            return isStateSet("auto");
+        }
+
+        public boolean isOff() {
+            return isStateSet("off");
+        }
+    }
+
+    public class BeagleAutoSwitch extends BeagleInputHandler {
+        public BeagleAutoSwitch(String location) {
+            super(location);
+        }
+
+        public void auto() {
+            setState("auto");
+        }
+
+        public void on() {
+            setState("on");
+        }
+
+        public void off() {
+            setState("off");
+        }
+
+        public boolean isAuto() {
+            return isStateSet("auto");
+        }
+
+        public boolean isOn() {
+            return isStateSet("on");
+        }
+
+        public boolean isOff() {
+            return isStateSet("off");
+        }
+    }
+    //used for turning things on or off on the beaglebone
+    public class BeagleSwitch extends BeagleInputHandler {
+        public BeagleSwitch(String location) {
+            super(location);
+        }
+
+        public void on() {
+            setState("on");
+        }
+
+        public void off() {
+            setState("off");
+        }
+
+        public boolean isOn() {
+            return isStateSet("on");
+        }
+
+        public boolean isOff() {
+            return isStateSet("off");
         }
     }
 }
