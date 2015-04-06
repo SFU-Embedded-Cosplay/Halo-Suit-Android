@@ -23,18 +23,17 @@ import java.lang.reflect.Method;
  * Created by Adam Brykajlo on 18/02/15.
  */
 public class AndroidBlue {
+    private final int REQUEST_ENABLE_BT = 42;
+
     private BluetoothSocket mSocket;
     private BluetoothAdapter mAdapter;
     private ArrayAdapter<BluetoothDevice> mDevices;
-    private final int REQUEST_ENABLE_BT = 42;
     private ArrayAdapter<String> mDeviceStrings;
     private BluetoothDevice mBeagleBone;
     private JSONObject mJSON;
     private Handler mHandler;
-    static private AndroidBlue mAndroidBlue = null;
-    static private Context mContext;
-    static private Activity mActivity;
 
+    private Runnable onConnect;
     private Runnable onDisconnect;
     private Runnable onReceive;
 
@@ -54,7 +53,10 @@ public class AndroidBlue {
     public final BeagleSwitch headFans;
     public final BeagleAutoSwitch mainLights;
 
-    protected AndroidBlue() {
+    static private AndroidBlue mAndroidBlue = null;
+    static private Context mContext;
+
+    private AndroidBlue() {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         mContext.registerReceiver(mReceiver, filter);
@@ -84,12 +86,8 @@ public class AndroidBlue {
         mContext = context;
     }
 
-    static public void setActivity(Activity activity) {
-        mActivity = activity;
-    }
-
     static public AndroidBlue getInstance() {
-        if (mContext != null && mActivity != null) {
+        if (mContext != null) {
             if (mAndroidBlue == null) {
                 mAndroidBlue = new AndroidBlue();
             }
@@ -102,10 +100,10 @@ public class AndroidBlue {
         return mAdapter.isEnabled();
     }
 
-    public void enableBluetooth() {
+    public void enableBluetooth(Activity callingActivity) {
         if (!isEnabled()) {
             Intent enableBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            mActivity.startActivityForResult(enableBTIntent, REQUEST_ENABLE_BT);
+            callingActivity.startActivityForResult(enableBTIntent, REQUEST_ENABLE_BT);
         }
     }
 
@@ -130,9 +128,11 @@ public class AndroidBlue {
         if (isEnabled()) {
             if (mAdapter.isDiscovering()) {
                 mAdapter.cancelDiscovery();
-                mDevices.clear();
-                mDeviceStrings.clear();
             }
+            //clear list adapters
+            mDevices.clear();
+            mDeviceStrings.clear();
+
             return mAdapter.startDiscovery();
         }
         return false;
@@ -214,13 +214,30 @@ public class AndroidBlue {
                     new Thread(new ConnectedRunnable()).start();
                 } catch (Exception e) {
 
-                    mActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(mContext, "Could Not Connect to " + mBeagleBone, Toast.LENGTH_LONG).show();
-                        }
-                    });
+                }
+            }
+        }
+    }
 
+    private class DisconnectedRunnable implements Runnable {
+        @Override
+        public void run() {
+            mHandler.post(onDisconnect);
+            while (true) {
+                try {
+                    Method m = mBeagleBone.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
+                    mSocket = (BluetoothSocket) m.invoke(mBeagleBone, 3);
+
+                    mSocket.connect();
+
+                    new Thread(new ConnectedRunnable()).start();
+                    return;
+                } catch (Exception e) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e2) {
+
+                    }
                 }
             }
         }
@@ -231,14 +248,21 @@ public class AndroidBlue {
 
         @Override
         public void run() {
-            while (isConnected()) {
+            mHandler.post(onConnect);
+            while (true) {
                 try {
                     mBytes = new byte[528];
                     mSocket.getInputStream().read(mBytes);
                     mJSON = new JSONObject(new String(mBytes));
                     mHandler.post(onReceive);
                 } catch (IOException e) {
-
+                    try {
+                        new Thread(new DisconnectedRunnable()).start();
+                        mSocket.close();
+                        return;
+                    } catch (Exception io) {
+                        //don't return will probably close on next loop
+                    }
                 } catch (JSONException e) {
 
                 }
@@ -246,7 +270,9 @@ public class AndroidBlue {
         }
     }
 
-
+    public void setOnConnect(Runnable onConnect) {
+        this.onConnect = onConnect;
+    }
     public void setOnDisconnect(Runnable onDisconnect) {
         this.onDisconnect = onDisconnect;
     }
@@ -257,6 +283,7 @@ public class AndroidBlue {
     public void changeUI() {
         this.onReceive = null;
         this.onDisconnect = null;
+        this.onConnect = null;
     }
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {

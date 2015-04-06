@@ -42,7 +42,6 @@ public class MainActivity extends ActionBarActivity {
                     .commit();
         }
         AndroidBlue.setContext(getApplicationContext());
-        AndroidBlue.setActivity(this);
         mAndroidBlue = AndroidBlue.getInstance();
         mPreferences = getPreferences(MODE_PRIVATE);
         if (mPreferences.contains("bluetooth")) {
@@ -195,7 +194,7 @@ public class MainActivity extends ActionBarActivity {
             mAndroidBlue.setOnReceive(new Runnable() {
                 @Override
                 public void run() {
-                    peltier.setChecked(mAndroidBlue.peltier.isOn());
+                    peltier.setChecked(mAndroidBlue.peltier.isAuto());
                 }
             });
 
@@ -283,7 +282,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         public void onDestroyView() {
             super.onDestroyView();
-            mAndroidBlue.destroyOnReceive();
+            mAndroidBlue.changeUI();
         }
     }
 
@@ -305,7 +304,7 @@ public class MainActivity extends ActionBarActivity {
                 public void onClick(View v) {
                     boolean on = ((Switch)v).isChecked();
                     if (on) {
-                        mAndroidBlue.enableBluetooth();
+                        mAndroidBlue.enableBluetooth(getActivity());
                     } else {
                         mAndroidBlue.disableBluetooth();
                     }
