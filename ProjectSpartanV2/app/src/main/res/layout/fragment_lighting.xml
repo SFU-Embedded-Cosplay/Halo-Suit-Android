@@ -1,54 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+    <view
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView2"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/halo_armor" />
-
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="white head lights"
-        android:id="@+id/switch5"
+        class="com.haloproject.projectspartanv2.TopBar"
+        app:menuName="Lighting"
+        android:id="@+id/lightingBar"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
-
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="red head lights"
-        android:id="@+id/switch6"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="on"
-        android:id="@+id/on"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="off"
-        android:id="@+id/off"
-        android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/on" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="AUTO"
-        android:id="@+id/auto"
-        android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/off" />
-
 </RelativeLayout>

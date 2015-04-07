@@ -1,31 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <Switch
+    <view
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Peltier"
-        android:id="@+id/peltier"
+        class="com.haloproject.projectspartanv2.TopBar"
+        app:menuName="Cooling"
+        android:id="@+id/coolingBar"
         android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/waterpump"
-        android:background="#aa000000" />
-
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Water Pump"
-        android:id="@+id/waterpump"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true"
-        android:background="#aa000000" />
-
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Head Fans"
-        android:id="@+id/headfans"
-        android:layout_alignParentBottom="true"
-        android:layout_alignEnd="@+id/waterpump"
-        android:background="#aa000000" />
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

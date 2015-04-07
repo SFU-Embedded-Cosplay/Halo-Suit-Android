@@ -18,7 +18,6 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.haloproject.bluetooth.AndroidBlue;
@@ -165,120 +164,121 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    static private void updateTopBar(final TopBar mTopBar) {
+        if (mAndroidBlue.isConnected()) {
+            mTopBar.setBluetooth(true);
+        } else {
+            mTopBar.setBluetooth(false);
+        }
+
+        mAndroidBlue.setOnConnect(new Runnable() {
+            @Override
+            public void run() {
+                mTopBar.setBluetooth(true);
+            }
+        });
+
+        mAndroidBlue.setOnDisconnect(new Runnable() {
+            @Override
+            public void run() {
+                mTopBar.setBluetooth(false);
+            }
+        });
+    }
+
     static public class MainFragment extends Fragment {
+        private TopBar mTopBar;
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             currentFragment = -1;
             // Inflate the layout for this fragment
-            return inflater.inflate(R.layout.fragment_main, container, false);
+            View view = inflater.inflate(R.layout.fragment_main, container, false);
+            mTopBar = (TopBar) view.findViewById(R.id.mainmenubar);
+            updateTopBar(mTopBar);
+            return view;
+        }
+
+        @Override
+        public void onDestroyView() {
+            super.onDestroyView();
+            mAndroidBlue.changeUI();
         }
     }
 
     static public class CoolingFragment extends Fragment {
-        Switch peltier;
+        private TopBar mTopBar;
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.fragment_cooling, container, false);
-            Switch waterpump = (Switch) view.findViewById(R.id.waterpump);
-            peltier = (Switch) view.findViewById(R.id.peltier);
-            waterpump.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        mAndroidBlue.waterPump.on();
-                    } else {
-                        mAndroidBlue.waterPump.off();
-                    }
-                }
-            });
-
-            mAndroidBlue.setOnReceive(new Runnable() {
-                @Override
-                public void run() {
-                    peltier.setChecked(mAndroidBlue.peltier.isAuto());
-                }
-            });
-
-            Switch headfans = (Switch) view.findViewById(R.id.headfans);
-            headfans.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        mAndroidBlue.headFans.on();
-                    } else {
-                        mAndroidBlue.headFans.off();
-                    }
-                }
-            });
+            mTopBar = (TopBar) view.findViewById(R.id.coolingBar);
+            updateTopBar(mTopBar);
             return view;
+        }
+
+        @Override
+        public void onDestroyView() {
+            super.onDestroyView();
+            mAndroidBlue.changeUI();
         }
     }
 
     static public class LightingFragment extends Fragment {
+        private TopBar mTopBar;
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             // Inflate the layout for this fragment
             View view = inflater.inflate(R.layout.fragment_lighting, container, false);
-            Button on = (Button) view.findViewById(R.id.on);
-            Button off = (Button) view.findViewById(R.id.off);
-            Button auto = (Button) view.findViewById(R.id.auto);
-            on.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAndroidBlue.mainLights.on();
-                }
-            });
-            off.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAndroidBlue.mainLights.off();
-                }
-            });
-            auto.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAndroidBlue.mainLights.auto();
-                }
-            });
-            //Switch whiteheadlights = (Switch) view.findViewById()
+            mTopBar = (TopBar) view.findViewById(R.id.lightingBar);
+            updateTopBar(mTopBar);
             return view;
         }
     }
 
     static public class RadarFragment extends Fragment {
+        private TopBar mTopBar;
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             // Inflate the layout for this fragment
-            return inflater.inflate(R.layout.fragment_radar, container, false);
+            View view = inflater.inflate(R.layout.fragment_radar, container, false);
+            mTopBar = (TopBar) view.findViewById(R.id.radarBar);
+            updateTopBar(mTopBar);
+            return view;
         }
     }
 
 
     static public class VitalsFragment extends Fragment {
-        TextView headtemp;
-        TextView armpitstemp;
-        TextView crotchtemp;
-        TextView watertemp;
+        private TopBar mTopBar;
+        private TempWheel headTemp;
+        private TempWheel armpitsTemp;
+        private TempWheel crotchTemp;
+        private TempWheel waterTemp;
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            final View view = inflater.inflate(R.layout.fragment_vitals, container, false);
-            headtemp = (TextView) view.findViewById(R.id.headtemp);
-            armpitstemp = (TextView) view.findViewById(R.id.armpitstemp);
-            crotchtemp = (TextView) view.findViewById(R.id.crotchtemp);
-            watertemp = (TextView) view.findViewById(R.id.watertemp);
-            mAndroidBlue.setOnReceive(new Runnable() {
+            View view = inflater.inflate(R.layout.fragment_vitals, container, false);
+            mTopBar = (TopBar) view.findViewById(R.id.vitalsBar);
+            updateTopBar(mTopBar);
+            headTemp = (TempWheel) view.findViewById(R.id.headTemp);
+            new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    headtemp.setText(String.format("%.2f", mAndroidBlue.headTemperature.getValue()));
-                    armpitstemp.setText(String.format("%.2f", mAndroidBlue.armpitsTemperature.getValue()));
-                    crotchtemp.setText(String.format("%.2f", mAndroidBlue.crotchTemperature.getValue()));
-                    watertemp.setText(String.format("%.2f", mAndroidBlue.waterTemperature.getValue()));
+                    while (true) {
+                        float oldTemp = headTemp.getTemp();
+                        float newTemp = ((int) oldTemp + 2) % 40;
+                        headTemp.setTemp(newTemp);
+                        try {
+                            Thread.sleep(1000);
+                        } catch (Exception e) {
+
+                        }
+                    }
                 }
-            });
+            }).start();
+
             return view;
         }
 

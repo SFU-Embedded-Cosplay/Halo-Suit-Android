@@ -58,7 +58,7 @@ public class MainButton extends View {
 
     private void invalidateTextPaintAndMeasurements() {
         mTextPaint.setTextSize(70);
-        mTextPaint.setColor(Color.argb(0xFF, 0x85, 0xAB, 0xCF));
+        mTextPaint.setColor(getResources().getColor(R.color.HaloLightBlue));
         mTextWidth = mTextPaint.measureText(mString);
 
         Paint.FontMetrics fontMetrics = mTextPaint.getFontMetrics();

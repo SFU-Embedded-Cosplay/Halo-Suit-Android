@@ -7,8 +7,8 @@
     <com.haloproject.projectspartanv2.TopBar
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/view"
-        app:bluetoothOn="false"
+        android:id="@+id/mainmenubar"
+        app:bluetoothOn="true"
         app:menuName="Main Menu"
         android:layout_alignParentStart="true" />
 
@@ -16,7 +16,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/horizontalScrollView"
-        android:layout_below="@+id/view"
+        android:layout_below="@+id/mainmenubar"
         android:scrollbars="none"
         android:layout_alignParentStart="true" >
 
@@ -33,7 +33,8 @@
                 class="com.haloproject.projectspartanv2.MainButton"
                 app:String="VITALS"
                 app:Icon="@drawable/vital_icon"
-                android:id="@+id/view2" />
+                android:id="@+id/menuButton1"
+                android:onClick="vitals" />
 
             <view
                 class="com.haloproject.projectspartanv2.MainButton"
@@ -42,7 +43,8 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="30px"
                 android:paddingTop="20px"
-                android:id="@+id/view3" />
+                android:id="@+id/menuButton2"
+                android:onClick="cooling" />
 
             <view
                 class="com.haloproject.projectspartanv2.MainButton"
@@ -51,7 +53,8 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="30px"
                 android:paddingTop="20px"
-                android:id="@+id/view4" />
+                android:id="@+id/menuButton3"
+                android:onClick="lighting" />
 
             <view
                 android:layout_width="wrap_content"
@@ -60,7 +63,8 @@
                 android:paddingTop="20px"
                 class="com.haloproject.projectspartanv2.MainButton"
                 app:String="RADAR"
-                android:id="@+id/view1" />
+                android:id="@+id/menuButton4"
+                android:onClick="radar" />
 
             <view
                 class="com.haloproject.projectspartanv2.MainButton"
@@ -69,7 +73,8 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="30px"
                 android:paddingTop="20px"
-                android:id="@+id/view5" />
+                android:id="@+id/menuButton5"
+                android:onClick="settings" />
         </LinearLayout>
     </HorizontalScrollView>
 

@@ -98,28 +98,14 @@ public class TopBar extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-//        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-//        int widthSize = MeasureSpec.getMode(widthMeasureSpec);
-//        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-//        int heightSize = MeasureSpec.getMode(heightMeasureSpec);
-
         int width = mTopBar.getIntrinsicWidth();
         int height = mTopBar.getIntrinsicHeight();
-
-//        if (widthMode == MeasureSpec.UNSPECIFIED) {
-//            width = mTopBar.getIntrinsicWidth();
-//        } else {
-//            width = widthSize;
-//        }
-//
-//        if (heightMode == MeasureSpec.UNSPECIFIED) {
-//            height = mTopBar.getIntrinsicHeight();
-//        } else {
-//            height = heightSize;
-//        }
 
         setMeasuredDimension(width, height);
     }
 
-
+    public void setBluetooth(boolean on) {
+        mBluetoothOn = on;
+        postInvalidate();
+    }
 }
