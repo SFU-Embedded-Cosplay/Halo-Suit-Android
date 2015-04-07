@@ -1,0 +1,6 @@
+<resources>
+    <declare-styleable name="MainButton">
+        <attr name="String" format="string" />
+        <attr name="Icon" format="reference" />
+    </declare-styleable>
+</resources>

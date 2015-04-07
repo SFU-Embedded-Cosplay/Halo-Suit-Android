@@ -1,78 +1,76 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity$PlaceholderFragment">
 
-    <ImageView
-        android:layout_width="wrap_content"
+    <com.haloproject.projectspartanv2.TopBar
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView3"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:src="@drawable/top_bar" />
+        android:id="@+id/view"
+        app:bluetoothOn="false"
+        app:menuName="Main Menu"
+        android:layout_alignParentStart="true" />
 
     <HorizontalScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/horizontalScrollView"
-        android:layout_below="@+id/imageView3"
+        android:layout_below="@+id/view"
         android:scrollbars="none"
         android:layout_alignParentStart="true" >
 
-        <RelativeLayout
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
-            <ImageView
+            <view
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/mainButton1"
-                android:src="@drawable/vitals_button"
-                android:layout_alignParentTop="true"
-                android:clickable="true"
-                android:onClick="vitals" />
+                android:paddingRight="30px"
+                android:paddingTop="20px"
+                class="com.haloproject.projectspartanv2.MainButton"
+                app:String="VITALS"
+                app:Icon="@drawable/vital_icon"
+                android:id="@+id/view2" />
 
-            <ImageView
+            <view
+                class="com.haloproject.projectspartanv2.MainButton"
+                app:String="COOLING"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/mainButton2"
-                android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/mainButton1"
-                android:clickable="true"
-                android:onClick="cooling"
-                android:src="@drawable/main_button" />
+                android:paddingRight="30px"
+                android:paddingTop="20px"
+                android:id="@+id/view3" />
 
-            <ImageView
+            <view
+                class="com.haloproject.projectspartanv2.MainButton"
+                app:String="LIGHTING"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/mainButton3"
-                android:src="@drawable/main_button"
-                android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/mainButton2"
-                android:clickable="true"
-                android:onClick="lighting" />
+                android:paddingRight="30px"
+                android:paddingTop="20px"
+                android:id="@+id/view4" />
 
-            <ImageView
+            <view
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/mainButton4"
-                android:src="@drawable/main_button"
-                android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/mainButton3"
-                android:clickable="true"
-                android:onClick="radar" />
+                android:paddingRight="30px"
+                android:paddingTop="20px"
+                class="com.haloproject.projectspartanv2.MainButton"
+                app:String="RADAR"
+                android:id="@+id/view1" />
 
-            <ImageView
+            <view
+                class="com.haloproject.projectspartanv2.MainButton"
+                app:String="SETTINGS"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/mainButton5"
-                android:src="@drawable/main_button"
-                android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/mainButton4"
-                android:onClick="settings"
-                android:clickable="true" />
-
-        </RelativeLayout>
+                android:paddingRight="30px"
+                android:paddingTop="20px"
+                android:id="@+id/view5" />
+        </LinearLayout>
     </HorizontalScrollView>
 
 </RelativeLayout>
