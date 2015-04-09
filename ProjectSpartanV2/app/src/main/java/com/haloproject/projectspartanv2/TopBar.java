@@ -108,4 +108,9 @@ public class TopBar extends View {
         mBluetoothOn = on;
         postInvalidate();
     }
+
+    public void setMenuName(String menuName) {
+        mMenuName = menuName;
+        postInvalidate();
+    }
 }

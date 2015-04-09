@@ -4,6 +4,8 @@ import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Switch;
@@ -29,13 +33,21 @@ public class MainActivity extends ActionBarActivity {
     static private int currentFragment; //-1 means its at main menu
     static private SharedPreferences mPreferences;
     private float x1, x2, y1, y2;
+    static private int mainMenuLocation = 0;
+    static private TopBar mTopBar;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_IMMERSIVE
-                | View.SYSTEM_UI_FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         mFragmentManager = getSupportFragmentManager();
         if (savedInstanceState == null) {
@@ -53,6 +65,8 @@ public class MainActivity extends ActionBarActivity {
             }
         }
         currentFragment = -1;
+        mTopBar = (TopBar) findViewById(R.id.topbar);
+        updateTopBar(mTopBar);
     }
 
     @Override
@@ -69,22 +83,24 @@ public class MainActivity extends ActionBarActivity {
                     if (currentFragment != -1 && currentFragment > 0) {
                         currentFragment -= 1;
                         mFragmentManager.beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
                                 .replace(R.id.container, swipeFragment(currentFragment))
                                 .commit();
                     }
                 } else if (x1 - x2 > 600) {
-                    if (currentFragment != -1 && currentFragment < TOTAL_SWIPE_FRAGMENTS) {
+                    if (currentFragment != -1 && currentFragment < TOTAL_SWIPE_FRAGMENTS - 1) {
+                        //left to right
                         currentFragment += 1;
-                        mFragmentManager.popBackStack();
                         mFragmentManager.beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                                 .replace(R.id.container, swipeFragment(currentFragment))
                                 .commit();
                     }
                 } else if (y2 - y1 > 400) {
                     if (mFragmentManager.getBackStackEntryCount() != 0) {
                         currentFragment = -1;
-                        mFragmentManager.popBackStack();
                         mFragmentManager.beginTransaction()
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                                 .replace(R.id.container, swipeFragment(currentFragment))
                                 .commit();
                     }
@@ -187,91 +203,88 @@ public class MainActivity extends ActionBarActivity {
     }
 
     static public class MainFragment extends Fragment {
-        private TopBar mTopBar;
+        private LinearLayout mainMenu;
+        private HorizontalScrollView scrollView;
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             currentFragment = -1;
+            mTopBar.setMenuName("Main Menu");
             // Inflate the layout for this fragment
             View view = inflater.inflate(R.layout.fragment_main, container, false);
-            mTopBar = (TopBar) view.findViewById(R.id.mainmenubar);
-            updateTopBar(mTopBar);
+            mainMenu = (LinearLayout) view.findViewById(R.id.mainmenu);
+            scrollView = (HorizontalScrollView) view.findViewById(R.id.scrollview);
+            int y = mainMenu.getTop();
+            scrollView.scrollTo(mainMenuLocation, y);
             return view;
         }
 
         @Override
         public void onDestroyView() {
             super.onDestroyView();
-            mAndroidBlue.changeUI();
+            mainMenuLocation = mainMenu.getLeft();
+            mAndroidBlue.changeOnReceive();
         }
     }
 
     static public class CoolingFragment extends Fragment {
-        private TopBar mTopBar;
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            mTopBar.setMenuName("Cooling");
             View view = inflater.inflate(R.layout.fragment_cooling, container, false);
-            mTopBar = (TopBar) view.findViewById(R.id.coolingBar);
-            updateTopBar(mTopBar);
             return view;
         }
 
         @Override
         public void onDestroyView() {
             super.onDestroyView();
-            mAndroidBlue.changeUI();
+            mAndroidBlue.changeOnReceive();
         }
     }
 
     static public class LightingFragment extends Fragment {
-        private TopBar mTopBar;
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             // Inflate the layout for this fragment
+            mTopBar.setMenuName("Lighting");
             View view = inflater.inflate(R.layout.fragment_lighting, container, false);
-            mTopBar = (TopBar) view.findViewById(R.id.lightingBar);
-            updateTopBar(mTopBar);
             return view;
         }
     }
 
     static public class RadarFragment extends Fragment {
-        private TopBar mTopBar;
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             // Inflate the layout for this fragment
+            mTopBar.setMenuName("Radar");
             View view = inflater.inflate(R.layout.fragment_radar, container, false);
-            mTopBar = (TopBar) view.findViewById(R.id.radarBar);
-            updateTopBar(mTopBar);
             return view;
         }
     }
 
 
     static public class VitalsFragment extends Fragment {
-        private TopBar mTopBar;
         private TempWheel headTemp;
         private TempWheel armpitsTemp;
         private TempWheel crotchTemp;
         private TempWheel waterTemp;
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            mTopBar.setMenuName("Vitals");
             View view = inflater.inflate(R.layout.fragment_vitals, container, false);
-            mTopBar = (TopBar) view.findViewById(R.id.vitalsBar);
-            updateTopBar(mTopBar);
             headTemp = (TempWheel) view.findViewById(R.id.headTemp);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     while (true) {
-                        float oldTemp = headTemp.getTemp();
-                        float newTemp = ((int) oldTemp + 2) % 40;
+                        double oldTemp = headTemp.getTemp();
+                        double newTemp = (oldTemp + 0.2);
                         headTemp.setTemp(newTemp);
                         try {
-                            Thread.sleep(1000);
+                            Thread.sleep(300);
                         } catch (Exception e) {
 
                         }
@@ -285,7 +298,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         public void onDestroyView() {
             super.onDestroyView();
-            mAndroidBlue.changeUI();
+            mAndroidBlue.changeOnReceive();
         }
     }
 
@@ -300,6 +313,7 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            mTopBar.setMenuName("Settings");
             view = inflater.inflate(R.layout.fragment_settings, container, false);
             switch1 = (Switch) view.findViewById(R.id.switch1);
             switch1.setOnClickListener(new View.OnClickListener() {
@@ -346,18 +360,7 @@ public class MainActivity extends ActionBarActivity {
                     }
                 }
             });
-            mAndroidBlue.setOnConnect(new Runnable() {
-                @Override
-                public void run() {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getActivity(), "Connected", Toast.LENGTH_LONG).show();
-                            connected.setChecked(true);
-                        }
-                    });
-                }
-            });
+
             configure = (Button) view.findViewById(R.id.configure);
             configure.setOnClickListener(new View.OnClickListener() {
                 @Override

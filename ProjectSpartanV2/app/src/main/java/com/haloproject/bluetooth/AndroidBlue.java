@@ -286,6 +286,10 @@ public class AndroidBlue {
         this.onConnect = null;
     }
 
+    public void changeOnReceive() {
+        onReceive = null;
+    }
+
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();

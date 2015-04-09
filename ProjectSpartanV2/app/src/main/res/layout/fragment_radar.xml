@@ -5,12 +5,4 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <view
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        class="com.haloproject.projectspartanv2.TopBar"
-        app:menuName="Radar"
-        android:id="@+id/radarBar"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
 </RelativeLayout>
