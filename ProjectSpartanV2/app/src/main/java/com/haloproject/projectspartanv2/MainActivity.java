@@ -38,8 +38,8 @@ public class MainActivity extends ActionBarActivity {
     static private TopBar mTopBar;
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_IMMERSIVE
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
@@ -307,29 +307,13 @@ public class MainActivity extends ActionBarActivity {
 
     static public class SettingsFragment extends Fragment {
         private ListView btdevices;
-        private Switch switch1;
-        private Button discover;
-        private Button configure;
-        private Button deconfigure;
         private View view;
-        private RadioButton connected;
 
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             mTopBar.setMenuName("Settings");
             view = inflater.inflate(R.layout.fragment_settings, container, false);
-            switch1 = (Switch) view.findViewById(R.id.switch1);
-            switch1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    boolean on = ((Switch)v).isChecked();
-                    if (on) {
-                        mAndroidBlue.enableBluetooth(getActivity());
-                    } else {
-                        mAndroidBlue.disableBluetooth();
-                    }
-                }
-            });
+
             btdevices = (ListView) view.findViewById(R.id.btdevices);
             btdevices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -339,51 +323,7 @@ public class MainActivity extends ActionBarActivity {
                     }
                 }
             });
-            discover = (Button) view.findViewById(R.id.discover);
-            discover.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    btdevices.setAdapter(mAndroidBlue.getDeviceStrings());
-                    mAndroidBlue.startDiscovery();
-                }
-            });
-            connected = (RadioButton) view.findViewById(R.id.connected);
-            if (mAndroidBlue.isConnected()) {
-                connected.setChecked(true);
-            } else {
-                connected.setChecked(false);
-            }
-            connected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (mAndroidBlue.isConnected()) {
-                        ((RadioButton) buttonView).setChecked(true);
-                    } else {
-                        ((RadioButton) buttonView).setChecked(false);
-                    }
-                }
-            });
-
-            configure = (Button) view.findViewById(R.id.configure);
-            configure.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mAndroidBlue.sendConfiguration()) {
-                        mPreferences.edit().putString("bluetooth", mAndroidBlue.getBeagleBone().getAddress()).commit();
-                    }
-                }
-            });
-            deconfigure = (Button) view.findViewById(R.id.deconfigure);
-            deconfigure.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mAndroidBlue.sendDeConfiguration()) {
-                        if (mPreferences.contains("bluetooth")) {
-                            mPreferences.edit().remove("bluetooth").commit();
-                        }
-                    }
-                }
-            });
+            btdevices.setAdapter(mAndroidBlue.getDeviceStrings());
             return view;
         }
 
@@ -391,10 +331,12 @@ public class MainActivity extends ActionBarActivity {
         public void onStart() {
             super.onStart();
             if (mAndroidBlue.isEnabled()) {
-                switch1.setChecked(true);
+                mAndroidBlue.startDiscovery();
             } else {
-                switch1.setChecked(false);
+                mAndroidBlue.enableBluetooth(getActivity());
+                mAndroidBlue.startDiscovery();
             }
+
         }
     }
 

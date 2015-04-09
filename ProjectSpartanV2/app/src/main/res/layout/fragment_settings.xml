@@ -4,69 +4,11 @@
     tools:context="com.haloproject.projectspartanv2.SettingsFragment">
 
     <ListView
-        android:layout_width="250dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:id="@+id/btdevices"
         android:layout_alignParentStart="true"
         android:headerDividersEnabled="false"
-        android:background="#aa000000"
-        android:layout_below="@+id/switch1"
-        android:layout_above="@+id/configure" />
-
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:paddingTop="16dp"
-        android:id="@+id/switch1"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/btdevices"
-        android:textOn="Bluetooth On"
-        android:textOff="Bluetooth Off"
-        android:text="Bluetooth" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Lock Configuration"
-        android:id="@+id/configure"
-        android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/deconfigure" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start Discovery"
-        android:id="@+id/discover"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/switch1" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="10px"
-        android:paddingLeft="20px"
-        android:text="Bluetooth Devices"
-        android:id="@+id/textView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:textSize="20dp" />
-
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/connected"
-        android:layout_below="@+id/btdevices"
-        android:layout_alignParentStart="true"
-        android:checked="false"
-        android:text="Connected" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Remove Configuration"
-        android:id="@+id/deconfigure"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true" />
+        android:background="#aa000000" />
 
 </RelativeLayout>
