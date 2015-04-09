@@ -11,9 +11,10 @@ import android.util.AttributeSet;
 import android.view.View;
 
 public class MainButton extends View {
-    private String mString = "MENU ITEM";
+    private String mText = "MENU ITEM";
     private Drawable mDrawable = getContext().getDrawable(R.drawable.main_button);
     private Drawable mIcon = null;
+    private int iconX = 62, iconY = 297;
 
     private TextPaint mTextPaint;
     private float mTextWidth;
@@ -39,11 +40,17 @@ public class MainButton extends View {
         final TypedArray a = getContext().obtainStyledAttributes(
                 attrs, R.styleable.MainButton, defStyle, 0);
 
-        if (a.hasValue(R.styleable.MainButton_String)) {
-            mString = a.getString(R.styleable.MainButton_String);
+        if (a.hasValue(R.styleable.MainButton_Text)) {
+            mText = a.getString(R.styleable.MainButton_Text);
         }
         if (a.hasValue(R.styleable.MainButton_Icon)) {
             mIcon = a.getDrawable(R.styleable.MainButton_Icon);
+        }
+        if (a.hasValue(R.styleable.MainButton_iconX)) {
+            iconX = a.getInteger(R.styleable.MainButton_iconX, 62);
+        }
+        if (a.hasValue(R.styleable.MainButton_iconY)) {
+            iconY = a.getInteger(R.styleable.MainButton_iconY, 297);
         }
         a.recycle();
 
@@ -59,7 +66,7 @@ public class MainButton extends View {
     private void invalidateTextPaintAndMeasurements() {
         mTextPaint.setTextSize(70);
         mTextPaint.setColor(getResources().getColor(R.color.HaloLightBlue));
-        mTextWidth = mTextPaint.measureText(mString);
+        mTextWidth = mTextPaint.measureText(mText);
 
         Paint.FontMetrics fontMetrics = mTextPaint.getFontMetrics();
         mTextHeight = fontMetrics.bottom;
@@ -82,11 +89,11 @@ public class MainButton extends View {
         mDrawable.draw(canvas);
 
         if (mIcon != null) {
-            mIcon.setBounds(62, 297, 62 + mIcon.getIntrinsicWidth(), 297 + mIcon.getIntrinsicHeight());
+            mIcon.setBounds(iconX, iconY, iconX + mIcon.getIntrinsicWidth(), iconY + mIcon.getIntrinsicHeight());
             mIcon.draw(canvas);
         }
         // Draw the text.
-        canvas.drawText(mString, 50, 100, mTextPaint);
+        canvas.drawText(mText, 50, 100, mTextPaint);
     }
 
     @Override
@@ -114,11 +121,11 @@ public class MainButton extends View {
     }
 
     public String getString() {
-        return mString;
+        return mText;
     }
 
     public void setString(String string) {
-        mString = string;
+        mText = string;
         invalidateTextPaintAndMeasurements();
     }
 

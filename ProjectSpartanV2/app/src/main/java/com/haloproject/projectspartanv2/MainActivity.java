@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -49,6 +50,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mFragmentManager = getSupportFragmentManager();
         if (savedInstanceState == null) {
             mFragmentManager.beginTransaction()
@@ -129,6 +131,7 @@ public class MainActivity extends ActionBarActivity {
 
     private void openCurrentFragment() {
         mFragmentManager.beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
                 .replace(R.id.container, swipeFragment(currentFragment))
                 .addToBackStack("test").commit();
     }

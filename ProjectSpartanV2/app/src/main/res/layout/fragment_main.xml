@@ -18,19 +18,21 @@
             android:id="@+id/mainmenu">
 
             <view
+                class="com.haloproject.projectspartanv2.MainButton"
+                app:Text="VITALS"
+                app:Icon="@drawable/vital_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingRight="30px"
                 android:paddingTop="20px"
-                class="com.haloproject.projectspartanv2.MainButton"
-                app:String="VITALS"
-                app:Icon="@drawable/vital_icon"
                 android:id="@+id/menuButton1"
                 android:onClick="vitals" />
 
             <view
                 class="com.haloproject.projectspartanv2.MainButton"
-                app:String="COOLING"
+                app:Text="COOLING"
+                app:Icon="@drawable/cooling_icon"
+                app:iconX="270"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingRight="30px"
@@ -40,7 +42,9 @@
 
             <view
                 class="com.haloproject.projectspartanv2.MainButton"
-                app:String="LIGHTING"
+                app:Text="LIGHTING"
+                app:Icon="@drawable/lighting_icon"
+                app:iconY="150"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingRight="30px"
@@ -49,18 +53,22 @@
                 android:onClick="lighting" />
 
             <view
+                class="com.haloproject.projectspartanv2.MainButton"
+                app:Text="RADAR"
+                app:Icon="@drawable/radar_icon"
+                app:iconX="110"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingRight="30px"
                 android:paddingTop="20px"
-                class="com.haloproject.projectspartanv2.MainButton"
-                app:String="RADAR"
                 android:id="@+id/menuButton4"
                 android:onClick="radar" />
 
             <view
                 class="com.haloproject.projectspartanv2.MainButton"
-                app:String="SETTINGS"
+                app:Text="SETTINGS"
+                app:Icon="@drawable/settings_icon"
+                app:iconY="280"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingRight="30px"

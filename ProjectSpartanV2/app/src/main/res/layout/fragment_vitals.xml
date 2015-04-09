@@ -20,7 +20,7 @@
             android:layout_height="400px"
             class="com.haloproject.projectspartanv2.TempWheel"
             android:id="@+id/view"
-            app:currTemp="30.0"
+            app:currTemp="40.0"
             android:layout_row="1"
             android:layout_column="0" />
 
