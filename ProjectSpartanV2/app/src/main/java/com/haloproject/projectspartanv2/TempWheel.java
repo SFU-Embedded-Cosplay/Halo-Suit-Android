@@ -19,8 +19,9 @@ import android.view.View;
 public class TempWheel extends View {
     private double maxTemp = 40.0f;
     private double currTemp = 0.0f;
-    private int haloBlue;
-    private int haloRed;
+    private int haloLightBlue;
+    private int haloDarkBlue;
+    private int haloHotRed;
     private RectF mRectF;
 
 
@@ -59,22 +60,23 @@ public class TempWheel extends View {
 
         mRectF = new RectF(0, 0, getWidth(), getHeight());
 
-        haloBlue = getResources().getColor(R.color.HaloLightBlue);
-        haloRed = getResources().getColor(R.color.HaloHotRed);
+        haloLightBlue = getResources().getColor(R.color.HaloLightBlue);
+        haloDarkBlue = getResources().getColor(R.color.HaloDarkBlue);
+        haloHotRed = getResources().getColor(R.color.HaloHotRed);
 
         mPaint = new Paint();
         mPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
-        mPaint.setColor(haloBlue);
+        mPaint.setColor(haloLightBlue);
 
         mStroke = new Paint();
         mStroke.setFlags(Paint.ANTI_ALIAS_FLAG);
         mStroke.setStyle(Paint.Style.STROKE);
         mStroke.setStrokeWidth(40);
-        mStroke.setShader(new SweepGradient(200, 200, new int[]{haloBlue, haloBlue, haloBlue, haloRed}, null));
+        mStroke.setShader(new SweepGradient(200, 200, new int[]{haloDarkBlue, haloDarkBlue, haloLightBlue, haloHotRed}, null));
 
         mTextPaint = new TextPaint();
         mTextPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
-        mTextPaint.setColor(haloBlue);
+        mTextPaint.setColor(haloLightBlue);
         mTextPaint.setTextSize(100);
     }
 
@@ -96,7 +98,7 @@ public class TempWheel extends View {
         Rect bounds = new Rect();
         mTextPaint.getTextBounds(temperature, 0, temperature.length() - 1, bounds);
 
-        canvas.drawText(temperature, 200 - bounds.centerX(), 200 - bounds.centerY(), mTextPaint);
+        canvas.drawText(temperature, 200 - bounds.centerX() - 40, 200 - bounds.centerY(), mTextPaint);
     }
 
     public void setTemp(double temp) {

@@ -1,5 +1,9 @@
 package com.haloproject.projectspartanv2;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -30,7 +34,7 @@ import com.haloproject.bluetooth.AndroidBlue;
 public class MainActivity extends ActionBarActivity {
     static private FragmentManager mFragmentManager;
     static private AndroidBlue mAndroidBlue;
-    final int TOTAL_SWIPE_FRAGMENTS = 5;
+    final int TOTAL_SWIPE_FRAGMENTS = 7;
     static private int currentFragment; //-1 means its at main menu
     static private SharedPreferences mPreferences;
     private float x1, x2, y1, y2;
@@ -69,6 +73,9 @@ public class MainActivity extends ActionBarActivity {
         currentFragment = -1;
         mTopBar = (TopBar) findViewById(R.id.topbar);
         updateTopBar(mTopBar);
+
+        //register receiver
+        registerReceiver(new MediaButtonReceiver(), new IntentFilter(Intent.ACTION_MEDIA_BUTTON));
     }
 
     @Override
@@ -99,7 +106,7 @@ public class MainActivity extends ActionBarActivity {
                                 .commit();
                     }
                 } else if (y2 - y1 > 400) {
-                    if (mFragmentManager.getBackStackEntryCount() != 0) {
+                    if (currentFragment != -1) {
                         currentFragment = -1;
                         mFragmentManager.beginTransaction()
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -110,6 +117,20 @@ public class MainActivity extends ActionBarActivity {
                 break;
         }
         return true;
+    }
+
+    private class MediaButtonReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (Intent.ACTION_MEDIA_BUTTON.equals(intent.getAction())) {
+                        Toast.makeText(context, "Button pressed", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        }
     }
 
     private Fragment swipeFragment(int fragment) {
@@ -123,6 +144,10 @@ public class MainActivity extends ActionBarActivity {
             case 3:
                 return new RadarFragment();
             case 4:
+                return new BatteryFragment();
+            case 5:
+                return new WarningsFragment();
+            case 6:
                 return new SettingsFragment();
             default:
                 return new MainFragment();
@@ -133,7 +158,7 @@ public class MainActivity extends ActionBarActivity {
         mFragmentManager.beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
                 .replace(R.id.container, swipeFragment(currentFragment))
-                .addToBackStack("test").commit();
+                .commit();
     }
 
     public void vitals(View view) {
@@ -156,8 +181,18 @@ public class MainActivity extends ActionBarActivity {
         openCurrentFragment();
     }
 
-    public void settings(View view) {
+    public void batteries(View view) {
         currentFragment = 4;
+        openCurrentFragment();
+    }
+
+    public void warnings(View view) {
+        currentFragment = 5;
+        openCurrentFragment();
+    }
+
+    public void settings(View view) {
+        currentFragment = 6;
         openCurrentFragment();
     }
 
@@ -340,5 +375,21 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+    static public class WarningsFragment extends Fragment {
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            mTopBar.setMenuName("Warnings");
+            View view = inflater.inflate(R.layout.fragment_warnings, container, false);
+            return view;
+        }
+    }
 
+    static public class BatteryFragment extends Fragment {
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            mTopBar.setMenuName("Batteries");
+            View view = inflater.inflate(R.layout.fragment_battery, container, false);
+            return view;
+        }
+    }
 }

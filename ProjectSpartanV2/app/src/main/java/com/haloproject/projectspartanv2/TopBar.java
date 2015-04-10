@@ -58,16 +58,16 @@ public class TopBar extends View {
         mTextPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setTextAlign(Paint.Align.LEFT);
         mTextPaint.setTextSize(100);
-        mTextPaint.setColor(Color.argb(0xFF, 0x85, 0xAB, 0xCF));
+        mTextPaint.setColor(getResources().getColor(R.color.HaloLightBlue));
         mTextWidth = mTextPaint.measureText("Bluetooth");
 
         mPaintOn = new Paint();
         mPaintOn.setFlags(Paint.ANTI_ALIAS_FLAG);
-        mPaintOn.setColor(Color.argb(0xFF, 0x87, 0xBA, 0x52));
+        mPaintOn.setColor(getResources().getColor(R.color.HaloGreen));
 
         mPaintOff = new Paint();
         mPaintOff.setFlags(Paint.ANTI_ALIAS_FLAG);
-        mPaintOff.setColor(Color.argb(0xFF, 0xDB, 0x42, 0x42));
+        mPaintOff.setColor(getResources().getColor(R.color.HaloHotRed));
     }
 
     @Override

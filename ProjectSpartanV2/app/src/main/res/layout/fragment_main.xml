@@ -66,6 +66,31 @@
 
             <view
                 class="com.haloproject.projectspartanv2.MainButton"
+                app:Text="BATTERY"
+                app:Icon="@drawable/battery_icon"
+                app:iconX="200"
+                app:iconY="267"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="30px"
+                android:paddingTop="20px"
+                android:id="@+id/menuButton5"
+                android:onClick="batteries" />
+
+            <view
+                class="com.haloproject.projectspartanv2.MainButton"
+                app:Text="WARNINGS"
+                app:iconX="100"
+                app:Icon="@drawable/warnings_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="30px"
+                android:paddingTop="20px"
+                android:id="@+id/menuButton6"
+                android:onClick="warnings" />
+
+            <view
+                class="com.haloproject.projectspartanv2.MainButton"
                 app:Text="SETTINGS"
                 app:Icon="@drawable/settings_icon"
                 app:iconY="280"
@@ -73,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="30px"
                 android:paddingTop="20px"
-                android:id="@+id/menuButton5"
+                android:id="@+id/menuButton7"
                 android:onClick="settings" />
         </LinearLayout>
     </HorizontalScrollView>
