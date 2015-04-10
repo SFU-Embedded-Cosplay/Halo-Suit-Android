@@ -1,10 +1,16 @@
 package com.haloproject.projectspartanv2;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.media.AudioManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.Fragment;
@@ -31,15 +37,36 @@ import android.widget.Toast;
 
 import com.haloproject.bluetooth.AndroidBlue;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements SensorEventListener {
     static private FragmentManager mFragmentManager;
     static private AndroidBlue mAndroidBlue;
     final int TOTAL_SWIPE_FRAGMENTS = 7;
+    private boolean isUpRight = true;
+    private SensorManager mSensorManager;
+    private Sensor mSensor;
     static private int currentFragment; //-1 means its at main menu
     static private SharedPreferences mPreferences;
     private float x1, x2, y1, y2;
-    static private int mainMenuLocation = 0;
     static private TopBar mTopBar;
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor == mSensor) {
+            final float z = event.values[2];
+            Toast.makeText(getApplicationContext(), String.format("%f", z), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(this);
+    }
 
     @Override
     protected void onResume() {
@@ -48,6 +75,7 @@ public class MainActivity extends ActionBarActivity {
                 | View.SYSTEM_UI_FLAG_IMMERSIVE
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL, 1000);
     }
 
     @Override
@@ -74,8 +102,9 @@ public class MainActivity extends ActionBarActivity {
         mTopBar = (TopBar) findViewById(R.id.topbar);
         updateTopBar(mTopBar);
 
-        //register receiver
-        registerReceiver(new MediaButtonReceiver(), new IntentFilter(Intent.ACTION_MEDIA_BUTTON));
+        //create sensor
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR);
     }
 
     @Override
@@ -117,20 +146,6 @@ public class MainActivity extends ActionBarActivity {
                 break;
         }
         return true;
-    }
-
-    private class MediaButtonReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(final Context context, final Intent intent) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (Intent.ACTION_MEDIA_BUTTON.equals(intent.getAction())) {
-                        Toast.makeText(context, "Button pressed", Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
-        }
     }
 
     private Fragment swipeFragment(int fragment) {
@@ -252,15 +267,12 @@ public class MainActivity extends ActionBarActivity {
             View view = inflater.inflate(R.layout.fragment_main, container, false);
             mainMenu = (LinearLayout) view.findViewById(R.id.mainmenu);
             scrollView = (HorizontalScrollView) view.findViewById(R.id.scrollview);
-            int y = mainMenu.getTop();
-            scrollView.scrollTo(mainMenuLocation, y);
             return view;
         }
 
         @Override
         public void onDestroyView() {
             super.onDestroyView();
-            mainMenuLocation = mainMenu.getLeft();
             mAndroidBlue.changeOnReceive();
         }
     }
