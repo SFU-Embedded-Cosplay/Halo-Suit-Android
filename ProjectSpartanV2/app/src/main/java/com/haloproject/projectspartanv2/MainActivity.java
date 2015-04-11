@@ -58,7 +58,6 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor == mSensor) {
             final float z = event.values[2];
-            Toast.makeText(getApplicationContext(), String.format("%f", z), Toast.LENGTH_SHORT).show();
         }
     }
 

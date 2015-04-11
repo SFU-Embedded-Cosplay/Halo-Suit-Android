@@ -5,4 +5,110 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Main Lights"
+        android:id="@+id/textView4"
+        android:layout_alignParentStart="true"
+        android:textSize="100px"
+        android:textColor="@color/HaloLightBlue" />
+
+    <RadioGroup
+        android:layout_width="960px"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/radioGroup">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ON"
+            android:id="@+id/radioButton" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OFF"
+            android:id="@+id/radioButton2" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AUTO"
+            android:id="@+id/radioButton3" />
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Head Lights"
+        android:id="@+id/textView6"
+        android:textSize="100px"
+        android:layout_centerVertical="true"
+        android:textColor="@color/HaloLightBlue" />
+
+    <RadioGroup
+        android:layout_width="480px"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/textView6"
+        android:layout_alignStart="@+id/radioGroup"
+        android:id="@+id/radioGroup2">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ON"
+            android:id="@+id/radioButton6" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OFF"
+            android:id="@+id/radioButton7" />
+    </RadioGroup>
+
+    <RadioGroup
+        android:layout_width="480dp"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/textView6"
+        android:layout_toEndOf="@+id/radioGroup2">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ON"
+            android:id="@+id/radioButton4" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OFF"
+            android:id="@+id/radioButton5" />
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Red"
+        android:id="@+id/textView7"
+        android:textSize="100px"
+        android:textColor="@color/HaloLightBlue"
+        android:layout_alignBottom="@+id/textView6"
+        android:layout_alignStart="@+id/radioGroup2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="White"
+        android:id="@+id/textView8"
+        android:textSize="100px"
+        android:textColor="@color/HaloLightBlue"
+        android:layout_above="@+id/radioGroup2"
+        android:layout_toEndOf="@+id/radioGroup2" />
+
 </RelativeLayout>

@@ -2,7 +2,5 @@
     <declare-styleable name="MainButton">
         <attr name="Text" format="string" />
         <attr name="Icon" format="reference" />
-        <attr name="iconX" format="integer" />
-        <attr name="iconY" format="integer" />
     </declare-styleable>
 </resources>

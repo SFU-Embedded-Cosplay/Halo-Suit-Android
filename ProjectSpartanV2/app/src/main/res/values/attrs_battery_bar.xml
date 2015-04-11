@@ -1,0 +1,6 @@
+<resources>
+    <declare-styleable name="BatteryBar">
+        <attr name="batteryName" format="string"/>
+        <attr name="batteryCharge" format="integer"/>
+    </declare-styleable>
+</resources>
