@@ -1,23 +1,16 @@
 package com.haloproject.projectspartanv2;
 
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.AudioManager;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,13 +19,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import com.haloproject.bluetooth.AndroidBlue;
@@ -176,6 +165,20 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
                 .commit();
     }
 
+    private void toggleVoice() {
+        mFragmentManager.beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                .replace(R.id.container, swipeFragment(currentFragment))
+                .commit();
+    }
+
+    private void toggleSounds() {
+        mFragmentManager.beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                .replace(R.id.container, swipeFragment(currentFragment))
+                .commit();
+    }
+
     public void vitals(View view) {
         currentFragment = 0;
         openCurrentFragment();
@@ -209,6 +212,14 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     public void settings(View view) {
         currentFragment = 6;
         openCurrentFragment();
+    }
+    public void voice(View view) {
+        currentFragment = 7;
+        toggleVoice();
+    }
+    public void sounds(View view) {
+        currentFragment = 8;
+        toggleSounds();
     }
 
     @Override
