@@ -4,35 +4,95 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <view
-        app:batteryCharge="80"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="480px"
-        android:layout_height="893px"
-        class="com.haloproject.projectspartanv2.BatteryBar"
-        android:id="@+id/view"
-        android:layout_gravity="center_vertical" />
+        android:layout_height="fill_parent">
 
-    <view
-        app:batteryCharge="50"
-        class="com.haloproject.projectspartanv2.BatteryBar"
-        android:layout_width="480px"
-        android:layout_height="893px"
-        android:id="@+id/view2"
-        android:layout_gravity="center_vertical" />
+        <view
+            app:batteryCharge="80"
+            android:layout_width="480px"
+            android:layout_height="700px"
+            class="com.haloproject.projectspartanv2.BatteryBar"
+            android:id="@+id/view"
+            android:layout_gravity="center_vertical" />
 
-    <view
-        app:batteryCharge="30"
-        class="com.haloproject.projectspartanv2.BatteryBar"
-        android:layout_width="480px"
-        android:layout_height="893px"
-        android:id="@+id/view3"
-        android:layout_gravity="center_vertical" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Large Text"
+            android:id="@+id/textView10"
+            android:textColor="@color/HaloLightBlue" />
+    </LinearLayout>
 
-    <view
-        app:batteryCharge="100"
-        class="com.haloproject.projectspartanv2.BatteryBar"
-        android:layout_width="480px"
-        android:layout_height="893px"
-        android:id="@+id/view4"
-        android:layout_gravity="center_vertical" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical">
+
+        <view
+            class="com.haloproject.projectspartanv2.BatteryBar"
+            app:batteryCharge="80"
+            android:layout_width="480px"
+            android:layout_height="700px"
+            android:id="@+id/view2"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Large Text"
+            android:id="@+id/textView11"
+            android:textColor="@color/HaloLightBlue" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical">
+
+        <view
+            class="com.haloproject.projectspartanv2.BatteryBar"
+            app:batteryCharge="80"
+            android:layout_width="480px"
+            android:layout_height="700px"
+            android:id="@+id/view3"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Large Text"
+            android:id="@+id/textView12"
+            android:textColor="@color/HaloLightBlue" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical">
+
+        <view
+            class="com.haloproject.projectspartanv2.BatteryBar"
+            app:batteryCharge="80"
+            android:layout_width="480px"
+            android:layout_height="700px"
+            android:id="@+id/view4"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Large Text"
+            android:id="@+id/textView13"
+            android:textColor="@color/HaloLightBlue" />
+    </LinearLayout>
+
 </LinearLayout>

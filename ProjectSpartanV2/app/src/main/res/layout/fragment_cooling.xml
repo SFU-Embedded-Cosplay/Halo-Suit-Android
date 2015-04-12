@@ -61,4 +61,20 @@
             android:textColor="@color/HaloLightBlue" />
     </LinearLayout>
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="760px"
+        android:layout_height="fill_parent"
+        android:id="@+id/linearLayout"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/textView2"
+        android:layout_marginStart="387dp"></LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="760px"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/linearLayout" />
+
 </RelativeLayout>

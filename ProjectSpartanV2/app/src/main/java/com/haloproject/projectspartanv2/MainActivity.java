@@ -110,6 +110,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
             mFragmentManager.beginTransaction()
                     .add(R.id.container, new MainFragment())
                     .commit();
+            currentFragment = -1;
         }
         AndroidBlue.setContext(getApplicationContext());
         mAndroidBlue = AndroidBlue.getInstance();
@@ -120,7 +121,6 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
                 mAndroidBlue.connect();
             }
         }
-        currentFragment = -1;
         mTopBar = (TopBar) findViewById(R.id.topbar);
         updateTopBar(mTopBar);
 
