@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="1000"
+            android:text="0"
             android:id="@+id/flowPump"
             android:textSize="150px"
             android:textColor="@color/HaloLightBlue" />
