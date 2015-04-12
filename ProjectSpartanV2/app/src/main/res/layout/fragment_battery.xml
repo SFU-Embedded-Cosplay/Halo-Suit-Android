@@ -10,20 +10,21 @@
         android:layout_height="fill_parent">
 
         <view
-            app:batteryCharge="80"
+            app:batteryCharge="0"
             android:layout_width="480px"
             android:layout_height="700px"
             class="com.haloproject.projectspartanv2.BatteryBar"
-            android:id="@+id/view"
+            android:id="@+id/highampbattery"
             android:layout_gravity="center_vertical" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
+            android:text="     High Amp"
             android:id="@+id/textView10"
-            android:textColor="@color/HaloLightBlue" />
+            android:textColor="@color/HaloLightBlue"
+            android:textAlignment="center" />
     </LinearLayout>
 
     <LinearLayout
@@ -34,17 +35,17 @@
 
         <view
             class="com.haloproject.projectspartanv2.BatteryBar"
-            app:batteryCharge="80"
+            app:batteryCharge="0"
             android:layout_width="480px"
             android:layout_height="700px"
-            android:id="@+id/view2"
+            android:id="@+id/lowampbattery"
             android:layout_gravity="center_vertical" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
+            android:text="       Low Amp"
             android:id="@+id/textView11"
             android:textColor="@color/HaloLightBlue" />
     </LinearLayout>
@@ -57,17 +58,17 @@
 
         <view
             class="com.haloproject.projectspartanv2.BatteryBar"
-            app:batteryCharge="80"
+            app:batteryCharge="0"
             android:layout_width="480px"
             android:layout_height="700px"
-            android:id="@+id/view3"
+            android:id="@+id/androidbattery"
             android:layout_gravity="center_vertical" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
+            android:text="       Android"
             android:id="@+id/textView12"
             android:textColor="@color/HaloLightBlue" />
     </LinearLayout>
@@ -80,17 +81,17 @@
 
         <view
             class="com.haloproject.projectspartanv2.BatteryBar"
-            app:batteryCharge="80"
+            app:batteryCharge="0"
             android:layout_width="480px"
             android:layout_height="700px"
-            android:id="@+id/view4"
+            android:id="@+id/glassbattery"
             android:layout_gravity="center_vertical" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
+            android:text="         Glass"
             android:id="@+id/textView13"
             android:textColor="@color/HaloLightBlue" />
     </LinearLayout>

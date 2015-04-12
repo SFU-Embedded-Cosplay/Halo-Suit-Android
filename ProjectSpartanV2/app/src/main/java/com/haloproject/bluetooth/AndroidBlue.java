@@ -69,12 +69,12 @@ public class AndroidBlue {
     static private AndroidBlue mAndroidBlue = null;
     static private Context mContext;
 
-    private AtomicBoolean isSoundOn;
+    private boolean isSoundOn;
     private SoundPool soundPool;
     private int volume;
 
-    private AndroidBlue(AtomicBoolean isSoundOn,SoundPool soundPool,int volume) {
-        this.isSoundOn = isSoundOn;
+    private AndroidBlue(SoundPool soundPool,int volume) {
+        this.isSoundOn = false;
         this.soundPool = soundPool;
         this.volume = volume;
 
@@ -107,14 +107,26 @@ public class AndroidBlue {
         mHandler = new Handler(Looper.getMainLooper());
     }
 
+    public boolean isSoundOn() {
+        return isSoundOn;
+    }
+
+    public void turnSoundOff() {
+        isSoundOn = false;
+    }
+
+    public void turnSoundOn() {
+        isSoundOn = true;
+    }
+
     static public void setContext(Context context) {
         mContext = context;
     }
 
-    static public AndroidBlue getInstance(AtomicBoolean isSoundOn,SoundPool soundPool,int volume) {
+    static public AndroidBlue getInstance(SoundPool soundPool,int volume) {
         if (mContext != null) {
             if (mAndroidBlue == null) {
-                mAndroidBlue = new AndroidBlue(isSoundOn,soundPool,volume);
+                mAndroidBlue = new AndroidBlue(soundPool,volume);
             }
             return mAndroidBlue;
         }
@@ -279,7 +291,7 @@ public class AndroidBlue {
                     mBytes = new byte[528];
                     mSocket.getInputStream().read(mBytes);
                     mJSON = new JSONObject(new String(mBytes));
-                    if(isSoundOn.get())
+                    if(isSoundOn)
                     {//a copy is needed because the object is passed off to a separate thread
                         JSONObject jsonCopy = new JSONObject(new String(mBytes));
                         SoundMessageHandler.handleSoundMessage(jsonCopy,soundPool,volume);

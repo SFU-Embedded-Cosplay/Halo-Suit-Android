@@ -30,7 +30,8 @@
         android:layout_width="400px"
         android:layout_height="400px"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:id="@+id/linearLayout">
 
         <TextView
             android:layout_width="wrap_content"
@@ -62,19 +63,111 @@
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="760px"
         android:layout_height="fill_parent"
-        android:id="@+id/linearLayout"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/textView2"
-        android:layout_marginStart="387dp"></LinearLayout>
+        android:id="@+id/linearLayout2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Peltier"
+            android:id="@+id/textView14"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/HaloLightBlue"
+            android:textSize="100px" />
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  AUTO"
+                android:id="@+id/peltierauto"
+                android:textColor="@color/HaloLightBlue" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  OFF"
+                android:id="@+id/peltieroff"
+                android:textColor="@color/HaloLightBlue" />
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Water Pump"
+            android:id="@+id/textView16"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/HaloLightBlue"
+            android:textSize="100px" />
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" >
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  AUTO"
+                android:id="@+id/waterpumpauto"
+                android:textColor="@color/HaloLightBlue" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  OFF"
+                android:id="@+id/waterpumpoff"
+                android:textColor="@color/HaloLightBlue" />
+        </RadioGroup>
+    </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="760px"
         android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/linearLayout" />
+        android:layout_toEndOf="@+id/linearLayout2" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Head Fans"
+            android:id="@+id/textView15"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/HaloLightBlue"
+            android:textSize="100px" />
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  ON"
+                android:id="@+id/headfanson"
+                android:textColor="@color/HaloLightBlue" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  OFF"
+                android:id="@+id/headfansoff"
+                android:textColor="@color/HaloLightBlue" />
+        </RadioGroup>
+
+    </LinearLayout>
 
 </RelativeLayout>
