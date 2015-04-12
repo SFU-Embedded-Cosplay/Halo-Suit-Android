@@ -1,9 +1,5 @@
 package com.haloproject.projectspartanv2;
 
-import android.media.AudioFormat;
-import android.media.AudioManager;
-import android.media.AudioRecord;
-import android.media.AudioTrack;
 import android.media.SoundPool;
 
 import org.json.JSONException;
@@ -25,23 +21,18 @@ public class SoundMessageHandler
                     {
                         if(soundToPlay.equals("lights"))
                         {
-                            soundPool.play(0,volume,volume,1,0,1);
+                            soundPool.play(1,volume,volume,1,0,1);
                         }
-                        else if(soundToPlay.equals("lights_on"))
+                        else if(soundToPlay.equals("shield_off"))
                         {
-                            soundPool.play(0,volume,volume,1,0,1);
+                            soundPool.play(2,volume,volume,1,0,1);
                         }
-                        else if(soundToPlay.equals("lights_on"))
+                        else if(soundToPlay.equals("shield_on"))
                         {
-                            soundPool.play(0,volume,volume,1,0,1);
-                        }
-                        else if(soundToPlay.equals("lights_on"))
-                        {
-                            soundPool.play(0,volume,volume,1,0,1);
+                            soundPool.play(3,volume,volume,1,0,1);
                         }
                     }
-                })
-                if(soundToPlay.compareTo("lights_sound"));
+                }).start();
             } catch (JSONException e)
             {}
 

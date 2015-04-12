@@ -8,16 +8,19 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.SoundPool;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
+
+import com.haloproject.projectspartanv2.SoundMessageHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Adam Brykajlo on 18/02/15.
@@ -56,7 +59,15 @@ public class AndroidBlue {
     static private AndroidBlue mAndroidBlue = null;
     static private Context mContext;
 
-    private AndroidBlue() {
+    private AtomicBoolean isSoundOn;
+    private SoundPool soundPool;
+    private int volume;
+
+    private AndroidBlue(AtomicBoolean isSoundOn,SoundPool soundPool,int volume) {
+        this.isSoundOn = isSoundOn;
+        this.soundPool = soundPool;
+        this.volume = volume;
+
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         mContext.registerReceiver(mReceiver, filter);
@@ -86,10 +97,10 @@ public class AndroidBlue {
         mContext = context;
     }
 
-    static public AndroidBlue getInstance() {
+    static public AndroidBlue getInstance(AtomicBoolean isSoundOn,SoundPool soundPool,int volume) {
         if (mContext != null) {
             if (mAndroidBlue == null) {
-                mAndroidBlue = new AndroidBlue();
+                mAndroidBlue = new AndroidBlue(isSoundOn,soundPool,volume);
             }
             return mAndroidBlue;
         }
@@ -254,6 +265,12 @@ public class AndroidBlue {
                     mBytes = new byte[528];
                     mSocket.getInputStream().read(mBytes);
                     mJSON = new JSONObject(new String(mBytes));
+                    if(isSoundOn.get())
+                    {//a copy is needed because the object is passed off to a separate thread
+                        JSONObject jsonCopy = new JSONObject(new String(mBytes));
+                        SoundMessageHandler.handleSoundMessage(jsonCopy,soundPool,volume);
+                    }
+
                     mHandler.post(onReceive);
                 } catch (IOException e) {
                     try {

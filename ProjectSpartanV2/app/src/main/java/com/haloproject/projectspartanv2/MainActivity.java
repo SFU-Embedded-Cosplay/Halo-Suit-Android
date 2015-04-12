@@ -1,23 +1,18 @@
 package com.haloproject.projectspartanv2;
 
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
+import android.media.SoundPool;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,18 +21,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.Switch;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.haloproject.bluetooth.AndroidBlue;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class MainActivity extends ActionBarActivity implements SensorEventListener {
+    private AtomicBoolean isMicOn,isSoundOn;
     static private FragmentManager mFragmentManager;
     static private AndroidBlue mAndroidBlue;
     final int TOTAL_SWIPE_FRAGMENTS = 7;
@@ -48,6 +42,8 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     static private SharedPreferences mPreferences;
     private float x1, x2, y1, y2;
     static private TopBar mTopBar;
+    Thread micThread;
+    private SoundPool soundPool;
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -58,7 +54,6 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor == mSensor) {
             final float z = event.values[2];
-            Toast.makeText(getApplicationContext(), String.format("%f", z), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -81,6 +76,17 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SoundPool.Builder soundPoolBuilder = new SoundPool.Builder();
+        soundPoolBuilder.setMaxStreams(4);
+        soundPool = soundPoolBuilder.build();
+        soundPool.load(this,R.raw.lights,1);
+        soundPool.load(this,R.raw.shield_off,1);
+        soundPool.load(this,R.raw.shield_on,1);
+
+        AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+        int volume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+
         setContentView(R.layout.activity_main);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mFragmentManager = getSupportFragmentManager();
@@ -88,9 +94,12 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
             mFragmentManager.beginTransaction()
                     .add(R.id.container, new MainFragment())
                     .commit();
+            currentFragment = -1;
         }
         AndroidBlue.setContext(getApplicationContext());
-        mAndroidBlue = AndroidBlue.getInstance();
+        isMicOn = new AtomicBoolean(true);
+        isSoundOn = new AtomicBoolean((true));
+        mAndroidBlue = AndroidBlue.getInstance(isSoundOn,soundPool,volume);
         mPreferences = getPreferences(MODE_PRIVATE);
         if (mPreferences.contains("bluetooth")) {
             String device = mPreferences.getString("bluetooth", "");
@@ -98,13 +107,18 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
                 mAndroidBlue.connect();
             }
         }
-        currentFragment = -1;
         mTopBar = (TopBar) findViewById(R.id.topbar);
         updateTopBar(mTopBar);
 
         //create sensor
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR);
+
+        //initialise microphone
+
+        HandleMicrophoneRunnable handleMicrophoneRunnable = new HandleMicrophoneRunnable(isMicOn);
+        micThread = new Thread(handleMicrophoneRunnable);
+        micThread.start();
     }
 
     @Override
@@ -176,6 +190,38 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
                 .commit();
     }
 
+    private void toggleVoice(MainButton view) {
+        boolean isMicOn = this.isMicOn.get();
+        if(isMicOn)
+        {
+            this.isMicOn.set(false);
+            view.setIcon(getResources().getDrawable(R.drawable.speaker_off_icon));
+            view.invalidate();
+        }
+        else
+        {
+            this.isMicOn.set(true);
+            view.setIcon(getResources().getDrawable(R.drawable.speaker_on_icon));
+            view.invalidate();
+        }
+    }
+
+    private void toggleSounds(MainButton view) {
+        boolean isSoundOn = this.isSoundOn.get();
+        if(isSoundOn)
+        {
+            this.isSoundOn.set(false);
+            view.setIcon(getResources().getDrawable(R.drawable.music_off_icon));
+            view.invalidate();
+        }
+        else
+        {
+            this.isSoundOn.set(true);
+            view.setIcon(getResources().getDrawable(R.drawable.music_on_icon));
+            view.invalidate();
+        }
+    }
+
     public void vitals(View view) {
         currentFragment = 0;
         openCurrentFragment();
@@ -209,6 +255,14 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     public void settings(View view) {
         currentFragment = 6;
         openCurrentFragment();
+    }
+    public void voice(View view) {
+        currentFragment = 7;
+        toggleVoice((MainButton)view);
+    }
+    public void sounds(View view) {
+        currentFragment = 8;
+        toggleSounds((MainButton)view);
     }
 
     @Override
@@ -247,9 +301,11 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
             }
         });
 
-        mAndroidBlue.setOnDisconnect(new Runnable() {
+        mAndroidBlue.setOnDisconnect(new Runnable()
+        {
             @Override
-            public void run() {
+            public void run()
+            {
                 mTopBar.setBluetooth(false);
             }
         });
@@ -320,27 +376,29 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         private TempWheel headTemp;
         private TempWheel armpitsTemp;
         private TempWheel crotchTemp;
-        private TempWheel waterTemp;
+        private TextView heartRate;
+
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             mTopBar.setMenuName("Vitals");
             View view = inflater.inflate(R.layout.fragment_vitals, container, false);
             headTemp = (TempWheel) view.findViewById(R.id.headTemp);
-            new Thread(new Runnable() {
+            armpitsTemp = (TempWheel) view.findViewById(R.id.armpitsTemp);
+            crotchTemp = (TempWheel) view.findViewById(R.id.crotchTemp);
+            heartRate = (TextView) view.findViewById(R.id.heartRate);
+
+            mAndroidBlue.setOnReceive(new Runnable() {
                 @Override
                 public void run() {
-                    while (true) {
-                        double oldTemp = headTemp.getTemp();
-                        double newTemp = (oldTemp + 0.2);
-                        headTemp.setTemp(newTemp);
-                        try {
-                            Thread.sleep(300);
-                        } catch (Exception e) {
+                    headTemp.setTemp(mAndroidBlue.headTemperature.getValue());
+                    armpitsTemp.setTemp(mAndroidBlue.armpitsTemperature.getValue());
+                    crotchTemp.setTemp(mAndroidBlue.crotchTemperature.getValue());
 
-                        }
-                    }
+                    int hr = mAndroidBlue.heartRate.getValue();
+                    String heartrate = String.format("%d", hr);
+                    heartRate.setText(heartrate);
                 }
-            }).start();
+            });
 
             return view;
         }
@@ -402,6 +460,20 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
             mTopBar.setMenuName("Batteries");
             View view = inflater.inflate(R.layout.fragment_battery, container, false);
             return view;
+        }
+    }
+
+    static public class Warning extends Fragment {
+        @Override
+        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            View view = inflater.inflate(R.layout.warning, container, false);
+            return view;
+        }
+
+        @Override
+        public void onStart() {
+            super.onStart();
+
         }
     }
 }

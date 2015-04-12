@@ -3,7 +3,6 @@ package com.haloproject.projectspartanv2;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
@@ -13,6 +12,7 @@ import android.view.View;
 public class MainButton extends View {
     private String mText = "MENU ITEM";
     private Drawable mDrawable = getContext().getDrawable(R.drawable.main_button);
+
     private Drawable mIcon = null;
 
     private TextPaint mTextPaint;
