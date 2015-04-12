@@ -2,14 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6fa04268-9ca2-48eb-994a-b816b747e3c6" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/bluetooth/AndroidBlue.java" afterPath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/bluetooth/AndroidBlue.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/res/drawable-xxhdpi/radio_off.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/res/drawable-xxhdpi/radio_on.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/res/drawable-xxhdpi/radio_on_on.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/res/drawable/radio.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/AndroidManifest.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/projectspartanv2/MainActivity.java" afterPath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/projectspartanv2/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/projectspartanv2/MainButton.java" afterPath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/projectspartanv2/MainButton.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProjectSpartanV2/ProjectSpartanV2.iml" afterPath="$PROJECT_DIR$/ProjectSpartanV2/ProjectSpartanV2.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/projectspartanv2/SoundMessageHandler.java" afterPath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/projectspartanv2/SoundMessageHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProjectSpartanV2/app/app.iml" afterPath="$PROJECT_DIR$/ProjectSpartanV2/app/app.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/res/layout/fragment_main.xml" afterPath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/res/layout/fragment_main.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/res/layout/fragment_cooling.xml" afterPath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/res/layout/fragment_cooling.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/res/layout/fragment_lighting.xml" afterPath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/res/layout/fragment_lighting.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProjectSpartanV2/.idea/misc.xml" afterPath="$PROJECT_DIR$/ProjectSpartanV2/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/res/values/styles.xml" afterPath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/res/values/styles.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/res/layout/warning.xml" afterPath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/res/layout/warning.xml" />
     </list>
     <ignored path="halo-project.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -85,8 +89,8 @@
       <file leaf-file-name="MainActivity.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/projectspartanv2/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="425" max-vertical-offset="8228">
-              <caret line="25" column="30" selection-start-line="25" selection-start-column="30" selection-end-line="25" selection-end-column="30" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="527" max-vertical-offset="9639">
+              <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -1359,8 +1363,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/projectspartanv2/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="425" max-vertical-offset="8211">
-          <caret line="25" column="30" selection-start-line="25" selection-start-column="30" selection-end-line="25" selection-end-column="30" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="527" max-vertical-offset="9639">
+          <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
           <folding />
         </state>
       </provider>

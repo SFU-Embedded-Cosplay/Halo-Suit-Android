@@ -24,20 +24,23 @@
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ON"
-            android:id="@+id/radioButton" />
+            android:text="  ON"
+            android:id="@+id/mainlightson"
+            android:textColor="@color/HaloLightBlue" />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="OFF"
-            android:id="@+id/radioButton2" />
+            android:text="  OFF"
+            android:id="@+id/mainlightsoff"
+            android:textColor="@color/HaloLightBlue" />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="AUTO"
-            android:id="@+id/radioButton3" />
+            android:text="  AUTO"
+            android:id="@+id/mainlightsauto"
+            android:textColor="@color/HaloLightBlue" />
     </RadioGroup>
 
     <TextView
@@ -60,14 +63,16 @@
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ON"
-            android:id="@+id/radioButton6" />
+            android:text="  ON"
+            android:id="@+id/redlightson"
+            android:textColor="@color/HaloLightBlue" />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="OFF"
-            android:id="@+id/radioButton7" />
+            android:text="  OFF"
+            android:id="@+id/redlightsoff"
+            android:textColor="@color/HaloLightBlue" />
     </RadioGroup>
 
     <RadioGroup
@@ -79,14 +84,16 @@
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ON"
-            android:id="@+id/radioButton4" />
+            android:text="  ON"
+            android:id="@+id/whitelightson"
+            android:textColor="@color/HaloLightBlue" />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="OFF"
-            android:id="@+id/radioButton5" />
+            android:text="  OFF"
+            android:id="@+id/whitelightsoff"
+            android:textColor="@color/HaloLightBlue" />
     </RadioGroup>
 
     <TextView

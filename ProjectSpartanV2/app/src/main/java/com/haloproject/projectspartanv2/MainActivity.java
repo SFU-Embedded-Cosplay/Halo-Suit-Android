@@ -6,13 +6,16 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
+
 import android.media.SoundPool;
 import android.os.Bundle;
+
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +27,9 @@ import android.widget.AdapterView;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+
 import android.widget.TextView;
+
 
 import com.haloproject.bluetooth.AndroidBlue;
 
@@ -36,6 +41,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     static private AndroidBlue mAndroidBlue;
     final int TOTAL_SWIPE_FRAGMENTS = 7;
     private boolean isUpRight = true;
+    private WindowManager.LayoutParams params;
     private SensorManager mSensorManager;
     private Sensor mSensor;
     static private int currentFragment; //-1 means its at main menu
@@ -52,9 +58,25 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if (event.sensor == mSensor) {
-            final float z = event.values[2];
-        }
+//        if (event.sensor == mSensor) {
+//            final float z = event.values[2];
+//
+//            if (isUpRight) {
+//                if (Math.abs(z) < 0.50) {
+//                    isUpRight = false;
+//                    params.screenBrightness = 0;
+//                    getWindow().setAttributes(params);
+//                    Log.d("App", "fellasleep");
+//                }
+//            } else {
+//                if (Math.abs(z) >= 0.50) {
+//                    isUpRight = true;
+//                    params.screenBrightness = -1;
+//                    getWindow().setAttributes(params);
+//                    Log.d("App", "wokeup");
+//                }
+//            }
+//        }
     }
 
     @Override
@@ -70,7 +92,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
                 | View.SYSTEM_UI_FLAG_IMMERSIVE
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL, 1000);
+        mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
@@ -88,7 +110,10 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         int volume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 
         setContentView(R.layout.activity_main);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        //set up wakelock
+        params = new WindowManager.LayoutParams();
+        params.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+        getWindow().setAttributes(params);
         mFragmentManager = getSupportFragmentManager();
         if (savedInstanceState == null) {
             mFragmentManager.beginTransaction()
@@ -314,6 +339,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     static public class MainFragment extends Fragment {
         private LinearLayout mainMenu;
         private HorizontalScrollView scrollView;
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -334,11 +360,26 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     }
 
     static public class CoolingFragment extends Fragment {
+        TempWheel waterTemp;
+        TextView flowPump;
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             mTopBar.setMenuName("Cooling");
             View view = inflater.inflate(R.layout.fragment_cooling, container, false);
+            waterTemp = (TempWheel) view.findViewById(R.id.waterTemp);
+            flowPump = (TextView) view.findViewById(R.id.flowPump);
+            mAndroidBlue.setOnReceive(new Runnable() {
+                @Override
+                public void run() {
+                    waterTemp.setTemp(mAndroidBlue.waterTemperature.getValue());
+                    int flow = mAndroidBlue.flowRate.getValue();
+                    String newFlow = String.format("%d", flow);
+
+                    flowPump.setText(newFlow);
+                }
+            });
             return view;
         }
 
@@ -356,6 +397,48 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
             // Inflate the layout for this fragment
             mTopBar.setMenuName("Lighting");
             View view = inflater.inflate(R.layout.fragment_lighting, container, false);
+            view.findViewById(R.id.mainlightson).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAndroidBlue.mainLights.on();
+                }
+            });
+            view.findViewById(R.id.mainlightsoff).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAndroidBlue.mainLights.off();
+                }
+            });
+            view.findViewById(R.id.mainlightsauto).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAndroidBlue.mainLights.auto();
+                }
+            });
+            view.findViewById(R.id.redlightson).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAndroidBlue.redHeadLight.on();
+                }
+            });
+            view.findViewById(R.id.redlightsoff).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAndroidBlue.redHeadLight.off();
+                }
+            });
+            view.findViewById(R.id.whitelightson).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAndroidBlue.whiteHeadLight.on();
+                }
+            });
+            view.findViewById(R.id.whitelightsoff).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAndroidBlue.whiteHeadLight.off();
+                }
+            });
             return view;
         }
     }
