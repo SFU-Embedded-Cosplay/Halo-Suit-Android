@@ -1,6 +1,7 @@
 <resources>
     <declare-styleable name="TempWheel">
         <attr name="maxTemp" format="float"/>
+        <attr name="minTemp" format="float"/>
         <attr name="currTemp" format="float"/>
     </declare-styleable>
 </resources>

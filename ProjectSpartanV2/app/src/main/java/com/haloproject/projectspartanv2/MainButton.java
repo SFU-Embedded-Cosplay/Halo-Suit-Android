@@ -14,7 +14,6 @@ public class MainButton extends View {
     private String mText = "MENU ITEM";
     private Drawable mDrawable = getContext().getDrawable(R.drawable.main_button);
     private Drawable mIcon = null;
-    private int iconX = 62, iconY = 297;
 
     private TextPaint mTextPaint;
     private float mTextWidth;
@@ -46,12 +45,7 @@ public class MainButton extends View {
         if (a.hasValue(R.styleable.MainButton_Icon)) {
             mIcon = a.getDrawable(R.styleable.MainButton_Icon);
         }
-        if (a.hasValue(R.styleable.MainButton_iconX)) {
-            iconX = a.getInteger(R.styleable.MainButton_iconX, 62);
-        }
-        if (a.hasValue(R.styleable.MainButton_iconY)) {
-            iconY = a.getInteger(R.styleable.MainButton_iconY, 297);
-        }
+
         a.recycle();
 
         // Set up a default TextPaint object
@@ -89,6 +83,8 @@ public class MainButton extends View {
         mDrawable.draw(canvas);
 
         if (mIcon != null) {
+            int iconX = getWidth() / 2 - mIcon.getIntrinsicWidth() / 2;
+            int iconY = getHeight() / 2 - mIcon.getIntrinsicHeight() / 2 + 30;
             mIcon.setBounds(iconX, iconY, iconX + mIcon.getIntrinsicWidth(), iconY + mIcon.getIntrinsicHeight());
             mIcon.draw(canvas);
         }

@@ -8,9 +8,57 @@
         android:layout_height="400px"
         class="com.haloproject.projectspartanv2.TempWheel"
         android:id="@+id/waterTemp"
-        app:currTemp="25.0"
+        app:currTemp="0.0"
         app:maxTemp="22.0"
-        android:layout_alignParentTop="true"
+        app:minTemp="-10.0"
+        android:layout_below="@+id/textView2"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Water Tank"
+        android:id="@+id/textView2"
+        android:textColor="@color/HaloLightBlue"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:textSize="80px" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="400px"
+        android:layout_height="400px"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Pump Flow"
+            android:id="@+id/textView3"
+            android:textColor="@color/HaloLightBlue"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:textSize="80px" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="1000"
+            android:id="@+id/flowPump"
+            android:textSize="150px"
+            android:textColor="@color/HaloLightBlue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="L / Hour"
+            android:id="@+id/textView5"
+            android:textColor="@color/HaloLightBlue" />
+    </LinearLayout>
 
 </RelativeLayout>

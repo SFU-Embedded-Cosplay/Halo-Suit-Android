@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <view
+        app:batteryCharge="80"
+        android:layout_width="480px"
+        android:layout_height="893px"
+        class="com.haloproject.projectspartanv2.BatteryBar"
+        android:id="@+id/view"
+        android:layout_gravity="center_vertical" />
+
+    <view
+        app:batteryCharge="50"
+        class="com.haloproject.projectspartanv2.BatteryBar"
+        android:layout_width="480px"
+        android:layout_height="893px"
+        android:id="@+id/view2"
+        android:layout_gravity="center_vertical" />
+
+    <view
+        app:batteryCharge="30"
+        class="com.haloproject.projectspartanv2.BatteryBar"
+        android:layout_width="480px"
+        android:layout_height="893px"
+        android:id="@+id/view3"
+        android:layout_gravity="center_vertical" />
+
+    <view
+        app:batteryCharge="100"
+        class="com.haloproject.projectspartanv2.BatteryBar"
+        android:layout_width="480px"
+        android:layout_height="893px"
+        android:id="@+id/view4"
+        android:layout_gravity="center_vertical" />
 </LinearLayout>
