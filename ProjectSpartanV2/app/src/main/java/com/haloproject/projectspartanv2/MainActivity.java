@@ -110,7 +110,6 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
             mFragmentManager.beginTransaction()
                     .add(R.id.container, new MainFragment())
                     .commit();
-            currentFragment = -1;
         }
         AndroidBlue.setContext(getApplicationContext());
         mAndroidBlue = AndroidBlue.getInstance();
@@ -121,6 +120,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
                 mAndroidBlue.connect();
             }
         }
+        currentFragment = -1;
         mTopBar = (TopBar) findViewById(R.id.topbar);
         updateTopBar(mTopBar);
 
@@ -400,29 +400,27 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         private TempWheel headTemp;
         private TempWheel armpitsTemp;
         private TempWheel crotchTemp;
-        private TextView heartRate;
-
+        private TempWheel waterTemp;
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             mTopBar.setMenuName("Vitals");
             View view = inflater.inflate(R.layout.fragment_vitals, container, false);
             headTemp = (TempWheel) view.findViewById(R.id.headTemp);
-            armpitsTemp = (TempWheel) view.findViewById(R.id.armpitsTemp);
-            crotchTemp = (TempWheel) view.findViewById(R.id.crotchTemp);
-            heartRate = (TextView) view.findViewById(R.id.heartRate);
-
-            mAndroidBlue.setOnReceive(new Runnable() {
+            new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    headTemp.setTemp(mAndroidBlue.headTemperature.getValue());
-                    armpitsTemp.setTemp(mAndroidBlue.armpitsTemperature.getValue());
-                    crotchTemp.setTemp(mAndroidBlue.crotchTemperature.getValue());
+                    while (true) {
+                        double oldTemp = headTemp.getTemp();
+                        double newTemp = (oldTemp + 0.2);
+                        headTemp.setTemp(newTemp);
+                        try {
+                            Thread.sleep(300);
+                        } catch (Exception e) {
 
-                    int hr = mAndroidBlue.heartRate.getValue();
-                    String heartrate = String.format("%d", hr);
-                    heartRate.setText(heartrate);
+                        }
+                    }
                 }
-            });
+            }).start();
 
             return view;
         }
@@ -484,20 +482,6 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
             mTopBar.setMenuName("Batteries");
             View view = inflater.inflate(R.layout.fragment_battery, container, false);
             return view;
-        }
-    }
-
-    static public class Warning extends Fragment {
-        @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.warning, container, false);
-            return view;
-        }
-
-        @Override
-        public void onStart() {
-            super.onStart();
-
         }
     }
 }
