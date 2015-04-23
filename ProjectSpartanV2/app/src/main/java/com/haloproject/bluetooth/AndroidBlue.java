@@ -9,17 +9,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.SoundPool;
+import android.os.BatteryManager;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.haloproject.projectspartanv2.SoundMessageHandler;
+import com.haloproject.projectspartanv2.Warning;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -27,6 +32,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class AndroidBlue {
     private final int REQUEST_ENABLE_BT = 42;
+
+    private List<Warning> mWarnings;
 
     private BluetoothSocket mSocket;
     private BluetoothAdapter mAdapter;
@@ -39,6 +46,7 @@ public class AndroidBlue {
     private Runnable onConnect;
     private Runnable onDisconnect;
     private Runnable onReceive;
+    private Runnable onWarning;
 
     //batteries
     public final BeagleIntegerOutput battery8AH;
@@ -105,6 +113,7 @@ public class AndroidBlue {
         mainLights = new BeagleAutoSwitch("lights");
 
         mHandler = new Handler(Looper.getMainLooper());
+        mWarnings = new LinkedList<Warning>();
     }
 
     public boolean isSoundOn() {
@@ -256,6 +265,30 @@ public class AndroidBlue {
         }
     }
 
+    private class BatteryRunnable implements Runnable {
+        @Override
+        public void run() {
+            IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+
+            while (isConnected()) {
+                Intent batteryStatus = mContext.registerReceiver(null, ifilter);
+                int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+                int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+
+                int charge = (int) ((float) level / (float) scale * 100);
+
+                try {
+                    JSONObject battery = new JSONObject();
+                    battery.put("phone battery", charge);
+                    mSocket.getOutputStream().write(battery.toString().getBytes());
+                    Thread.sleep(5000);
+                } catch (Exception e) {
+
+                }
+            }
+        }
+    }
+
     private class DisconnectedRunnable implements Runnable {
         @Override
         public void run() {
@@ -285,10 +318,11 @@ public class AndroidBlue {
 
         @Override
         public void run() {
+            //mHandler.post(new BatteryRunnable());
             mHandler.post(onConnect);
             while (true) {
                 try {
-                    mBytes = new byte[528];
+                    mBytes = new byte[1024];
                     mSocket.getInputStream().read(mBytes);
                     mJSON = new JSONObject(new String(mBytes));
                     if(isSoundOn)
@@ -296,8 +330,9 @@ public class AndroidBlue {
                         JSONObject jsonCopy = new JSONObject(new String(mBytes));
                         SoundMessageHandler.handleSoundMessage(jsonCopy,soundPool,volume);
                     }
-
+                    setWarnings();
                     mHandler.post(onReceive);
+                    Log.d("JSON", mJSON.toString());
                 } catch (IOException e) {
                     try {
                         new Thread(new DisconnectedRunnable()).start();
@@ -307,7 +342,7 @@ public class AndroidBlue {
                         //don't return will probably close on next loop
                     }
                 } catch (JSONException e) {
-
+                    Log.d("JSON", e.getLocalizedMessage());
                 }
             }
         }
@@ -322,6 +357,9 @@ public class AndroidBlue {
     public void setOnReceive(Runnable onReceive) {
         this.onReceive = onReceive;
     }
+    public void setOnWarning(Runnable onWarning) {
+        this.onWarning = onWarning;
+    }
 
     public void changeUI() {
         this.onReceive = null;
@@ -331,6 +369,40 @@ public class AndroidBlue {
 
     public void changeOnReceive() {
         onReceive = null;
+    }
+
+    public ArrayAdapter<Warning> getWarnings() {
+        ArrayAdapter<Warning> warnings = new ArrayAdapter<Warning>(mContext, android.R.layout.simple_list_item_1);
+        for (Warning warning : mWarnings) {
+            warnings.add(warning);
+        }
+        return warnings;
+    }
+
+    private void setWarnings() {
+        try {
+            boolean newWarning = false;
+
+            JSONObject warnings = mJSON.getJSONObject("warnings");
+            for (Warning warning : Warning.values()) {
+                if (warnings.has(warning.toString())) {
+                    if (!mWarnings.contains(warning)) {
+                        mWarnings.add(warning);
+                        newWarning = true;
+                    }
+                } else {
+                    if (mWarnings.contains(warning)) {
+                        mWarnings.remove(warning);
+                    }
+                }
+            }
+
+            if (newWarning) {
+                mHandler.post(onWarning);
+            }
+        } catch (Exception e) {
+
+        }
     }
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -406,7 +478,6 @@ public class AndroidBlue {
     }
 
     //turn switched auto or off
-    //TODO ask chris if we can information about on or off state
     public class BeagleAutoOffSwitch extends BeagleInputHandler {
         public BeagleAutoOffSwitch(String location) {
             super(location);

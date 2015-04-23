@@ -24,10 +24,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 
@@ -135,6 +137,18 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         if (!mAndroidBlue.isEnabled()) {
             mAndroidBlue.enableBluetooth(this);
         }
+
+        //set on warning
+        mAndroidBlue.setOnWarning(new Runnable() {
+            @Override
+            public void run() {
+                currentFragment = 5;
+                mFragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_down, R.anim.slide_out_down)
+                        .replace(R.id.container, swipeFragment(5))
+                        .commit();
+            }
+        });
 
         //create sensor
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -564,10 +578,26 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     }
 
     static public class WarningsFragment extends Fragment {
+        private ListView warningsList;
+        private ArrayAdapter<Warning> warningsAdapter;
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             mTopBar.setMenuName("Warnings");
             View view = inflater.inflate(R.layout.fragment_warnings, container, false);
+            warningsList = (ListView) view.findViewById(R.id.warningslist);
+            warningsAdapter = mAndroidBlue.getWarnings();
+            warningsList.setAdapter(warningsAdapter);
+            warningsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    currentFragment = warningsAdapter.getItem(position).getFragment();
+                    mFragmentManager.beginTransaction()
+                            .setCustomAnimations(R.anim.slide_in_down, R.anim.slide_out_down)
+                            .replace(R.id.container, swipeFragment(currentFragment))
+                            .commit();
+                }
+            });
             return view;
         }
     }

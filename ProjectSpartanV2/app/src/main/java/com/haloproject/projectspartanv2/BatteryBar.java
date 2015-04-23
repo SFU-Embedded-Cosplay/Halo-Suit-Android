@@ -80,5 +80,6 @@ public class BatteryBar extends View {
         } else {
             batteryCharge = charge;
         }
+        postInvalidate();
     }
 }
