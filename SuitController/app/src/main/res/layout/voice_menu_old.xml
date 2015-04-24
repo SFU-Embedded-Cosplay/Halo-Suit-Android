@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+    android:background="@drawable/unsc_alt"
+    android:keepScreenOn="true">
+
+    <suit.halo.suitcontroller.HeadListView
+        android:layout_width="160px"
+        android:layout_height="640px"
+        android:layout_marginStart="5dp"
+        android:id="@+id/hotword_chooser"
+        android:choiceMode="singleChoice"
+        android:layout_x="240px"
+        android:layout_y="-240px"
+        android:rotation="90.0"/>
+
+    <TextView
+        android:layout_width="320px"
+        android:layout_height="60px"
+        android:layout_x="0px"
+        android:layout_y="160px"
+        android:id="@+id/temp1"
+        android:textSize="10sp"
+        />
+    <TextView
+        android:layout_width="320px"
+        android:layout_height="60px"
+        android:layout_x="320px"
+        android:layout_y="160px"
+        android:id="@+id/temp2"
+        android:textSize="10sp"
+        />
+    <TextView
+        android:layout_width="320px"
+        android:layout_height="60px"
+        android:layout_x="0px"
+        android:layout_y="220px"
+        android:id="@+id/temp3"
+        android:textSize="10sp"
+        />
+
+    <TextView
+        android:layout_width="320px"
+        android:layout_height="60px"
+        android:layout_x="320px"
+        android:layout_y="220px"
+        android:id="@+id/temp4"
+        android:textSize="10sp"
+        />
+
+	<TextView
+		android:layout_width="260px"
+		android:layout_height="80px"
+        android:layout_x="0px"
+        android:layout_y="280px"
+		android:id="@+id/gps"
+		android:textSize="30sp"
+        android:text="GPS"
+		/>
+    <ImageView
+        android:layout_width="120px"
+        android:layout_height="80px"
+        android:layout_x="260px"
+        android:layout_y="240px"
+        android:src="@drawable/battery_horizontal_40percent"
+        android:id="@+id/battery_level"
+        />
+    <TextView
+        android:layout_width="280px"
+        android:layout_height="80px"
+        android:layout_x="380px"
+        android:layout_y="280px"
+        android:id="@+id/temperature"
+        android:text="Temp Warning"
+        />
+
+
+</AbsoluteLayout>

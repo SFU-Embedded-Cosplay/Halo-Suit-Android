@@ -20,7 +20,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Adam Brykajlo on 18/02/15.
