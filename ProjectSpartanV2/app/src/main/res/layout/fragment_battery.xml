@@ -58,7 +58,7 @@
 
         <view
             class="com.haloproject.projectspartanv2.BatteryBar"
-            app:batteryCharge="0"
+            app:batteryCharge="80"
             android:layout_width="480px"
             android:layout_height="700px"
             android:id="@+id/androidbattery"
