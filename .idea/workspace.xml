@@ -2,109 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6fa04268-9ca2-48eb-994a-b816b747e3c6" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/libs/GlassVoice-xe22.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-hdpi/audio_off.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-hdpi/audio_on.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-hdpi/battery_horizontal_40percent.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-mdpi/battery_horizontal_40percent.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-xhdpi/battery_horizontal_40percent.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-xxhdpi/battery_horizontal_40percent.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-hdpi/cooling_off.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-hdpi/cooling_on.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/gradle/wrapper/gradle-wrapper.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-hdpi/head_light.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-mdpi/head_light.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-hdpi/head_lights.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-hdpi/head_lights_off.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-hdpi/ic_glass_logo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-hdpi/ic_launcher.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-mdpi/ic_launcher.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-xhdpi/ic_launcher.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-xxhdpi/ic_launcher.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-hdpi/ic_stop.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-hdpi/icon_high.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-mdpi/icon_high.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-hdpi/icon_low.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-mdpi/icon_low.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-hdpi/icon_medium.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-mdpi/icon_medium.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-hdpi/icon_off.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-mdpi/icon_off.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/raw/lights.ogg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-hdpi/lights.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-mdpi/lights.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-hdpi/lights_auto.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-hdpi/lights_off.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-hdpi/lights_on.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/raw/shield_off.ogg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/raw/shield_on.ogg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-hdpi/unsc.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-mdpi/unsc.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-xxhdpi/unsc.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-hdpi/unsc_alt.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-mdpi/unsc_alt.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-hdpi/voice_off.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/drawable-hdpi/voice_on.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/.gitignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/.gitignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/.idea/.name" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/java/suit/halo/suitcontroller/AndroidBlue.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/AndroidManifest.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/androidTest/java/suit/halo/suitcontroller/ApplicationTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/java/suit/halo/suitcontroller/Blue.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/java/suit/halo/suitcontroller/Constants.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/java/com/google/android/glass/eye/EyeGesture.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/java/com/google/android/glass/eye/EyeGestureManager.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/java/suit/halo/suitcontroller/HeadListView.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/java/suit/halo/suitcontroller/IconList.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/java/suit/halo/suitcontroller/MathUtils.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/java/suit/halo/suitcontroller/Send.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/java/suit/halo/suitcontroller/SoundMessageHandler.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/java/suit/halo/suitcontroller/StubVoiceListener.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/SuitController.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/java/suit/halo/suitcontroller/ViewHelperFactory.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/java/suit/halo/suitcontroller/VoiceDetection.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/java/suit/halo/suitcontroller/VoiceMenuActivity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/java/suit/halo/suitcontroller/VoiceMenuActivity_old.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/layout/activity_main.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/app.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/build.gradle" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/build.gradle" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/.idea/compiler.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/.idea/encodings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/layout/fragment_host.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/gradle/wrapper/gradle-wrapper.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/gradle.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/.idea/gradle.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/gradlew.bat" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/gradlew" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/layout/list_single.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/layout/main.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/.idea/misc.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/.idea/modules.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/.idea/copyright/profiles_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/proguard-rules.pro" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/.idea/scopes/scope_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/settings.gradle" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/settings.gradle" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/values/strings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/values/styles.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/layout/voice_menu.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/layout/voice_menu_item.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/layout/voice_menu_old.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SuitController/app/src/main/res/xml/voice_trigger.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SuitController/build/intermediates/model_data.bin" afterPath="$PROJECT_DIR$/SuitController/build/intermediates/model_data.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/bluetooth/AndroidBlue.java" afterPath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/bluetooth/AndroidBlue.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SuitController/app/build/generated/source/buildConfig/debug/suit/halo/suitcontroller/BuildConfig.java" afterPath="$PROJECT_DIR$/SuitController/app/build/generated/source/buildConfig/debug/suit/halo/suitcontroller/BuildConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SuitController/app/build/generated/source/buildConfig/test/debug/suit/halo/suitcontroller/test/BuildConfig.java" afterPath="$PROJECT_DIR$/SuitController/app/build/generated/source/buildConfig/test/debug/suit/halo/suitcontroller/test/BuildConfig.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/projectspartan/.gradle/2.2.1/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/projectspartan/.gradle/2.2.1/taskArtifacts/cache.properties.lock" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/projectspartan/.gradle/2.2.1/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/projectspartan/.gradle/2.2.1/taskArtifacts/fileHashes.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/projectspartan/.gradle/2.2.1/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/projectspartan/.gradle/2.2.1/taskArtifacts/fileSnapshots.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/projectspartan/build/intermediates/model_data.bin" afterPath="$PROJECT_DIR$/projectspartan/build/intermediates/model_data.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/projectspartan/.gradle/2.2.1/taskArtifacts/outputFileStates.bin" afterPath="$PROJECT_DIR$/projectspartan/.gradle/2.2.1/taskArtifacts/outputFileStates.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/projectspartan/.gradle/2.2.1/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/projectspartan/.gradle/2.2.1/taskArtifacts/taskArtifacts.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/projectspartanv2/MainActivity.java" afterPath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/projectspartanv2/MainActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProjectSpartanV2/ProjectSpartanV2.iml" afterPath="$PROJECT_DIR$/ProjectSpartanV2/ProjectSpartanV2.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SuitController/app/build/generated/source/r/debug/suit/halo/suitcontroller/R.java" afterPath="$PROJECT_DIR$/SuitController/app/build/generated/source/r/debug/suit/halo/suitcontroller/R.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProjectSpartanV2/app/app.iml" afterPath="$PROJECT_DIR$/ProjectSpartanV2/app/app.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SuitController/build/intermediates/dex-cache/cache.xml" afterPath="$PROJECT_DIR$/SuitController/build/intermediates/dex-cache/cache.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SuitController/local.properties" afterPath="$PROJECT_DIR$/SuitController/local.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/projectspartan/app/app.iml" afterPath="$PROJECT_DIR$/projectspartan/app/app.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/res/layout/fragment_main.xml" afterPath="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/res/layout/fragment_main.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/projectspartan/local.properties" afterPath="$PROJECT_DIR$/projectspartan/local.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/projectspartan/.idea/modules.xml" afterPath="$PROJECT_DIR$/projectspartan/.idea/modules.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/projectspartan/.idea/libraries/support_annotations_20_0_0.xml" afterPath="$PROJECT_DIR$/projectspartan/.idea/libraries/support_annotations_20_0_0.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/projectspartan/.idea/libraries/support_v4_20_0_0.xml" afterPath="$PROJECT_DIR$/projectspartan/.idea/libraries/support_v4_20_0_0.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SuitController/.idea/workspace.xml" afterPath="$PROJECT_DIR$/SuitController/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/projectspartan/.idea/workspace.xml" afterPath="$PROJECT_DIR$/projectspartan/.idea/workspace.xml" />
     </list>
     <ignored path="halo-project.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -160,8 +73,8 @@
       <file leaf-file-name="AndroidBlue.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/bluetooth/AndroidBlue.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3306544" vertical-offset="2653" max-vertical-offset="6902">
-              <caret line="208" column="39" selection-start-line="208" selection-start-column="39" selection-end-line="208" selection-end-column="39" />
+            <state vertical-scroll-proportion="0.3306544" vertical-offset="2721" max-vertical-offset="7990">
+              <caret line="218" column="39" selection-start-line="218" selection-start-column="39" selection-end-line="218" selection-end-column="39" />
               <folding />
             </state>
           </provider>
@@ -180,8 +93,8 @@
       <file leaf-file-name="MainActivity.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/projectspartanv2/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="748" max-vertical-offset="10302">
-              <caret line="44" column="50" selection-start-line="44" selection-start-column="50" selection-end-line="44" selection-end-column="50" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="680" max-vertical-offset="10710">
+              <caret line="40" column="33" selection-start-line="40" selection-start-column="33" selection-end-line="40" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -224,10 +137,10 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/bluetooth/AndroidBlue.java" />
         <option value="$PROJECT_DIR$/json.txt" />
         <option value="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/projectspartanv2/HandleMicrophone.java" />
         <option value="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/projectspartanv2/MainActivity.java" />
+        <option value="$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/bluetooth/AndroidBlue.java" />
       </list>
     </option>
   </component>
@@ -248,7 +161,7 @@
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectReloadState">
-    <option name="STATE" value="0" />
+    <option name="STATE" value="2" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -263,6 +176,9 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -305,9 +221,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="AndroidView" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -532,7 +445,11 @@
       <created>1428831882946</created>
       <updated>1428831882946</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Merging everything into main source repository">
+      <created>1429844011714</created>
+      <updated>1429844011714</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -586,12 +503,53 @@
     <MESSAGE value="Google Glass batter + voice commands" />
     <MESSAGE value="temp" />
     <MESSAGE value="Everything needed for the Audio. Sounds + Mic." />
-    <option name="LAST_COMMIT_MESSAGE" value="Everything needed for the Audio. Sounds + Mic." />
+    <MESSAGE value="Merging everything into main source repository" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merging everything into main source repository" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/json.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="238" max-vertical-offset="697">
+          <caret line="14" column="22" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/bluetooth/AndroidBlue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2891" max-vertical-offset="8296">
+          <caret line="218" column="39" selection-start-line="218" selection-start-column="39" selection-end-line="218" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Android/sdk1/sources/android-19/android/bluetooth/BluetoothAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="23698" max-vertical-offset="30141">
+          <caret line="1394" column="26" selection-start-line="1394" selection-start-column="26" selection-end-line="1394" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/projectspartanv2/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="782" max-vertical-offset="10812">
+          <caret line="46" column="33" selection-start-line="46" selection-start-column="33" selection-end-line="46" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/projectspartanv2/TopBar.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="459" max-vertical-offset="2074">
+          <caret line="27" column="11" selection-start-line="27" selection-start-column="11" selection-end-line="27" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/projectspartan/app/src/main/java/org/unsc/projectspartan/LoadActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="425" max-vertical-offset="1241">
@@ -938,8 +896,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/projectspartanv2/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="748" max-vertical-offset="10302">
-          <caret line="44" column="50" selection-start-line="44" selection-start-column="50" selection-end-line="44" selection-end-column="50" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="680" max-vertical-offset="10710">
+          <caret line="40" column="33" selection-start-line="40" selection-start-column="33" selection-end-line="40" selection-end-column="33" />
           <folding />
         </state>
       </provider>
@@ -954,8 +912,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ProjectSpartanV2/app/src/main/java/com/haloproject/bluetooth/AndroidBlue.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3306544" vertical-offset="2653" max-vertical-offset="6902">
-          <caret line="208" column="39" selection-start-line="208" selection-start-column="39" selection-end-line="208" selection-end-column="39" />
+        <state vertical-scroll-proportion="0.3306544" vertical-offset="2891" max-vertical-offset="8296">
+          <caret line="218" column="39" selection-start-line="218" selection-start-column="39" selection-end-line="218" selection-end-column="39" />
           <folding />
         </state>
       </provider>
