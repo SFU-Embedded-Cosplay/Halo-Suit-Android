@@ -18,7 +18,7 @@
             android:id="@+id/mainmenu">
 
             <view
-                class="com.haloproject.projectspartanv2.MainButton"
+                class="com.haloproject.projectspartanv2.view.MainButton"
                 app:Text="SOUNDS"
                 app:Icon="@drawable/music_on_icon"
                 android:layout_width="wrap_content"
@@ -29,7 +29,7 @@
                 android:onClick="sounds" />
 
             <view
-                class="com.haloproject.projectspartanv2.MainButton"
+                class="com.haloproject.projectspartanv2.view.MainButton"
                 app:Text="VOICE"
                 app:Icon="@drawable/speaker_on_icon"
                 android:layout_width="wrap_content"
@@ -40,7 +40,7 @@
                 android:onClick="voice" />
 
             <view
-                class="com.haloproject.projectspartanv2.MainButton"
+                class="com.haloproject.projectspartanv2.view.MainButton"
                 app:Text="VITALS"
                 app:Icon="@drawable/vital_icon"
                 android:layout_width="wrap_content"
@@ -50,7 +50,7 @@
                 android:id="@+id/menuButton1"
                 android:onClick="vitals" />
             <view
-                class="com.haloproject.projectspartanv2.MainButton"
+                class="com.haloproject.projectspartanv2.view.MainButton"
                 app:Text="VITALS"
                 app:Icon="@drawable/vital_icon"
                 android:layout_width="wrap_content"
@@ -61,7 +61,7 @@
                 android:onClick="vitals" />
 
             <view
-                class="com.haloproject.projectspartanv2.MainButton"
+                class="com.haloproject.projectspartanv2.view.MainButton"
                 app:Text="VITALS"
                 app:Icon="@drawable/vital_icon"
                 android:layout_width="wrap_content"
@@ -72,7 +72,7 @@
                 android:onClick="vitals" />
 
             <view
-                class="com.haloproject.projectspartanv2.MainButton"
+                class="com.haloproject.projectspartanv2.view.MainButton"
                 app:Text="COOLING"
                 app:Icon="@drawable/cooling_icon"
                 android:layout_width="wrap_content"
@@ -83,7 +83,7 @@
                 android:onClick="cooling" />
 
             <view
-                class="com.haloproject.projectspartanv2.MainButton"
+                class="com.haloproject.projectspartanv2.view.MainButton"
                 app:Text="LIGHTING"
                 app:Icon="@drawable/lighting_icon"
                 android:layout_width="wrap_content"
@@ -94,7 +94,7 @@
                 android:onClick="lighting" />
 
             <view
-                class="com.haloproject.projectspartanv2.MainButton"
+                class="com.haloproject.projectspartanv2.view.MainButton"
                 app:Text="RADAR"
                 app:Icon="@drawable/radar_icon"
                 android:layout_width="wrap_content"
@@ -105,7 +105,7 @@
                 android:onClick="radar" />
 
             <view
-                class="com.haloproject.projectspartanv2.MainButton"
+                class="com.haloproject.projectspartanv2.view.MainButton"
                 app:Text="BATTERY"
                 app:Icon="@drawable/battery_icon"
                 android:layout_width="wrap_content"
@@ -116,7 +116,7 @@
                 android:onClick="batteries" />
 
             <view
-                class="com.haloproject.projectspartanv2.MainButton"
+                class="com.haloproject.projectspartanv2.view.MainButton"
                 app:Text="WARNINGS"
                 app:Icon="@drawable/warnings_icon"
                 android:layout_width="wrap_content"
@@ -127,7 +127,7 @@
                 android:onClick="warnings" />
 
             <view
-                class="com.haloproject.projectspartanv2.MainButton"
+                class="com.haloproject.projectspartanv2.view.MainButton"
                 app:Text="SETTINGS"
                 app:Icon="@drawable/settings_icon"
                 android:layout_width="wrap_content"

@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         app:menuName=""
         app:bluetoothOn="false"
-        class="com.haloproject.projectspartanv2.TopBar"
+        class="com.haloproject.projectspartanv2.view.TopBar"
         android:id="@+id/topbar" />
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"

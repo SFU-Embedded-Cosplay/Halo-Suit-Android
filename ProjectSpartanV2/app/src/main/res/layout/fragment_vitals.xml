@@ -6,7 +6,7 @@
     android:layout_alignParentStart="true">
 
         <view
-            class="com.haloproject.projectspartanv2.TempWheel"
+            class="com.haloproject.projectspartanv2.view.TempWheel"
             android:layout_width="400px"
             android:layout_height="400px"
             android:id="@+id/headTemp"
@@ -14,7 +14,7 @@
             android:layout_alignParentStart="true" />
 
     <view
-            class="com.haloproject.projectspartanv2.TempWheel"
+            class="com.haloproject.projectspartanv2.view.TempWheel"
             android:layout_width="400px"
             android:layout_height="400px"
             android:id="@+id/armpitsTemp"
@@ -23,7 +23,7 @@
         android:layout_alignParentEnd="true" />
 
         <view
-            class="com.haloproject.projectspartanv2.TempWheel"
+            class="com.haloproject.projectspartanv2.view.TempWheel"
             android:layout_width="400px"
             android:layout_height="400px"
             android:id="@+id/crotchTemp"

@@ -20,13 +20,13 @@
         app:Text="Start Discovery"
         android:layout_width="wrap_content"
         android:layout_height="296px"
-        class="com.haloproject.projectspartanv2.SettingsButton"
+        class="com.haloproject.projectspartanv2.view.SettingsButton"
         android:id="@+id/startdiscovery"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/btdevices" />
 
     <view
-        class="com.haloproject.projectspartanv2.SettingsButton"
+        class="com.haloproject.projectspartanv2.view.SettingsButton"
         app:Text="Lock Configuration"
         android:layout_width="wrap_content"
         android:layout_height="296px"
@@ -35,7 +35,7 @@
         android:layout_toEndOf="@+id/btdevices" />
 
     <view
-        class="com.haloproject.projectspartanv2.SettingsButton"
+        class="com.haloproject.projectspartanv2.view.SettingsButton"
         app:Text="Reset Configuration"
         android:layout_width="wrap_content"
         android:layout_height="296px"

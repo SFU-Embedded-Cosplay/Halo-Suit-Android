@@ -6,7 +6,7 @@
     <view
         android:layout_width="400px"
         android:layout_height="400px"
-        class="com.haloproject.projectspartanv2.TempWheel"
+        class="com.haloproject.projectspartanv2.view.TempWheel"
         android:id="@+id/waterTemp"
         app:currTemp="0.0"
         app:maxTemp="22.0"

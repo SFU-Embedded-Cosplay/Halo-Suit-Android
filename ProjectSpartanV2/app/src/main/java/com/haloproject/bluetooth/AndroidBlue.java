@@ -74,8 +74,8 @@ public class AndroidBlue {
     public final BeagleDoubleOutput armpitsTemperature;
     public final BeagleIntegerOutput heartRate;
 
-    static private AndroidBlue mAndroidBlue = null;
-    static private Context mContext;
+    private static AndroidBlue mAndroidBlue = null;
+    private static Context mContext;
 
     private boolean isSoundOn;
     private SoundPool soundPool;
@@ -128,11 +128,11 @@ public class AndroidBlue {
         isSoundOn = true;
     }
 
-    static public void setContext(Context context) {
+    public static void setContext(Context context) {
         mContext = context;
     }
 
-    static public AndroidBlue getInstance(SoundPool soundPool,int volume) {
+    public static AndroidBlue getInstance(SoundPool soundPool,int volume) {
         if (mContext != null) {
             if (mAndroidBlue == null) {
                 mAndroidBlue = new AndroidBlue(soundPool,volume);
@@ -140,6 +140,18 @@ public class AndroidBlue {
             return mAndroidBlue;
         }
         return null;
+    }
+
+    public static AndroidBlue getInstance() {
+        if (mContext != null) {
+            if (mAndroidBlue == null) {
+                assert false;
+            }
+
+            return mAndroidBlue;
+        } else {
+            return null;
+        }
     }
 
     public boolean isEnabled() {

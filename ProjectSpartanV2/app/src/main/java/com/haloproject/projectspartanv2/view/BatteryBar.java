@@ -1,4 +1,4 @@
-package com.haloproject.projectspartanv2;
+package com.haloproject.projectspartanv2.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -11,6 +11,8 @@ import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
+
+import com.haloproject.projectspartanv2.R;
 
 public class BatteryBar extends View {
     private Drawable emptyBattery = getContext().getDrawable(R.drawable.empty_battery);

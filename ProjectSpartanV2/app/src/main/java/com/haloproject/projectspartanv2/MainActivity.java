@@ -28,20 +28,36 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.haloproject.bluetooth.AndroidBlue;
+import com.haloproject.projectspartanv2.Fragments.BatteryFragment;
+import com.haloproject.projectspartanv2.Fragments.CoolingFragment;
+import com.haloproject.projectspartanv2.Fragments.LightingFragment;
+import com.haloproject.projectspartanv2.Fragments.RadarFragment;
+import com.haloproject.projectspartanv2.Fragments.SettingsFragment;
+import com.haloproject.projectspartanv2.Fragments.VitalsFragment;
+import com.haloproject.projectspartanv2.view.BatteryBar;
+import com.haloproject.projectspartanv2.view.MainButton;
+import com.haloproject.projectspartanv2.view.TempWheel;
+import com.haloproject.projectspartanv2.view.TopBar;
 
 public class MainActivity extends ActionBarActivity implements SensorEventListener {
-    static private FragmentManager mFragmentManager;
-    static private AndroidBlue mAndroidBlue;
-    final int TOTAL_SWIPE_FRAGMENTS = 7;
-    private boolean isUpRight = true;
+    private static FragmentManager mFragmentManager;
+    private static AndroidBlue mAndroidBlue;
+
+    public static final int TOTAL_SWIPE_FRAGMENTS = 7;
+
     private WindowManager.LayoutParams params;
+
     private SensorManager mSensorManager;
     private Sensor mSensor;
-    static private int currentFragment; //-1 means its at main menu
-    static private SharedPreferences mPreferences;
+
+    private static int currentFragment; //-1 means its at main menu
+
+    private static SharedPreferences mPreferences;
     private float x1, x2, y1, y2;
-    static private TopBar mTopBar;
-    MicrophoneHandler mMicrophoneHandler;
+    //TODO: make mTopBar private and find a way so that all the fragments don't have to access it directly
+    public static TopBar mTopBar; //cant pass this directly into a view with a bundle since it is not serializable or parcable
+
+    private MicrophoneHandler mMicrophoneHandler;
     private SoundPool soundPool;
 
     @Override
@@ -92,15 +108,8 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SoundPool.Builder soundPoolBuilder = new SoundPool.Builder();
-        soundPoolBuilder.setMaxStreams(4);
-        soundPool = soundPoolBuilder.build();
-        soundPool.load(this,R.raw.lights,1);
-        soundPool.load(this,R.raw.shield_off,1);
-        soundPool.load(this,R.raw.shield_on,1);
-
-        AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-        int volume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        setupAudioServices();
+        int volume = getVolume();
 
         setContentView(R.layout.activity_main);
         //set up wakelock
@@ -115,6 +124,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
 
             currentFragment = -1;
         }
+
         mMicrophoneHandler = MicrophoneHandler.getInstance();
         AndroidBlue.setContext(getApplicationContext());
         mAndroidBlue = AndroidBlue.getInstance(soundPool,volume);
@@ -147,6 +157,20 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         //create sensor
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR);
+    }
+
+    private void setupAudioServices() {
+        SoundPool.Builder soundPoolBuilder = new SoundPool.Builder();
+        soundPoolBuilder.setMaxStreams(4);
+        soundPool = soundPoolBuilder.build();
+        soundPool.load(this,R.raw.lights,1);
+        soundPool.load(this,R.raw.shield_off,1);
+        soundPool.load(this,R.raw.shield_on,1);
+    }
+
+    private int getVolume() {
+        AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+        return audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
     }
 
     @Override
@@ -190,7 +214,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         return true;
     }
 
-    static private Fragment swipeFragment(int fragment) {
+    private static Fragment swipeFragment(int fragment) {
         switch (fragment) {
             case 0:
                 return new VitalsFragment();
@@ -311,7 +335,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         return super.onOptionsItemSelected(item);
     }
 
-    static private void updateTopBar(final TopBar mTopBar) {
+    private static void updateTopBar(final TopBar mTopBar) {
         if (mAndroidBlue.isConnected()) {
             mTopBar.setBluetooth(true);
         } else {
@@ -335,7 +359,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         });
     }
 
-    static public class MainFragment extends Fragment {
+    public static class MainFragment extends Fragment {
         private LinearLayout mainMenu;
         private HorizontalScrollView scrollView;
 
@@ -358,230 +382,19 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         }
     }
 
-    static public class CoolingFragment extends Fragment {
-        TempWheel waterTemp;
-        TextView flowPump;
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            mTopBar.setMenuName("Cooling");
-            View view = inflater.inflate(R.layout.fragment_cooling, container, false);
-            waterTemp = (TempWheel) view.findViewById(R.id.waterTemp);
-            flowPump = (TextView) view.findViewById(R.id.flowPump);
-
-            //set onclick listeners
-            view.findViewById(R.id.peltierauto).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAndroidBlue.peltier.auto();
-                }
-            });
-            view.findViewById(R.id.peltieroff).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAndroidBlue.peltier.off();
-                }
-            });
-            view.findViewById(R.id.headfanson).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAndroidBlue.headFans.on();
-                }
-            });
-            view.findViewById(R.id.headfansoff).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAndroidBlue.headFans.off();
-                }
-            });
-            view.findViewById(R.id.waterpumpauto).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAndroidBlue.waterPump.auto();
-                }
-            });
-            view.findViewById(R.id.waterpumpoff).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAndroidBlue.waterPump.off();
-                }
-            });
-            mAndroidBlue.setOnReceive(new Runnable() {
-                @Override
-                public void run() {
-                    waterTemp.setTemp(mAndroidBlue.waterTemperature.getValue());
-                    int flow = mAndroidBlue.flowRate.getValue();
-                    String newFlow = String.format("%d", flow);
-
-                    flowPump.setText(newFlow);
-                }
-            });
-            return view;
-        }
-
-        @Override
-        public void onDestroyView() {
-            super.onDestroyView();
-            mAndroidBlue.changeOnReceive();
-        }
-    }
-
-    static public class LightingFragment extends Fragment {
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            // Inflate the layout for this fragment
-            mTopBar.setMenuName("Lighting");
-            View view = inflater.inflate(R.layout.fragment_lighting, container, false);
-            view.findViewById(R.id.mainlightson).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAndroidBlue.mainLights.on();
-                }
-            });
-            view.findViewById(R.id.mainlightsoff).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAndroidBlue.mainLights.off();
-                }
-            });
-            view.findViewById(R.id.mainlightsauto).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAndroidBlue.mainLights.auto();
-                }
-            });
-            view.findViewById(R.id.redlightson).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAndroidBlue.redHeadLight.on();
-                }
-            });
-            view.findViewById(R.id.redlightsoff).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAndroidBlue.redHeadLight.off();
-                }
-            });
-            view.findViewById(R.id.whitelightson).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAndroidBlue.whiteHeadLight.on();
-                }
-            });
-            view.findViewById(R.id.whitelightsoff).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAndroidBlue.whiteHeadLight.off();
-                }
-            });
-            return view;
-        }
-    }
-
-    static public class RadarFragment extends Fragment {
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            // Inflate the layout for this fragment
-            mTopBar.setMenuName("Radar");
-            View view = inflater.inflate(R.layout.fragment_radar, container, false);
-            return view;
-        }
-    }
-
-
-    static public class VitalsFragment extends Fragment {
-        private TempWheel headTemp;
-        private TempWheel armpitsTemp;
-        private TempWheel crotchTemp;
-        private TextView heartRate;
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            mTopBar.setMenuName("Vitals");
-            View view = inflater.inflate(R.layout.fragment_vitals, container, false);
-            headTemp = (TempWheel) view.findViewById(R.id.headTemp);
-            armpitsTemp = (TempWheel) view.findViewById(R.id.armpitsTemp);
-            crotchTemp = (TempWheel) view.findViewById(R.id.crotchTemp);
-            heartRate = (TextView) view.findViewById(R.id.heartRate);
-
-            mAndroidBlue.setOnReceive(new Runnable() {
-                @Override
-                public void run() {
-                    headTemp.setTemp(mAndroidBlue.headTemperature.getValue());
-                    armpitsTemp.setTemp(mAndroidBlue.armpitsTemperature.getValue());
-                    crotchTemp.setTemp(mAndroidBlue.crotchTemperature.getValue());
-
-                    int hr = mAndroidBlue.heartRate.getValue();
-                    String heartrate = String.format("%d", hr);
-                    heartRate.setText(heartrate);
-                }
-            });
-
-            return view;
-        }
-
-        @Override
-        public void onDestroyView() {
-            super.onDestroyView();
-            mAndroidBlue.changeOnReceive();
-        }
-    }
-
-    static public class SettingsFragment extends Fragment {
-        private ListView btdevices;
-        private View view;
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            mTopBar.setMenuName("Settings");
-            view = inflater.inflate(R.layout.fragment_settings, container, false);
-
-            btdevices = (ListView) view.findViewById(R.id.btdevices);
-            btdevices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                    if (mAndroidBlue.setBeagleBone(position)) {
-                        mAndroidBlue.connect();
-                    }
-                }
-            });
-            btdevices.setAdapter(mAndroidBlue.getDeviceStrings());
-            view.findViewById(R.id.startdiscovery).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAndroidBlue.startDiscovery();
-                }
-            });
-            view.findViewById(R.id.lockconfiguration).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAndroidBlue.sendConfiguration();
-                }
-            });
-            view.findViewById(R.id.deconfgiure).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAndroidBlue.sendDeConfiguration();
-                }
-            });
-            return view;
-        }
-    }
-
-    static public class WarningsFragment extends Fragment {
+    public static class WarningsFragment extends Fragment {
         private ListView warningsList;
         private ArrayAdapter<Warning> warningsAdapter;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             mTopBar.setMenuName("Warnings");
+
             View view = inflater.inflate(R.layout.fragment_warnings, container, false);
             warningsList = (ListView) view.findViewById(R.id.warningslist);
             warningsAdapter = mAndroidBlue.getWarnings();
             warningsList.setAdapter(warningsAdapter);
+
             warningsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -590,33 +403,6 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
                             .setCustomAnimations(R.anim.slide_in_down, R.anim.slide_out_down)
                             .replace(R.id.container, swipeFragment(currentFragment))
                             .commit();
-                }
-            });
-            return view;
-        }
-    }
-
-    static public class BatteryFragment extends Fragment {
-        private BatteryBar highAmp;
-        private BatteryBar lowAmp;
-        private BatteryBar android;
-        private BatteryBar glass;
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            mTopBar.setMenuName("Batteries");
-            View view = inflater.inflate(R.layout.fragment_battery, container, false);
-            highAmp = (BatteryBar) view.findViewById(R.id.highampbattery);
-            lowAmp = (BatteryBar) view.findViewById(R.id.lowampbattery);
-            android = (BatteryBar) view.findViewById(R.id.androidbattery);
-            glass = (BatteryBar) view.findViewById(R.id.glassbattery);
-            mAndroidBlue.setOnReceive(new Runnable() {
-                @Override
-                public void run() {
-                    highAmp.setBatteryCharge(mAndroidBlue.battery8AH.getValue());
-                    lowAmp.setBatteryCharge(mAndroidBlue.battery2AH.getValue());
-                    android.setBatteryCharge(mAndroidBlue.batteryAndroid.getValue());
-                    glass.setBatteryCharge(mAndroidBlue.batteryGlass.getValue());
                 }
             });
             return view;
