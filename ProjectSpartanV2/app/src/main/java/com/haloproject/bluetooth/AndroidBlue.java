@@ -54,31 +54,6 @@ public class AndroidBlue {
     private Runnable onReceive;
     private Runnable onWarning;
 
-    //batteries
-    public final BeagleIntegerOutput battery8AH;
-    public final BeagleIntegerOutput battery2AH;
-    public final BeagleIntegerOutput batteryAndroid;
-    public final BeagleIntegerOutput batteryGlass;
-
-    //lights
-    public final BeagleAutoSwitch mainLights;
-    public final BeagleSwitch redHeadLight;
-    public final BeagleSwitch whiteHeadLight;
-
-    //cooling
-    //input
-    public final BeagleAutoOffSwitch peltier;
-    public final BeagleAutoOffSwitch waterPump;
-    public final BeagleSwitch headFans;
-    //output
-    public final BeagleIntegerOutput flowRate;
-    public final BeagleDoubleOutput waterTemperature;
-
-    //vitals
-    public final BeagleDoubleOutput headTemperature;
-    public final BeagleDoubleOutput crotchTemperature;
-    public final BeagleDoubleOutput armpitsTemperature;
-    public final BeagleIntegerOutput heartRate;
 
     private static AndroidBlue mAndroidBlue = null;
     private static Context mContext;
@@ -97,26 +72,6 @@ public class AndroidBlue {
         mContext.registerReceiver(mReceiver, filter);
         mDevices = new ArrayAdapter<BluetoothDevice>(mContext, android.R.layout.simple_list_item_1);
         mDeviceStrings = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1);
-
-        headTemperature = new BeagleDoubleOutput("head temperature");
-        crotchTemperature = new BeagleDoubleOutput("crotch temperature");
-        armpitsTemperature = new BeagleDoubleOutput("armpits temperature");
-        waterTemperature = new BeagleDoubleOutput("water temperature");
-
-        flowRate = new BeagleIntegerOutput("flow rate");
-        heartRate = new BeagleIntegerOutput("heart rate");
-        battery2AH = new BeagleIntegerOutput("2 AH battery");
-        battery8AH = new BeagleIntegerOutput("8 AH battery");
-        batteryAndroid = new BeagleIntegerOutput("phone battery");
-        batteryGlass = new BeagleIntegerOutput("hud battery");
-
-
-        redHeadLight = new BeagleSwitch("head lights red");
-        whiteHeadLight = new BeagleSwitch("head lights white");
-        peltier = new BeagleAutoOffSwitch("peltier");
-        waterPump = new BeagleAutoOffSwitch("water pump");
-        headFans = new BeagleSwitch("head fans");
-        mainLights = new BeagleAutoSwitch("lights");
 
         mHandler = new Handler(Looper.getMainLooper());
         mWarnings = new LinkedList<Warning>();
@@ -283,6 +238,7 @@ public class AndroidBlue {
         }
     }
 
+    //TODO: is this needed. it is not used.
     private class BatteryRunnable implements Runnable {
         @Override
         public void run() {
@@ -379,6 +335,8 @@ public class AndroidBlue {
         this.onWarning = onWarning;
     }
 
+    //TODO: can we remove this?
+    //is this for resetting purposes?
     public void changeUI() {
         this.onReceive = null;
         this.onDisconnect = null;
@@ -439,7 +397,7 @@ public class AndroidBlue {
 
     /**
      * returns a reference to the JSON object inside androidBlue.
-     * not save because we are returning a reference.
+     * not safe because we are returning a reference.
      * */
     public JSONObject getJSON() {
         //is JSONObject immutable?

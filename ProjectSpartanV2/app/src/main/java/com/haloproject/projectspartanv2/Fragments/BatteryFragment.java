@@ -1,5 +1,6 @@
 package com.haloproject.projectspartanv2.Fragments;
 
+import android.bluetooth.BluetoothClass;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.haloproject.bluetooth.AndroidBlue;
+import com.haloproject.bluetooth.DeviceHandlerCollection;
 import com.haloproject.projectspartanv2.MainActivity;
 import com.haloproject.projectspartanv2.R;
 import com.haloproject.projectspartanv2.view.BatteryBar;
@@ -23,11 +25,13 @@ public class BatteryFragment extends Fragment {
 
     private TopBar mTopBar;
     private AndroidBlue mAndroidBlue;
+    private DeviceHandlerCollection mDeviceHandlerCollection;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mTopBar = MainActivity.mTopBar;
         mAndroidBlue = AndroidBlue.getInstance();
+        mDeviceHandlerCollection = DeviceHandlerCollection.getInstance();
 
 
         mTopBar.setMenuName("Batteries");
@@ -42,10 +46,10 @@ public class BatteryFragment extends Fragment {
         mAndroidBlue.setOnReceive(new Runnable() {
             @Override
             public void run() {
-                highAmp.setBatteryCharge(mAndroidBlue.battery8AH.getValue());
-                lowAmp.setBatteryCharge(mAndroidBlue.battery2AH.getValue());
-                android.setBatteryCharge(mAndroidBlue.batteryAndroid.getValue());
-                glass.setBatteryCharge(mAndroidBlue.batteryGlass.getValue());
+                highAmp.setBatteryCharge(mDeviceHandlerCollection.battery8AH.getValue());
+                lowAmp.setBatteryCharge(mDeviceHandlerCollection.battery2AH.getValue());
+                android.setBatteryCharge(mDeviceHandlerCollection.batteryAndroid.getValue());
+                glass.setBatteryCharge(mDeviceHandlerCollection.batteryGlass.getValue());
             }
         });
         return view;

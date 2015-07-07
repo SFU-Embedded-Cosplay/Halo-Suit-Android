@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.haloproject.bluetooth.AndroidBlue;
+import com.haloproject.bluetooth.DeviceHandlerCollection;
 import com.haloproject.projectspartanv2.MainActivity;
 import com.haloproject.projectspartanv2.R;
 import com.haloproject.projectspartanv2.view.TempWheel;
@@ -25,11 +26,15 @@ public class VitalsFragment extends Fragment {
 
     private TopBar mTopBar;
     private AndroidBlue mAndroidBlue;
+    private DeviceHandlerCollection mDeviceHandlerCollection;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mTopBar = MainActivity.mTopBar;
         mAndroidBlue = AndroidBlue.getInstance();
+        mDeviceHandlerCollection = DeviceHandlerCollection.getInstance();
+
 
         mTopBar.setMenuName("Vitals");
         View view = inflater.inflate(R.layout.fragment_vitals, container, false);
@@ -41,11 +46,11 @@ public class VitalsFragment extends Fragment {
         mAndroidBlue.setOnReceive(new Runnable() {
             @Override
             public void run() {
-                headTemp.setTemp(mAndroidBlue.headTemperature.getValue());
-                armpitsTemp.setTemp(mAndroidBlue.armpitsTemperature.getValue());
-                crotchTemp.setTemp(mAndroidBlue.crotchTemperature.getValue());
+                headTemp.setTemp(mDeviceHandlerCollection.headTemperature.getValue());
+                armpitsTemp.setTemp(mDeviceHandlerCollection.armpitsTemperature.getValue());
+                crotchTemp.setTemp(mDeviceHandlerCollection.crotchTemperature.getValue());
 
-                int hr = mAndroidBlue.heartRate.getValue();
+                int hr = mDeviceHandlerCollection.heartRate.getValue();
                 String heartrate = String.format("%d", hr);
                 heartRate.setText(heartrate);
             }

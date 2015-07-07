@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.haloproject.bluetooth.AndroidBlue;
+import com.haloproject.bluetooth.DeviceHandlerCollection;
 import com.haloproject.projectspartanv2.MainActivity;
 import com.haloproject.projectspartanv2.R;
 import com.haloproject.projectspartanv2.view.TempWheel;
@@ -22,12 +23,14 @@ public class CoolingFragment extends Fragment {
 
     private AndroidBlue mAndroidBlue;
     private TopBar mTopBar;
+    private DeviceHandlerCollection mDeviceHandlerCollection;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mTopBar = MainActivity.mTopBar;
         mAndroidBlue = AndroidBlue.getInstance();
+        mDeviceHandlerCollection = DeviceHandlerCollection.getInstance();
 
 
         mTopBar.setMenuName("Cooling");
@@ -39,44 +42,44 @@ public class CoolingFragment extends Fragment {
         view.findViewById(R.id.peltierauto).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAndroidBlue.peltier.auto();
+                mDeviceHandlerCollection.peltier.auto();
             }
         });
         view.findViewById(R.id.peltieroff).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAndroidBlue.peltier.off();
+                mDeviceHandlerCollection.peltier.off();
             }
         });
         view.findViewById(R.id.headfanson).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAndroidBlue.headFans.on();
+                mDeviceHandlerCollection.headFans.on();
             }
         });
         view.findViewById(R.id.headfansoff).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAndroidBlue.headFans.off();
+                mDeviceHandlerCollection.headFans.off();
             }
         });
         view.findViewById(R.id.waterpumpauto).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAndroidBlue.waterPump.auto();
+                mDeviceHandlerCollection.waterPump.auto();
             }
         });
         view.findViewById(R.id.waterpumpoff).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAndroidBlue.waterPump.off();
+                mDeviceHandlerCollection.waterPump.off();
             }
         });
         mAndroidBlue.setOnReceive(new Runnable() {
             @Override
             public void run() {
-                waterTemp.setTemp(mAndroidBlue.waterTemperature.getValue());
-                int flow = mAndroidBlue.flowRate.getValue();
+                waterTemp.setTemp(mDeviceHandlerCollection.waterTemperature.getValue());
+                int flow = mDeviceHandlerCollection.flowRate.getValue();
                 String newFlow = String.format("%d", flow);
 
                 flowPump.setText(newFlow);
