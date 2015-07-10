@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_alignParentStart="true">
+
+        <view
+            class="com.haloproject.projectspartanv2.view.TempWheel"
+            android:layout_width="400px"
+            android:layout_height="400px"
+            android:id="@+id/headTemp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
+
+    <view
+            class="com.haloproject.projectspartanv2.view.TempWheel"
+            android:layout_width="400px"
+            android:layout_height="400px"
+            android:id="@+id/armpitsTemp"
+        app:currTemp="40.0"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+
+        <view
+            class="com.haloproject.projectspartanv2.view.TempWheel"
+            android:layout_width="400px"
+            android:layout_height="400px"
+            android:id="@+id/crotchTemp"
+            app:currTemp="40.0"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/imageView"
+        android:src="@drawable/diagram"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <RelativeLayout
+        android:layout_width="400px"
+        android:layout_height="400px"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BPM"
+            android:id="@+id/textView"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:textSize="100px"
+            android:textColor="@color/HaloLightBlue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="--"
+            android:id="@+id/heartRate"
+            android:layout_above="@+id/textView"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/HaloLightBlue"
+            android:textSize="220px" />
+    </RelativeLayout>
+</RelativeLayout>
