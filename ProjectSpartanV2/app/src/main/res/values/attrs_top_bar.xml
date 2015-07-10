@@ -1,6 +1,0 @@
-<resources>
-    <declare-styleable name="TopBar">
-        <attr name="menuName" format="string" />
-        <attr name="bluetoothOn" format="boolean" />
-    </declare-styleable>
-</resources>
