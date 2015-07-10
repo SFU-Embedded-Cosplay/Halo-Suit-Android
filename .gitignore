@@ -1,0 +1,19 @@
+# git ignore for halo project repository
+
+#####Compiled Source##########
+*.out
+*.o
+*server_Host
+*server_Target
+
+##########Log Files###########
+log.txt
+
+#####Compressed Files#########
+*.zip
+*.tar
+*.rar
+
+#####ETC######################
+*.swp
+

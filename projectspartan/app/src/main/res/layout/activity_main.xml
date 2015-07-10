@@ -1,0 +1,201 @@
+<RelativeLayout
+    android:id="@+id/layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Buttons -->
+
+    <RelativeLayout
+        android:id="@+id/left"
+        android:layout_width="540px"
+        android:layout_height="fill_parent">
+
+        <TextView
+            android:id="@+id/head_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Head"
+            android:textSize="75px"/>
+
+        <TextView
+        android:id="@+id/armpits_temp"
+        android:layout_below="@id/head_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Armpits"
+        android:textSize="75px"/>
+
+        <TextView
+        android:id="@+id/crotch_temp"
+        android:layout_below="@id/armpits_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Crotch"
+        android:textSize="75px"/>
+
+        <TextView
+        android:id="@+id/water_temp"
+        android:layout_below="@id/crotch_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Water"
+        android:textSize="75px"/>
+
+        <TextView
+            android:id="@+id/lights"
+            android:text="Lights"
+            android:textSize="75px"
+            android:layout_below="@id/water_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/lightson"
+            android:onClick="lightsOn"
+            android:text="On"
+            android:layout_below="@id/lights"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/lightsoff"
+            android:onClick="lightsOff"
+            android:text="Off"
+            android:layout_below="@id/lights"
+            android:layout_toRightOf="@id/lightson"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/lightsauto"
+            android:onClick="lightsAuto"
+            android:text="Auto"
+            android:layout_below="@id/lights"
+            android:layout_toRightOf="@id/lightsoff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/whiteheadlights"
+            android:text="White Head Lights"
+            android:textSize="75px"
+            android:layout_below="@id/lightson"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/whiteheadlightson"
+            android:onClick="whiteHeadlightsOn"
+            android:text="On"
+            android:layout_below="@id/whiteheadlights"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/whiteheadlightsoff"
+            android:onClick="whiteHeadlightsOff"
+            android:text="Off"
+            android:layout_below="@id/whiteheadlights"
+            android:layout_toRightOf="@id/whiteheadlightson"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/right"
+        android:layout_toRightOf="@id/left"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <TextView
+            android:id="@+id/redheadlights"
+            android:text="Red Head Lights"
+            android:textSize="75px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+        <Button
+            android:id="@+id/redheadlightson"
+            android:text="On"
+            android:layout_toRightOf="@id/redheadlights"
+            android:onClick="redHeadlightsOn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/redheadlightsoff"
+            android:text="Off"
+            android:layout_toRightOf="@id/redheadlightson"
+            android:onClick="redHeadlightsOff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/headfan"
+            android:text="Head Fan"
+            android:textSize="75px"
+            android:layout_below="@id/redheadlightson"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/headfanon"
+            android:onClick="headFanOn"
+            android:text="On"
+            android:layout_below="@id/redheadlightson"
+            android:layout_toRightOf="@id/headfan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/headfanoff"
+            android:onClick="headFanOff"
+            android:text="Off"
+            android:layout_below="@id/redheadlightson"
+            android:layout_toRightOf="@id/headfanon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/pump"
+            android:text="Pump"
+            android:textSize="75px"
+            android:layout_below="@id/headfanon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/pumpon"
+            android:onClick="pumpOn"
+            android:text="On"
+            android:layout_below="@id/headfanon"
+            android:layout_toRightOf="@id/pump"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/pumpoff"
+            android:onClick="pumpOff"
+            android:text="Off"
+            android:layout_below="@id/headfanon"
+            android:layout_toRightOf="@id/pumpon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/peltier"
+            android:text="Peltier"
+            android:textSize="75px"
+            android:layout_below="@id/pumpon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/peltieron"
+            android:onClick="peltierOn"
+            android:text="On"
+            android:layout_below="@id/pumpon"
+            android:layout_toRightOf="@id/peltier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/peltieroff"
+            android:onClick="peltierOff"
+            android:text="Off"
+            android:layout_below="@id/pumpon"
+            android:layout_toRightOf="@id/peltieron"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        </RelativeLayout>
+</RelativeLayout>

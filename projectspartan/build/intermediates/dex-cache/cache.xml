@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/home/adam/Documents/halo-project/projectspartan/app/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="8694693636ab36910c8100ce527c258ff3ebece0">
+        <dex dex="/home/adam/Documents/halo-project/projectspartan/app/build/intermediates/pre-dexed/debug/classes-f7d88c2a5e3d82f014f7e80a8c7ba44a5a20927c.jar" />
+    </item>
+    <item
+        jar="/home/adam/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/20.0.0/support-annotations-20.0.0.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="9d9013e9ff35fc3756411e62873c363c70c638fa">
+        <dex dex="/home/adam/Documents/halo-project/projectspartan/app/build/intermediates/pre-dexed/debug/support-annotations-20.0.0-ac0f638c76f523252efb3450dd5e554e91df3dab.jar" />
+    </item>
+    <item
+        jar="/home/adam/Documents/halo-project/projectspartan/app/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/libs/internal_impl-20.0.0.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d">
+        <dex dex="/home/adam/Documents/halo-project/projectspartan/app/build/intermediates/pre-dexed/debug/internal_impl-20.0.0-312fe9faee316db28da6569c0bdcecf368297b28.jar" />
+    </item>
+
+</items>
