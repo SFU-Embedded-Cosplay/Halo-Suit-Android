@@ -47,7 +47,7 @@ public class AndroidBlue {
     private ArrayAdapter<String> mDeviceStrings;
     private BluetoothDevice mBeagleBone;
     private JSONObject mJSON;
-    private Handler mHandler;
+    private Handler mHandler; //handles the launching of threads (runnables)
 
     private Runnable onConnect;
     private Runnable onDisconnect;
@@ -62,7 +62,7 @@ public class AndroidBlue {
     private SoundPool soundPool;
     private int volume;
 
-    private AndroidBlue(SoundPool soundPool,int volume) {
+    private AndroidBlue(SoundPool soundPool, int volume) {
         this.isSoundOn = false;
         this.soundPool = soundPool;
         this.volume = volume;
@@ -77,8 +77,19 @@ public class AndroidBlue {
         mWarnings = new LinkedList<Warning>();
     }
 
+    public boolean isConnected() {
+        if (mSocket != null) {
+            return mSocket.isConnected();
+        }
+        return false;
+    }
+
     public boolean isSoundOn() {
         return isSoundOn;
+    }
+
+    public ArrayAdapter<String> getDeviceStrings() {
+        return mDeviceStrings;
     }
 
     public void turnSoundOff() {
@@ -132,17 +143,6 @@ public class AndroidBlue {
         }
     }
 
-    public boolean isConnected() {
-        if (mSocket != null) {
-            return mSocket.isConnected();
-        }
-        return false;
-    }
-
-    public ArrayAdapter<String> getDeviceStrings() {
-        return mDeviceStrings;
-    }
-
     public boolean startDiscovery() {
         if (isEnabled()) {
             if (mAdapter.isDiscovering()) {
@@ -174,10 +174,6 @@ public class AndroidBlue {
         }
     }
 
-    public BluetoothDevice getBeagleBone() {
-        return mBeagleBone;
-    }
-
     public void connect() {
         new Thread(new ConnectRunnable()).start();
     }
@@ -205,7 +201,7 @@ public class AndroidBlue {
     public boolean sendDeConfiguration() {
         if (isConnected()) {
             try {
-                if (mBeagleBone != null) {
+                if (mBeagleBone != null) { //TODO: question - is this check necessary?
                     JSONObject deconfiguration = new JSONObject();
                     JSONObject android = new JSONObject();
                     android.put("android", "delete");
@@ -220,9 +216,13 @@ public class AndroidBlue {
         return false;
     }
 
+
+    // 4 classes that correspond to different runnables
     private class ConnectRunnable implements Runnable {
         @Override
         public void run() {
+            //TODO: connect socket
+
             if (mBeagleBone != null) {
                 try {
                     Method m = mBeagleBone.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
@@ -238,7 +238,6 @@ public class AndroidBlue {
         }
     }
 
-    //TODO: is this needed. it is not used.
     private class BatteryRunnable implements Runnable {
         @Override
         public void run() {
@@ -263,12 +262,16 @@ public class AndroidBlue {
         }
     }
 
+    /**
+     * identical to connectRunnable except posting onDisconnect
+     * */
     private class DisconnectedRunnable implements Runnable {
         @Override
         public void run() {
             mHandler.post(onDisconnect);
             while (true) {
                 try {
+                    // question: why is this connecting agian???
                     Method m = mBeagleBone.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
                     mSocket = (BluetoothSocket) m.invoke(mBeagleBone, 3);
 
@@ -277,6 +280,7 @@ public class AndroidBlue {
                     new Thread(new ConnectedRunnable()).start();
                     return;
                 } catch (Exception e) {
+                    //question Why do were wait here???
                     try {
                         Thread.sleep(1000);
                     } catch (Exception e2) {
@@ -299,8 +303,8 @@ public class AndroidBlue {
                     mBytes = new byte[1024];
                     mSocket.getInputStream().read(mBytes);
                     mJSON = new JSONObject(new String(mBytes));
-                    if(isSoundOn)
-                    {//a copy is needed because the object is passed off to a separate thread
+                    if(isSoundOn) {
+                        //a copy is needed because the object is passed off to a separate thread
                         JSONObject jsonCopy = new JSONObject(new String(mBytes));
                         SoundMessageHandler.handleSoundMessage(jsonCopy,soundPool,volume);
                     }
@@ -355,6 +359,7 @@ public class AndroidBlue {
         return warnings;
     }
 
+    //TODO: should probably rename this to comething more comprehensive
     private void setWarnings() {
         try {
             boolean newWarning = false;
@@ -400,7 +405,7 @@ public class AndroidBlue {
      * not safe because we are returning a reference.
      * */
     public JSONObject getJSON() {
-        //is JSONObject immutable?
+        //is JSONObject immutable? -> No I don't think so
         return mJSON; //TODO: look into returning a copy (how will this effect performance)
     }
 
