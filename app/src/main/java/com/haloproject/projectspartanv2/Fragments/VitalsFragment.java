@@ -28,12 +28,28 @@ public class VitalsFragment extends Fragment {
     private AndroidBlue mAndroidBlue;
     private DeviceHandlerCollection mDeviceHandlerCollection;
 
+    private static final String ANDROID_BLUE_KEY = "androidBlue";
+    private static final String DEVICE_HANDLER_COLLECTION_KEY = "deviceHandlerCollection";
+
+    public static VitalsFragment newInstance(AndroidBlue mAndroidBlue, DeviceHandlerCollection mDeviceHandlerCollection) {
+        VitalsFragment fragment = new VitalsFragment();
+
+        final Bundle args = new Bundle();
+
+        args.putSerializable(ANDROID_BLUE_KEY, mAndroidBlue);
+        args.putSerializable(DEVICE_HANDLER_COLLECTION_KEY, mDeviceHandlerCollection);
+
+        fragment.setArguments(args);
+
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mTopBar = MainActivity.mTopBar;
-        mAndroidBlue = AndroidBlue.getInstance();
-        mDeviceHandlerCollection = DeviceHandlerCollection.getInstance();
+
+        mAndroidBlue = (AndroidBlue) getArguments().getSerializable(ANDROID_BLUE_KEY);
+        mDeviceHandlerCollection = (DeviceHandlerCollection) getArguments().getSerializable(DEVICE_HANDLER_COLLECTION_KEY);
 
 
         mTopBar.setMenuName("Vitals");

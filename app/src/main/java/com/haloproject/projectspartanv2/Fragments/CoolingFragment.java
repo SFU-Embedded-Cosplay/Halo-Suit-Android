@@ -21,16 +21,33 @@ public class CoolingFragment extends Fragment {
     private TempWheel waterTemp;
     private TextView flowPump;
 
-    private AndroidBlue mAndroidBlue;
     private TopBar mTopBar;
+    private AndroidBlue mAndroidBlue;
     private DeviceHandlerCollection mDeviceHandlerCollection;
+
+    private static final String ANDROID_BLUE_KEY = "androidBlue";
+    private static final String DEVICE_HANDLER_COLLECTION_KEY = "deviceHandlerCollection";
+
+    public static CoolingFragment newInstance(AndroidBlue mAndroidBlue, DeviceHandlerCollection mDeviceHandlerCollection) {
+        CoolingFragment fragment = new CoolingFragment();
+
+        final Bundle args = new Bundle();
+
+        args.putSerializable(ANDROID_BLUE_KEY, mAndroidBlue);
+        args.putSerializable(DEVICE_HANDLER_COLLECTION_KEY, mDeviceHandlerCollection);
+
+        fragment.setArguments(args);
+
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mTopBar = MainActivity.mTopBar;
-        mAndroidBlue = AndroidBlue.getInstance();
-        mDeviceHandlerCollection = DeviceHandlerCollection.getInstance();
+
+        mAndroidBlue = (AndroidBlue) getArguments().getSerializable(ANDROID_BLUE_KEY);
+        mDeviceHandlerCollection = (DeviceHandlerCollection) getArguments().getSerializable(DEVICE_HANDLER_COLLECTION_KEY);
 
 
         mTopBar.setMenuName("Cooling");

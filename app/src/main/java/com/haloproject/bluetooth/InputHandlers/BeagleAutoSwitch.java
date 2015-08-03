@@ -1,12 +1,15 @@
 package com.haloproject.bluetooth.InputHandlers;
 
+import com.haloproject.bluetooth.AndroidBlue;
+import com.haloproject.bluetooth.BluetoothInterfaces.JSONCommunicationDevice;
+
 /**
  * Created by Tyler on 7/5/2015.
  * turns things on or off or auto
  */
 public class BeagleAutoSwitch extends BeagleInputHandler {
-    public BeagleAutoSwitch(String location) {
-        super(location);
+    public BeagleAutoSwitch(String location, JSONCommunicationDevice communicationDevice) {
+        super(location, communicationDevice);
     }
 
     public void auto() {

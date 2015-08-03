@@ -15,11 +15,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
-import com.haloproject.bluetooth.InputHandlers.BeagleAutoOffSwitch;
-import com.haloproject.bluetooth.InputHandlers.BeagleAutoSwitch;
-import com.haloproject.bluetooth.InputHandlers.BeagleSwitch;
-import com.haloproject.bluetooth.OutputHandlers.BeagleDoubleOutput;
-import com.haloproject.bluetooth.OutputHandlers.BeagleIntegerOutput;
+import com.haloproject.bluetooth.BluetoothInterfaces.JSONCommunicationDevice;
 import com.haloproject.projectspartanv2.SoundMessageHandler;
 import com.haloproject.projectspartanv2.Warning;
 
@@ -28,15 +24,15 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Adam Brykajlo on 18/02/15.
  */
-public class AndroidBlue {
+public class AndroidBlue implements JSONCommunicationDevice, Serializable {
     private final int REQUEST_ENABLE_BT = 42;
 
     private List<Warning> mWarnings;
@@ -62,7 +58,9 @@ public class AndroidBlue {
     private SoundPool soundPool;
     private int volume;
 
-    private AndroidBlue(SoundPool soundPool, int volume) {
+    private AndroidBlue(SoundPool soundPool, int volume, Context context) {
+        this.mContext = context;
+
         this.isSoundOn = false;
         this.soundPool = soundPool;
         this.volume = volume;
@@ -100,14 +98,10 @@ public class AndroidBlue {
         isSoundOn = true;
     }
 
-    public static void setContext(Context context) {
-        mContext = context;
-    }
-
-    public static AndroidBlue getInstance(SoundPool soundPool,int volume) {
+    public static AndroidBlue getInstance(SoundPool soundPool, int volume) {
         if (mContext != null) {
             if (mAndroidBlue == null) {
-                mAndroidBlue = new AndroidBlue(soundPool,volume);
+                mAndroidBlue = new AndroidBlue(soundPool,volume, mContext);
             }
             return mAndroidBlue;
         }
@@ -124,6 +118,10 @@ public class AndroidBlue {
         } else {
             return null;
         }
+    }
+
+    public static void setContext(Context context) {
+        mContext = context;
     }
 
     public boolean isEnabled() {

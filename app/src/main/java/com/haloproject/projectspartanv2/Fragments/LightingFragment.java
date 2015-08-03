@@ -19,7 +19,19 @@ public class LightingFragment extends Fragment {
     private TopBar mTopBar;
     private DeviceHandlerCollection mDeviceHandlerCollection;
 
+    private static final String DEVICE_HANDLER_COLLECTION_KEY = "deviceHandlerCollection";
 
+    public static LightingFragment newInstance(DeviceHandlerCollection mDeviceHandlerCollection) {
+        LightingFragment fragment = new LightingFragment();
+
+        final Bundle args = new Bundle();
+
+        args.putSerializable(DEVICE_HANDLER_COLLECTION_KEY, mDeviceHandlerCollection);
+
+        fragment.setArguments(args);
+
+        return fragment;
+    }
 
 
     @Override
@@ -27,7 +39,7 @@ public class LightingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mTopBar = MainActivity.mTopBar;
-        mDeviceHandlerCollection = DeviceHandlerCollection.getInstance();
+        mDeviceHandlerCollection =(DeviceHandlerCollection) getArguments().getSerializable(DEVICE_HANDLER_COLLECTION_KEY);
 
 
 //        mTopBar.setMenuName("Lighting");

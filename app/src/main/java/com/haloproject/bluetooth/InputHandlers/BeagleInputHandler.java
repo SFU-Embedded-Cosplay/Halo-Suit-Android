@@ -1,6 +1,7 @@
 package com.haloproject.bluetooth.InputHandlers;
 
 import com.haloproject.bluetooth.AndroidBlue;
+import com.haloproject.bluetooth.BluetoothInterfaces.JSONCommunicationDevice;
 
 import org.json.JSONObject;
 
@@ -9,18 +10,18 @@ import org.json.JSONObject;
  */
 public abstract class BeagleInputHandler {
     protected String location;
-    protected AndroidBlue androidBlue;
+    protected JSONCommunicationDevice mCommunicationDevice;
 
-    public BeagleInputHandler(String location) {
+    public BeagleInputHandler(String location, JSONCommunicationDevice communicationDevice) {
         this.location = location;
-        this.androidBlue = AndroidBlue.getInstance();
+        mCommunicationDevice = communicationDevice;
     }
 
     protected void setState(String state) {
         try {
             JSONObject switchObject = new JSONObject();
             switchObject.put(location, state);
-            androidBlue.getOutputStream().write(switchObject.toString().getBytes());
+            mCommunicationDevice.getOutputStream().write(switchObject.toString().getBytes());
         } catch (Exception e) {
 
         }
@@ -28,7 +29,7 @@ public abstract class BeagleInputHandler {
 
     protected boolean isStateSet(String state) {
         try {
-            return androidBlue.getJSON().getString(location).equals(state);
+            return mCommunicationDevice.getJSON().getString(location).equals(state);
         } catch (Exception e) {
             return false;
         }

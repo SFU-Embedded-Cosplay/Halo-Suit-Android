@@ -28,6 +28,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.haloproject.bluetooth.AndroidBlue;
+import com.haloproject.bluetooth.DeviceHandlerCollection;
 import com.haloproject.projectspartanv2.Fragments.BatteryFragment;
 import com.haloproject.projectspartanv2.Fragments.CoolingFragment;
 import com.haloproject.projectspartanv2.Fragments.LightingFragment;
@@ -218,19 +219,19 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     private static Fragment swipeFragment(int fragment) {
         switch (fragment) {
             case 0:
-                return new VitalsFragment();
+                return VitalsFragment.newInstance(mAndroidBlue, DeviceHandlerCollection.getInstance(mAndroidBlue));
             case 1:
-                return new CoolingFragment();
+                return CoolingFragment.newInstance(mAndroidBlue, DeviceHandlerCollection.getInstance(mAndroidBlue));
             case 2:
-                return new LightingFragment();
+                return LightingFragment.newInstance(DeviceHandlerCollection.getInstance(mAndroidBlue));
             case 3:
-                return new RadarFragment();
+                return RadarFragment.newInstance();
             case 4:
-                return new BatteryFragment();
+                return BatteryFragment.newInstance(mAndroidBlue, DeviceHandlerCollection.getInstance(mAndroidBlue));
             case 5:
                 return new WarningsFragment();
             case 6:
-                return new SettingsFragment();
+                return SettingsFragment.newInstance(mAndroidBlue);
             default:
                 return new MainFragment();
         }
@@ -244,14 +245,11 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     }
 
     private void toggleVoice(MainButton view) {
-        if(mMicrophoneHandler.isMicOn())
-        {
+        if(mMicrophoneHandler.isMicOn()) {
             mMicrophoneHandler.turnMicOff();
             view.setIcon(getResources().getDrawable(R.drawable.speaker_off_icon));
             view.invalidate();
-        }
-        else
-        {
+        } else {
             mMicrophoneHandler.turnMicOn();
             view.setIcon(getResources().getDrawable(R.drawable.speaker_on_icon));
             view.invalidate();
@@ -259,14 +257,12 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     }
 
     private void toggleSounds(MainButton view) {
-        if(mAndroidBlue.isSoundOn())
-        {
+        if(mAndroidBlue.isSoundOn()) {
             mAndroidBlue.turnSoundOff();
             view.setIcon(getResources().getDrawable(R.drawable.music_off_icon));
             view.invalidate();
         }
-        else
-        {
+        else {
             mAndroidBlue.turnSoundOn();
             view.setIcon(getResources().getDrawable(R.drawable.music_on_icon));
             view.invalidate();
