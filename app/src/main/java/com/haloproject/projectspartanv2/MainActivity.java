@@ -32,6 +32,7 @@ import com.haloproject.bluetooth.DeviceHandlerCollection;
 import com.haloproject.projectspartanv2.Fragments.BatteryFragment;
 import com.haloproject.projectspartanv2.Fragments.CoolingFragment;
 import com.haloproject.projectspartanv2.Fragments.LightingFragment;
+import com.haloproject.projectspartanv2.Fragments.MainFragment;
 import com.haloproject.projectspartanv2.Fragments.RadarFragment;
 import com.haloproject.projectspartanv2.Fragments.SettingsFragment;
 import com.haloproject.projectspartanv2.Fragments.VitalsFragment;
@@ -113,7 +114,13 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         setupAudioServices();
         int volume = getVolume();
 
+        mMicrophoneHandler = MicrophoneHandler.getInstance();
+
+        AndroidBlue.setContext(getApplicationContext());
+        mAndroidBlue = AndroidBlue.getInstance(soundPool, volume);
+
         setContentView(R.layout.activity_main);
+
         //set up wakelock
         params = new WindowManager.LayoutParams();
         params.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
@@ -121,15 +128,16 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         mFragmentManager = getSupportFragmentManager();
         if (savedInstanceState == null) {
             mFragmentManager.beginTransaction()
-                    .add(R.id.container, new MainFragment())
+                    .add(R.id.container, MainFragment.newInstance(mAndroidBlue))
                     .commit();
 
             currentFragment = -1;
         }
 
-        mMicrophoneHandler = MicrophoneHandler.getInstance();
-        AndroidBlue.setContext(getApplicationContext());
-        mAndroidBlue = AndroidBlue.getInstance(soundPool, volume);
+
+
+
+
         mPreferences = getPreferences(MODE_PRIVATE);
         if (mPreferences.contains("bluetooth")) {
             String device = mPreferences.getString("bluetooth", "");
@@ -233,7 +241,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
             case 6:
                 return SettingsFragment.newInstance(mAndroidBlue);
             default:
-                return new MainFragment();
+                return MainFragment.newInstance(mAndroidBlue);
         }
     }
 
@@ -269,6 +277,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         }
     }
 
+    //TODO: do these need to accept a view?
     public void vitals(View view) {
         currentFragment = 0;
         openCurrentFragment();
@@ -303,6 +312,11 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         currentFragment = 6;
         openCurrentFragment();
     }
+
+    public static void setCurrentFragmentToMainMenu() {
+        currentFragment = -1;
+    }
+
     public void voice(View view) {
         toggleVoice((MainButton)view);
     }
@@ -354,29 +368,6 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
                 mTopBar.setBluetooth(false);
             }
         });
-    }
-
-    public static class MainFragment extends Fragment {
-        private LinearLayout mainMenu;
-        private HorizontalScrollView scrollView;
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            currentFragment = -1;
-            mTopBar.setMenuName("Main Menu");
-            // Inflate the layout for this fragment
-            View view = inflater.inflate(R.layout.fragment_main, container, false);
-            mainMenu = (LinearLayout) view.findViewById(R.id.mainmenu);
-            scrollView = (HorizontalScrollView) view.findViewById(R.id.scrollview);
-            return view;
-        }
-
-        @Override
-        public void onDestroyView() {
-            super.onDestroyView();
-            mAndroidBlue.changeOnReceive();
-        }
     }
 
     public static class WarningsFragment extends Fragment {
