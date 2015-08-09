@@ -64,7 +64,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
+        //TODO: why do we have this here.  This appears to be for working with the gyroscope and other hardware functionality
     }
 
     @Override
@@ -146,7 +146,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
             }
         }
         mTopBar = (TopBar) findViewById(R.id.topbar);
-        updateTopBar(mTopBar);
+        updateTopBar();
 
         if (!mAndroidBlue.isEnabled()) {
             mAndroidBlue.enableBluetooth(this);
@@ -346,7 +346,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         return super.onOptionsItemSelected(item);
     }
 
-    private static void updateTopBar(final TopBar mTopBar) {
+    private static void updateTopBar() {
         if (mAndroidBlue.isConnected()) {
             mTopBar.setBluetooth(true);
         } else {

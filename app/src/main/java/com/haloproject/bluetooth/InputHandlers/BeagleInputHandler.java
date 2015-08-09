@@ -1,5 +1,7 @@
 package com.haloproject.bluetooth.InputHandlers;
 
+import android.util.Log;
+
 import com.haloproject.bluetooth.AndroidBlue;
 import com.haloproject.bluetooth.BluetoothInterfaces.JSONCommunicationDevice;
 
@@ -23,7 +25,8 @@ public abstract class BeagleInputHandler {
             switchObject.put(location, state);
             mCommunicationDevice.getOutputStream().write(switchObject.toString().getBytes());
         } catch (Exception e) {
-
+            //may want to throw exception to UI layer for better handling.
+            Log.d("OutputStreamInformation", "outputStream is not set yet"); //should have a better key and error message.
         }
     }
 

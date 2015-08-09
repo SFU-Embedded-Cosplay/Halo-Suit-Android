@@ -7,7 +7,7 @@ import com.haloproject.bluetooth.BluetoothInterfaces.JSONCommunicationDevice;
  * Created by Tyler on 7/5/2015.
  * turns things on or off or auto
  */
-public class BeagleAutoSwitch extends BeagleInputHandler {
+public class BeagleAutoSwitch extends BeagleInputHandler { //TODO: should probably extend BeagleSwitch (BeagleSwitch has on/off isOn/isOff functions)
     public BeagleAutoSwitch(String location, JSONCommunicationDevice communicationDevice) {
         super(location, communicationDevice);
     }
