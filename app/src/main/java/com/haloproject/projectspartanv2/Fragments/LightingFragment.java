@@ -42,7 +42,7 @@ public class LightingFragment extends Fragment {
         mDeviceHandlerCollection =(DeviceHandlerCollection) getArguments().getSerializable(DEVICE_HANDLER_COLLECTION_KEY);
 
 
-//        mTopBar.setMenuName("Lighting");
+        mTopBar.setMenuName("Lighting");
         View view = inflater.inflate(R.layout.fragment_lighting, container, false);
         view.findViewById(R.id.mainlightson).setOnClickListener(new View.OnClickListener() {
             @Override
