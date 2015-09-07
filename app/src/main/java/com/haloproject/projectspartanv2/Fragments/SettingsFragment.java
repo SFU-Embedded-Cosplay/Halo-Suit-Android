@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -58,24 +60,36 @@ public class SettingsFragment extends Fragment {
             }
         });
         btdevices.setAdapter(mAndroidBlue.getDeviceStrings());
-        view.findViewById(R.id.startdiscovery).setOnClickListener(new View.OnClickListener() {
+
+        final Animation onClickAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.button_onclick);
+
+        View startDiscoveryButton = view.findViewById(R.id.startdiscovery);
+        startDiscoveryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.startAnimation(onClickAnimation);
                 mAndroidBlue.startDiscovery();
             }
         });
-        view.findViewById(R.id.lockconfiguration).setOnClickListener(new View.OnClickListener() {
+
+        View lockConfigurationButton = view.findViewById(R.id.lockconfiguration);
+        lockConfigurationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.startAnimation(onClickAnimation);
                 mAndroidBlue.sendConfiguration();
             }
         });
-        view.findViewById(R.id.deconfgiure).setOnClickListener(new View.OnClickListener() {
+
+        View deconfigureButton = view.findViewById(R.id.deconfgiure);
+        deconfigureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.startAnimation(onClickAnimation);
                 mAndroidBlue.sendDeConfiguration();
             }
         });
+
         return view;
     }
 }

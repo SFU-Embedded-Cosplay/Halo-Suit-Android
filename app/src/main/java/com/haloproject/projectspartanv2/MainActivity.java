@@ -20,6 +20,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.HorizontalScrollView;
@@ -46,6 +48,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     private static AndroidBlue mAndroidBlue;
 
     public static final int TOTAL_SWIPE_FRAGMENTS = 7;
+    private Animation onClickAnimation;
 
     private WindowManager.LayoutParams params;
 
@@ -167,6 +170,8 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         //create sensor
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR);
+
+        onClickAnimation = AnimationUtils.loadAnimation(this, R.anim.button_onclick);
     }
 
     private void setupAudioServices() {
@@ -279,36 +284,43 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
 
     //TODO: do these need to accept a view?
     public void vitals(View view) {
+        view.startAnimation(onClickAnimation);
         currentFragment = 0;
         openCurrentFragment();
     }
 
     public void cooling(View view) {
+        view.startAnimation(onClickAnimation);
         currentFragment = 1;
         openCurrentFragment();
     }
 
     public void lighting(View view) {
+        view.startAnimation(onClickAnimation);
         currentFragment = 2;
         openCurrentFragment();
     }
 
     public void radar(View view) {
+        view.startAnimation(onClickAnimation);
         currentFragment = 3;
         openCurrentFragment();
     }
 
     public void batteries(View view) {
+        view.startAnimation(onClickAnimation);
         currentFragment = 4;
         openCurrentFragment();
     }
 
     public void warnings(View view) {
+        view.startAnimation(onClickAnimation);
         currentFragment = 5;
         openCurrentFragment();
     }
 
     public void settings(View view) {
+        view.startAnimation(onClickAnimation);
         currentFragment = 6;
         openCurrentFragment();
     }
@@ -318,7 +330,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     }
 
     public void voice(View view) {
-        toggleVoice((MainButton)view);
+        toggleVoice((MainButton) view);
     }
     public void sounds(View view) {
         toggleSounds((MainButton)view);
