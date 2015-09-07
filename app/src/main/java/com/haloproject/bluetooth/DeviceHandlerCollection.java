@@ -2,16 +2,19 @@ package com.haloproject.bluetooth;
 
 import android.bluetooth.BluetoothClass;
 
+import com.haloproject.bluetooth.BluetoothInterfaces.JSONCommunicationDevice;
 import com.haloproject.bluetooth.InputHandlers.BeagleAutoOffSwitch;
 import com.haloproject.bluetooth.InputHandlers.BeagleAutoSwitch;
 import com.haloproject.bluetooth.InputHandlers.BeagleSwitch;
 import com.haloproject.bluetooth.OutputHandlers.BeagleDoubleOutput;
 import com.haloproject.bluetooth.OutputHandlers.BeagleIntegerOutput;
 
+import java.io.Serializable;
+
 /**
  * Created by Tyler on 7/6/2015.
  */
-public class DeviceHandlerCollection {
+public class DeviceHandlerCollection implements Serializable {
 
     private static DeviceHandlerCollection deviceHandlerCollection;
 
@@ -41,31 +44,31 @@ public class DeviceHandlerCollection {
     public final BeagleDoubleOutput armpitsTemperature;
     public final BeagleIntegerOutput heartRate;
 
-    private DeviceHandlerCollection() {
-        headTemperature = new BeagleDoubleOutput("head temperature");
-        crotchTemperature = new BeagleDoubleOutput("crotch temperature");
-        armpitsTemperature = new BeagleDoubleOutput("armpits temperature");
-        waterTemperature = new BeagleDoubleOutput("water temperature");
+    private DeviceHandlerCollection(JSONCommunicationDevice communicationDevice) {
+        headTemperature = new BeagleDoubleOutput("head temperature", communicationDevice);
+        crotchTemperature = new BeagleDoubleOutput("crotch temperature", communicationDevice);
+        armpitsTemperature = new BeagleDoubleOutput("armpits temperature", communicationDevice);
+        waterTemperature = new BeagleDoubleOutput("water temperature", communicationDevice);
 
-        flowRate = new BeagleIntegerOutput("flow rate");
-        heartRate = new BeagleIntegerOutput("heart rate");
-        battery2AH = new BeagleIntegerOutput("2 AH battery");
-        battery8AH = new BeagleIntegerOutput("8 AH battery");
-        batteryAndroid = new BeagleIntegerOutput("phone battery");
-        batteryGlass = new BeagleIntegerOutput("hud battery");
+        flowRate = new BeagleIntegerOutput("flow rate", communicationDevice);
+        heartRate = new BeagleIntegerOutput("heart rate", communicationDevice);
+        battery2AH = new BeagleIntegerOutput("2 AH battery", communicationDevice);
+        battery8AH = new BeagleIntegerOutput("8 AH battery", communicationDevice);
+        batteryAndroid = new BeagleIntegerOutput("phone battery", communicationDevice);
+        batteryGlass = new BeagleIntegerOutput("hud battery", communicationDevice);
 
 
-        redHeadLight = new BeagleSwitch("head lights red");
-        whiteHeadLight = new BeagleSwitch("head lights white");
-        peltier = new BeagleAutoOffSwitch("peltier");
-        waterPump = new BeagleAutoOffSwitch("water pump");
-        headFans = new BeagleSwitch("head fans");
-        mainLights = new BeagleAutoSwitch("lights");
+        redHeadLight = new BeagleSwitch("head lights red", communicationDevice);
+        whiteHeadLight = new BeagleSwitch("head lights white", communicationDevice);
+        peltier = new BeagleAutoOffSwitch("peltier", communicationDevice);
+        waterPump = new BeagleAutoOffSwitch("water pump", communicationDevice);
+        headFans = new BeagleSwitch("head fans", communicationDevice);
+        mainLights = new BeagleAutoSwitch("lights", communicationDevice);
     }
 
-    public static DeviceHandlerCollection getInstance() {
+    public static DeviceHandlerCollection getInstance(JSONCommunicationDevice communicationDevice) {
         if(deviceHandlerCollection == null) {
-            deviceHandlerCollection = new DeviceHandlerCollection();
+            deviceHandlerCollection = new DeviceHandlerCollection(communicationDevice);
         }
 
         return deviceHandlerCollection;

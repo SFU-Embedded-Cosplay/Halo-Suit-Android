@@ -16,6 +16,10 @@ import com.haloproject.projectspartanv2.view.TopBar;
 public class RadarFragment extends Fragment {
     private TopBar mTopBar;
 
+    public static RadarFragment newInstance() {
+        return new RadarFragment();
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

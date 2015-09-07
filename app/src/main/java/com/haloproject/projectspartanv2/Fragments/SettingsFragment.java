@@ -24,10 +24,25 @@ public class SettingsFragment extends Fragment {
     private TopBar mTopBar;
     private AndroidBlue mAndroidBlue;
 
+    private static final String ANDROID_BLUE_KEY = "androidBlue";
+    private static final String DEVICE_HANDLER_COLLECTION_KEY = "deviceHandlerCollection";
+
+    public static SettingsFragment newInstance(AndroidBlue mAndroidBlue) {
+        SettingsFragment fragment = new SettingsFragment();
+
+        final Bundle args = new Bundle();
+
+        args.putSerializable(ANDROID_BLUE_KEY, mAndroidBlue);
+
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mTopBar = MainActivity.mTopBar;
-        mAndroidBlue = AndroidBlue.getInstance();
+        mAndroidBlue = (AndroidBlue) getArguments().getSerializable(ANDROID_BLUE_KEY);
 
 
         mTopBar.setMenuName("Settings");

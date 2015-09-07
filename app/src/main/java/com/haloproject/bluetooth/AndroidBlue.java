@@ -15,11 +15,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
-import com.haloproject.bluetooth.InputHandlers.BeagleAutoOffSwitch;
-import com.haloproject.bluetooth.InputHandlers.BeagleAutoSwitch;
-import com.haloproject.bluetooth.InputHandlers.BeagleSwitch;
-import com.haloproject.bluetooth.OutputHandlers.BeagleDoubleOutput;
-import com.haloproject.bluetooth.OutputHandlers.BeagleIntegerOutput;
+import com.haloproject.bluetooth.BluetoothInterfaces.JSONCommunicationDevice;
 import com.haloproject.projectspartanv2.SoundMessageHandler;
 import com.haloproject.projectspartanv2.Warning;
 
@@ -27,16 +23,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Adam Brykajlo on 18/02/15.
  */
-public class AndroidBlue {
+public class AndroidBlue implements JSONCommunicationDevice, Serializable {
     private final int REQUEST_ENABLE_BT = 42;
 
     private List<Warning> mWarnings;
@@ -47,29 +46,37 @@ public class AndroidBlue {
     private ArrayAdapter<String> mDeviceStrings;
     private BluetoothDevice mBeagleBone;
     private JSONObject mJSON;
-    private Handler mHandler;
+    private Handler mHandler; //handles the launching of threads (runnables)
+
+    private Socket mTestSocket = new Socket();
+    private InetSocketAddress mTestSocketAddress = new InetSocketAddress("10.0.2.2", 8080);
+    protected static final boolean IS_TESTING_WITH_SOCKET = false;
 
     private Runnable onConnect;
     private Runnable onDisconnect;
     private Runnable onReceive;
     private Runnable onWarning;
 
-
-    private static AndroidBlue mAndroidBlue = null;
-    private static Context mContext;
-
+                                                    // TODO: prefix static variables with s if we want to follow the m prefix standard.
+    private static AndroidBlue mAndroidBlue = null; // following the m prefix standard static variables should be prefixed with s.
+    private static Context mContext;                // see http://source.android.com/source/code-style.html#follow-field-naming-conventions
+                                                    // which has a section on "Follow Field Naming Conventions" which explains the convention.
     private boolean isSoundOn;
     private SoundPool soundPool;
     private int volume;
 
-    private AndroidBlue(SoundPool soundPool,int volume) {
+    private AndroidBlue(SoundPool soundPool, int volume, Context context) {
+        mContext = context;
+
         this.isSoundOn = false;
         this.soundPool = soundPool;
         this.volume = volume;
 
         mAdapter = BluetoothAdapter.getDefaultAdapter();
+
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         mContext.registerReceiver(mReceiver, filter);
+
         mDevices = new ArrayAdapter<BluetoothDevice>(mContext, android.R.layout.simple_list_item_1);
         mDeviceStrings = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1);
 
@@ -77,8 +84,25 @@ public class AndroidBlue {
         mWarnings = new LinkedList<Warning>();
     }
 
+    public boolean isConnected() {
+        if(IS_TESTING_WITH_SOCKET) {
+            if(mTestSocket != null) {
+                return mTestSocket.isConnected();
+            }
+        }
+
+        if (mSocket != null) {
+            return mSocket.isConnected();
+        }
+        return false;
+    }
+
     public boolean isSoundOn() {
         return isSoundOn;
+    }
+
+    public ArrayAdapter<String> getDeviceStrings() {
+        return mDeviceStrings;
     }
 
     public void turnSoundOff() {
@@ -89,37 +113,37 @@ public class AndroidBlue {
         isSoundOn = true;
     }
 
-    public static void setContext(Context context) {
-        mContext = context;
-    }
-
-    public static AndroidBlue getInstance(SoundPool soundPool,int volume) {
+    public static AndroidBlue getInstance(SoundPool soundPool, int volume) {
         if (mContext != null) {
             if (mAndroidBlue == null) {
-                mAndroidBlue = new AndroidBlue(soundPool,volume);
+                mAndroidBlue = new AndroidBlue(soundPool,volume, mContext);
             }
             return mAndroidBlue;
         }
         return null;
     }
 
-    public static AndroidBlue getInstance() {
-        if (mContext != null) {
-            if (mAndroidBlue == null) {
-                assert false;
-            }
-
-            return mAndroidBlue;
-        } else {
-            return null;
-        }
+    public static void setContext(Context context) {
+        mContext = context;
     }
 
     public boolean isEnabled() {
+        if(IS_TESTING_WITH_SOCKET) {
+            return true;
+        }
+
         return mAdapter.isEnabled();
     }
 
     public void enableBluetooth(Activity callingActivity) {
+        assert false;
+        //TODO: find out what this does.
+        //this does not appear to get called.
+
+        if(IS_TESTING_WITH_SOCKET) {
+            return;
+        }
+
         if (!isEnabled()) {
             Intent enableBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             callingActivity.startActivityForResult(enableBTIntent, REQUEST_ENABLE_BT);
@@ -127,24 +151,24 @@ public class AndroidBlue {
     }
 
     public void disableBluetooth() {
+        if(IS_TESTING_WITH_SOCKET) {
+            return;
+        }
+
         if (isEnabled()) {
             mAdapter.disable();
         }
     }
 
-    public boolean isConnected() {
-        if (mSocket != null) {
-            return mSocket.isConnected();
-        }
-        return false;
-    }
-
-    public ArrayAdapter<String> getDeviceStrings() {
-        return mDeviceStrings;
-    }
-
     public boolean startDiscovery() {
+
+        if(IS_TESTING_WITH_SOCKET) {
+            connect();
+            return true;
+        }
+
         if (isEnabled()) {
+
             if (mAdapter.isDiscovering()) {
                 mAdapter.cancelDiscovery();
             }
@@ -158,6 +182,10 @@ public class AndroidBlue {
     }
 
     public boolean setBeagleBone(int pos) {
+        if(IS_TESTING_WITH_SOCKET) {
+            return true;
+        }
+
         if (pos < mDevices.getCount()) {
             mBeagleBone = mDevices.getItem(pos);
             return true;
@@ -166,16 +194,16 @@ public class AndroidBlue {
     }
 
     public boolean setBeagleBone(String device) {
+        if(IS_TESTING_WITH_SOCKET) {
+            return true;
+        }
+
         try {
             mBeagleBone = mAdapter.getRemoteDevice(device);
             return true;
         } catch (IllegalArgumentException e) {
             return false;
         }
-    }
-
-    public BluetoothDevice getBeagleBone() {
-        return mBeagleBone;
     }
 
     public void connect() {
@@ -185,15 +213,15 @@ public class AndroidBlue {
     public boolean sendConfiguration() {
         if (isConnected()) {
             try {
-                if (mBeagleBone != null) {
-                    JSONObject configuration = new JSONObject();
+                //if (mBeagleBone != null) { //I dont think this is necessary
+                JSONObject configuration = new JSONObject();
 
-                    JSONObject android = new JSONObject();
-                    android.put("android", mAdapter.getAddress());
-                    configuration.put("configuration", android);
+                JSONObject android = new JSONObject();
+                android.put("android", getAdapterAddress());
+                configuration.put("configuration", android);
 
-                    mSocket.getOutputStream().write(configuration.toString().getBytes());
-                }
+                getOutputStream().write(configuration.toString().getBytes());
+                //}
             } catch (Exception e) {
                 return false;
             }
@@ -202,16 +230,20 @@ public class AndroidBlue {
         return false;
     }
 
+    //should this be named delete or disconnectConfiguration???
     public boolean sendDeConfiguration() {
         if (isConnected()) {
             try {
-                if (mBeagleBone != null) {
+                //if (mBeagleBone != null) { //TODO: question - is this check necessary?
+
                     JSONObject deconfiguration = new JSONObject();
                     JSONObject android = new JSONObject();
+
                     android.put("android", "delete");
                     deconfiguration.put("configuration", android);
-                    mSocket.getOutputStream().write(deconfiguration.toString().getBytes());
-                }
+
+                    getOutputStream().write(deconfiguration.toString().getBytes());
+                //}
             } catch (Exception e) {
                 return false;
             }
@@ -220,25 +252,32 @@ public class AndroidBlue {
         return false;
     }
 
+
+    // 4 classes that correspond to different runnables
     private class ConnectRunnable implements Runnable {
         @Override
         public void run() {
-            if (mBeagleBone != null) {
-                try {
-                    Method m = mBeagleBone.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
-                    mSocket = (BluetoothSocket) m.invoke(mBeagleBone, 3);
+            //TODO: connect socket
 
-                    mSocket.connect();
+            //if (mBeagleBone != null) { //probably not necessary
+                try {
+                    if(IS_TESTING_WITH_SOCKET) {
+                        mTestSocket.connect(mTestSocketAddress);
+                    } else {
+                        Method m = mBeagleBone.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
+                        mSocket = (BluetoothSocket) m.invoke(mBeagleBone, 3);
+
+                        mSocket.connect();
+                    }
 
                     new Thread(new ConnectedRunnable()).start();
                 } catch (Exception e) {
 
                 }
-            }
+            //}
         }
     }
 
-    //TODO: is this needed. it is not used.
     private class BatteryRunnable implements Runnable {
         @Override
         public void run() {
@@ -254,7 +293,7 @@ public class AndroidBlue {
                 try {
                     JSONObject battery = new JSONObject();
                     battery.put("phone battery", charge);
-                    mSocket.getOutputStream().write(battery.toString().getBytes());
+                    getOutputStream().write(battery.toString().getBytes());
                     Thread.sleep(5000);
                 } catch (Exception e) {
 
@@ -263,20 +302,29 @@ public class AndroidBlue {
         }
     }
 
+    /**
+     * identical to connectRunnable except posting onDisconnect
+     * */
     private class DisconnectedRunnable implements Runnable {
         @Override
         public void run() {
             mHandler.post(onDisconnect);
             while (true) {
                 try {
-                    Method m = mBeagleBone.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
-                    mSocket = (BluetoothSocket) m.invoke(mBeagleBone, 3);
+                    if(IS_TESTING_WITH_SOCKET) {
+                        mTestSocket.connect(mTestSocketAddress);
+                    } else {
+                        // question: why is this connecting agian???
+                        Method m = mBeagleBone.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
+                        mSocket = (BluetoothSocket) m.invoke(mBeagleBone, 3);
 
-                    mSocket.connect();
+                        mSocket.connect();
+                    }
 
                     new Thread(new ConnectedRunnable()).start();
                     return;
                 } catch (Exception e) {
+                    //question Why do were wait here???
                     try {
                         Thread.sleep(1000);
                     } catch (Exception e2) {
@@ -297,12 +345,12 @@ public class AndroidBlue {
             while (true) {
                 try {
                     mBytes = new byte[1024];
-                    mSocket.getInputStream().read(mBytes);
+                    mAndroidBlue.getInputStream().read(mBytes);
                     mJSON = new JSONObject(new String(mBytes));
-                    if(isSoundOn)
-                    {//a copy is needed because the object is passed off to a separate thread
+                    if(isSoundOn) {
+                        //a copy is needed because the object is passed off to a separate thread
                         JSONObject jsonCopy = new JSONObject(new String(mBytes));
-                        SoundMessageHandler.handleSoundMessage(jsonCopy,soundPool,volume);
+                        SoundMessageHandler.handleSoundMessage(jsonCopy, soundPool, volume);
                     }
                     setWarnings();
                     mHandler.post(onReceive);
@@ -310,7 +358,11 @@ public class AndroidBlue {
                 } catch (IOException e) {
                     try {
                         new Thread(new DisconnectedRunnable()).start();
-                        mSocket.close();
+                        if(IS_TESTING_WITH_SOCKET) {
+                            mTestSocket.close();
+                        } else {
+                            mSocket.close();
+                        }
                         return;
                     } catch (Exception io) {
                         //don't return will probably close on next loop
@@ -355,6 +407,7 @@ public class AndroidBlue {
         return warnings;
     }
 
+    //TODO: should probably rename this to comething more comprehensive
     private void setWarnings() {
         try {
             boolean newWarning = false;
@@ -400,11 +453,32 @@ public class AndroidBlue {
      * not safe because we are returning a reference.
      * */
     public JSONObject getJSON() {
-        //is JSONObject immutable?
+        //is JSONObject immutable? -> No I don't think so
         return mJSON; //TODO: look into returning a copy (how will this effect performance)
     }
 
     public OutputStream getOutputStream() throws IOException {
+        if(IS_TESTING_WITH_SOCKET) {
+            return mTestSocket.getOutputStream();
+        }
+
         return mSocket.getOutputStream();
+    }
+
+    public InputStream getInputStream() throws IOException {
+        if(IS_TESTING_WITH_SOCKET) {
+            return mTestSocket.getInputStream();
+        }
+
+        return mSocket.getInputStream();
+
+    }
+
+    private String getAdapterAddress() {
+        if(IS_TESTING_WITH_SOCKET) {
+            return mTestSocketAddress.getAddress().toString();
+        }
+
+        return mAdapter.getAddress();
     }
 }
