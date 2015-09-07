@@ -24,3 +24,4 @@ log.txt
 /.idea/libraries
 .DS_Store
 /build
+.idea/
