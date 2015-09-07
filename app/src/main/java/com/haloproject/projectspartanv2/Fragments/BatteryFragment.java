@@ -1,5 +1,8 @@
 package com.haloproject.projectspartanv2.Fragments;
 
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -59,15 +62,29 @@ public class BatteryFragment extends Fragment {
         android = (BatteryBar) view.findViewById(R.id.androidbattery);
         glass = (BatteryBar) view.findViewById(R.id.glassbattery);
 
+        android.setBatteryCharge(getBatteryLevel());
+
         mAndroidBlue.setOnReceive(new Runnable() {
             @Override
             public void run() {
                 highAmp.setBatteryCharge(mDeviceHandlerCollection.battery8AH.getValue());
                 lowAmp.setBatteryCharge(mDeviceHandlerCollection.battery2AH.getValue());
-                android.setBatteryCharge(mDeviceHandlerCollection.batteryAndroid.getValue());
                 glass.setBatteryCharge(mDeviceHandlerCollection.batteryGlass.getValue());
             }
         });
         return view;
+    }
+
+    private int getBatteryLevel() {
+        Intent batteryIntent = this.getActivity().registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        int level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        int scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+
+        if(level == -1 || scale == -1) {
+            return 50;
+        }
+
+        Float batteryLevel = ((float)level / (float)scale) * 100.0f;
+        return batteryLevel.intValue();
     }
 }
