@@ -51,28 +51,6 @@
                 android:onClick="vitals" />
             <view
                 class="com.haloproject.projectspartanv2.view.MainButton"
-                app:Text="VITALS"
-                app:Icon="@drawable/vital_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="30px"
-                android:paddingTop="20px"
-                android:id="@+id/menuButton8"
-                android:onClick="vitals" />
-
-            <view
-                class="com.haloproject.projectspartanv2.view.MainButton"
-                app:Text="VITALS"
-                app:Icon="@drawable/vital_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="30px"
-                android:paddingTop="20px"
-                android:id="@+id/menuButton9"
-                android:onClick="vitals" />
-
-            <view
-                class="com.haloproject.projectspartanv2.view.MainButton"
                 app:Text="COOLING"
                 app:Icon="@drawable/cooling_icon"
                 android:layout_width="wrap_content"
