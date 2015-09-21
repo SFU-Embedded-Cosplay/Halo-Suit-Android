@@ -50,7 +50,7 @@ public class AndroidBlue implements JSONCommunicationDevice, Serializable {
 
     private Socket mTestSocket = new Socket();
     private InetSocketAddress mTestSocketAddress = new InetSocketAddress("10.0.2.2", 8080);
-    protected static final boolean IS_TESTING_WITH_SOCKET = false;
+    public static final boolean IS_TESTING_WITH_SOCKET = false;
 
     private Runnable onConnect;
     private Runnable onDisconnect;

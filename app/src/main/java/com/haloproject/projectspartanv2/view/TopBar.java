@@ -3,13 +3,13 @@ package com.haloproject.projectspartanv2.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.haloproject.bluetooth.AndroidBlue;
 import com.haloproject.projectspartanv2.R;
 
 
@@ -69,7 +69,12 @@ public class TopBar extends View {
 
         mPaintOff = new Paint();
         mPaintOff.setFlags(Paint.ANTI_ALIAS_FLAG);
-        mPaintOff.setColor(getResources().getColor(R.color.HaloHotRed));
+
+        if(AndroidBlue.IS_TESTING_WITH_SOCKET) {
+            mPaintOff.setColor(getResources().getColor(R.color.HaloYellow));
+        } else {
+            mPaintOff.setColor(getResources().getColor(R.color.HaloHotRed));
+        }
     }
 
     @Override
