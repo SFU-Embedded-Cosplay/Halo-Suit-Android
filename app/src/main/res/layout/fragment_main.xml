@@ -114,6 +114,17 @@
                 android:paddingTop="20px"
                 android:id="@+id/menuButton7"
                 android:onClick="settings" />
+
+            <view
+                class="com.haloproject.projectspartanv2.view.MainButton"
+                app:Text="DEBUG"
+                app:Icon="@drawable/vital_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="30px"
+                android:paddingTop="20px"
+                android:id="@+id/menuButton10"
+                android:onClick="debug" />
         </LinearLayout>
     </HorizontalScrollView>
 

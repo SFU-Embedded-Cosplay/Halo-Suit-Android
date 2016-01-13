@@ -25,3 +25,4 @@ log.txt
 .DS_Store
 /build
 .idea/
+*.iml

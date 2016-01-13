@@ -33,6 +33,7 @@ import com.haloproject.bluetooth.AndroidBlue;
 import com.haloproject.bluetooth.DeviceHandlerCollection;
 import com.haloproject.projectspartanv2.Fragments.BatteryFragment;
 import com.haloproject.projectspartanv2.Fragments.CoolingFragment;
+import com.haloproject.projectspartanv2.Fragments.DebugFragment;
 import com.haloproject.projectspartanv2.Fragments.LightingFragment;
 import com.haloproject.projectspartanv2.Fragments.MainFragment;
 import com.haloproject.projectspartanv2.Fragments.RadarFragment;
@@ -245,6 +246,8 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
                 return new WarningsFragment();
             case 6:
                 return SettingsFragment.newInstance(mAndroidBlue);
+            case 7:
+                return DebugFragment.newInstance(mAndroidBlue, DeviceHandlerCollection.getInstance(mAndroidBlue));
             default:
                 return MainFragment.newInstance(mAndroidBlue);
         }
@@ -322,6 +325,12 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     public void settings(View view) {
         view.startAnimation(onClickAnimation);
         currentFragment = 6;
+        openCurrentFragment();
+    }
+
+    public void debug(View view) {
+        view.startAnimation(onClickAnimation);
+        currentFragment = 7;
         openCurrentFragment();
     }
 
