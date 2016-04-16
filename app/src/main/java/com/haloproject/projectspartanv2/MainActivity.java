@@ -1,14 +1,9 @@
 package com.haloproject.projectspartanv2;
 
 import android.content.SharedPreferences;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -24,10 +19,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.HorizontalScrollView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.haloproject.bluetooth.AndroidBlue;
 import com.haloproject.bluetooth.DeviceHandlerCollection;
@@ -39,12 +31,10 @@ import com.haloproject.projectspartanv2.Fragments.MainFragment;
 import com.haloproject.projectspartanv2.Fragments.RadarFragment;
 import com.haloproject.projectspartanv2.Fragments.SettingsFragment;
 import com.haloproject.projectspartanv2.Fragments.VitalsFragment;
-import com.haloproject.projectspartanv2.view.BatteryBar;
 import com.haloproject.projectspartanv2.view.MainButton;
-import com.haloproject.projectspartanv2.view.TempWheel;
 import com.haloproject.projectspartanv2.view.TopBar;
 
-public class MainActivity extends ActionBarActivity implements SensorEventListener {
+public class MainActivity extends ActionBarActivity {
     private static FragmentManager mFragmentManager;
     private static AndroidBlue mAndroidBlue;
 
@@ -52,9 +42,6 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     private Animation onClickAnimation;
 
     private WindowManager.LayoutParams params;
-
-    private SensorManager mSensorManager;
-    private Sensor mSensor;
 
     private static int currentFragment; //-1 means its at main menu
 
@@ -67,37 +54,8 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     private SoundPool soundPool;
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        //TODO: why do we have this here.  This appears to be for working with the gyroscope and other hardware functionality
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-//        if (event.sensor == mSensor) {
-//            final float z = event.values[2];
-//
-//            if (isUpRight) {
-//                if (Math.abs(z) < 0.50) {
-//                    isUpRight = false;
-//                    params.screenBrightness = 0;
-//                    getWindow().setAttributes(params);
-//                    Log.d("App", "fellasleep");
-//                }
-//            } else {
-//                if (Math.abs(z) >= 0.50) {
-//                    isUpRight = true;
-//                    params.screenBrightness = -1;
-//                    getWindow().setAttributes(params);
-//                    Log.d("App", "wokeup");
-//                }
-//            }
-//        }
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
-        mSensorManager.unregisterListener(this);
     }
 
     @Override
@@ -108,7 +66,6 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
@@ -167,10 +124,6 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
                         .commit();
             }
         });
-
-        //create sensor
-        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR);
 
         onClickAnimation = AnimationUtils.loadAnimation(this, R.anim.button_onclick);
     }
