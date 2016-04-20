@@ -4,46 +4,30 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import com.haloproject.bluetooth.AndroidBlue;
-import com.haloproject.bluetooth.DeviceHandlerCollection;
-import com.haloproject.projectspartanv2.Fragments.BatteryFragment;
-import com.haloproject.projectspartanv2.Fragments.CoolingFragment;
-import com.haloproject.projectspartanv2.Fragments.DebugFragment;
-import com.haloproject.projectspartanv2.Fragments.LightingFragment;
 import com.haloproject.projectspartanv2.Fragments.MainFragment;
-import com.haloproject.projectspartanv2.Fragments.RadarFragment;
-import com.haloproject.projectspartanv2.Fragments.SettingsFragment;
-import com.haloproject.projectspartanv2.Fragments.VitalsFragment;
 import com.haloproject.projectspartanv2.view.MainButton;
 import com.haloproject.projectspartanv2.view.TopBar;
 
 public class MainActivity extends ActionBarActivity {
-    private static FragmentManager mFragmentManager;
+    private FragmentManager mFragmentManager;
     private static AndroidBlue mAndroidBlue;
 
     public static final int TOTAL_SWIPE_FRAGMENTS = 7;
     private Animation onClickAnimation;
 
     private WindowManager.LayoutParams params;
-
-    private static int currentFragment; //-1 means its at main menu
 
     private static SharedPreferences mPreferences;
     private float x1, x2, y1, y2;
@@ -52,6 +36,8 @@ public class MainActivity extends ActionBarActivity {
 
     private MicrophoneHandler mMicrophoneHandler;
     private SoundPool soundPool;
+
+    private static FragmentSelector mFragmentSelector;
 
     @Override
     protected void onPause() {
@@ -86,12 +72,14 @@ public class MainActivity extends ActionBarActivity {
         params.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
         getWindow().setAttributes(params);
         mFragmentManager = getSupportFragmentManager();
+        mFragmentSelector = new FragmentSelector(mAndroidBlue, mFragmentManager);
+
         if (savedInstanceState == null) {
             mFragmentManager.beginTransaction()
-                    .add(R.id.container, MainFragment.newInstance(mAndroidBlue))
+                    .add(R.id.container, MainFragment.newInstance(mAndroidBlue, mFragmentSelector))
                     .commit();
 
-            currentFragment = -1;
+            mFragmentSelector.setCurrentFragment(-1);
         }
 
 
@@ -116,10 +104,10 @@ public class MainActivity extends ActionBarActivity {
         mAndroidBlue.setOnWarning(new Runnable() {
             @Override
             public void run() {
-                currentFragment = 5;
+                mFragmentSelector.setCurrentFragment(5);
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_down, R.anim.slide_out_down)
-                        .replace(R.id.container, swipeFragment(5))
+                        .replace(R.id.container, mFragmentSelector.getSelectedFragment())
                         .commit();
             }
         });
@@ -152,28 +140,29 @@ public class MainActivity extends ActionBarActivity {
                 x2 = event.getX();
                 y2 = event.getY();
                 if (x2 - x1 > 600) {
-                    if (currentFragment != -1 && currentFragment > 0) {
-                        currentFragment -= 1;
+                    if (mFragmentSelector.getCurrentFragment() != -1 && mFragmentSelector.getCurrentFragment() > 0) {
+                        mFragmentSelector.setCurrentFragment(mFragmentSelector.getCurrentFragment() - 1);
+
                         mFragmentManager.beginTransaction()
                                 .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                                .replace(R.id.container, swipeFragment(currentFragment))
+                                .replace(R.id.container, mFragmentSelector.getSelectedFragment())
                                 .commit();
                     }
                 } else if (x1 - x2 > 600) {
-                    if (currentFragment != -1 && currentFragment < TOTAL_SWIPE_FRAGMENTS - 1) {
+                    if (mFragmentSelector.getCurrentFragment() != -1 && mFragmentSelector.getCurrentFragment() < TOTAL_SWIPE_FRAGMENTS - 1) {
                         //left to right
-                        currentFragment += 1;
+                        mFragmentSelector.setCurrentFragment(mFragmentSelector.getCurrentFragment() + 1);
                         mFragmentManager.beginTransaction()
                                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                                .replace(R.id.container, swipeFragment(currentFragment))
+                                .replace(R.id.container, mFragmentSelector.getSelectedFragment())
                                 .commit();
                     }
                 } else if (y2 - y1 > 400) {
-                    if (currentFragment != -1) {
-                        currentFragment = -1;
+                    if (mFragmentSelector.getCurrentFragment() != -1) {
+                        mFragmentSelector.setCurrentFragment(-1);
                         mFragmentManager.beginTransaction()
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                                .replace(R.id.container, swipeFragment(currentFragment))
+                                .replace(R.id.container, mFragmentSelector.getSelectedFragment())
                                 .commit();
                     }
                 }
@@ -182,33 +171,14 @@ public class MainActivity extends ActionBarActivity {
         return true;
     }
 
-    private static Fragment swipeFragment(int fragment) {
-        switch (fragment) {
-            case 0:
-                return VitalsFragment.newInstance(mAndroidBlue, DeviceHandlerCollection.getInstance(mAndroidBlue));
-            case 1:
-                return CoolingFragment.newInstance(mAndroidBlue, DeviceHandlerCollection.getInstance(mAndroidBlue));
-            case 2:
-                return LightingFragment.newInstance(DeviceHandlerCollection.getInstance(mAndroidBlue));
-            case 3:
-                return RadarFragment.newInstance();
-            case 4:
-                return BatteryFragment.newInstance(mAndroidBlue, DeviceHandlerCollection.getInstance(mAndroidBlue));
-            case 5:
-                return new WarningsFragment();
-            case 6:
-                return SettingsFragment.newInstance(mAndroidBlue);
-            case 7:
-                return DebugFragment.newInstance(mAndroidBlue, DeviceHandlerCollection.getInstance(mAndroidBlue));
-            default:
-                return MainFragment.newInstance(mAndroidBlue);
-        }
+    private static void reDrawMainFragmentViewState() {
+
     }
 
     private void openCurrentFragment() {
         mFragmentManager.beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                .replace(R.id.container, swipeFragment(currentFragment))
+                .replace(R.id.container, mFragmentSelector.getSelectedFragment())
                 .commit();
     }
 
@@ -240,54 +210,50 @@ public class MainActivity extends ActionBarActivity {
     //TODO: do these need to accept a view?
     public void vitals(View view) {
         view.startAnimation(onClickAnimation);
-        currentFragment = 0;
+        mFragmentSelector.setCurrentFragment(0);
         openCurrentFragment();
     }
 
     public void cooling(View view) {
         view.startAnimation(onClickAnimation);
-        currentFragment = 1;
+        mFragmentSelector.setCurrentFragment(1);
         openCurrentFragment();
     }
 
     public void lighting(View view) {
         view.startAnimation(onClickAnimation);
-        currentFragment = 2;
+        mFragmentSelector.setCurrentFragment(2);
         openCurrentFragment();
     }
 
     public void radar(View view) {
         view.startAnimation(onClickAnimation);
-        currentFragment = 3;
+        mFragmentSelector.setCurrentFragment(3);
         openCurrentFragment();
     }
 
     public void batteries(View view) {
         view.startAnimation(onClickAnimation);
-        currentFragment = 4;
+        mFragmentSelector.setCurrentFragment(4);
         openCurrentFragment();
     }
 
     public void warnings(View view) {
         view.startAnimation(onClickAnimation);
-        currentFragment = 5;
+        mFragmentSelector.setCurrentFragment(5);
         openCurrentFragment();
     }
 
     public void settings(View view) {
         view.startAnimation(onClickAnimation);
-        currentFragment = 6;
+        mFragmentSelector.setCurrentFragment(6);
         openCurrentFragment();
     }
 
     public void debug(View view) {
         view.startAnimation(onClickAnimation);
-        currentFragment = 7;
+        mFragmentSelector.setCurrentFragment(7);
         openCurrentFragment();
-    }
-
-    public static void setCurrentFragmentToMainMenu() {
-        currentFragment = -1;
     }
 
     public void voice(View view) {
@@ -333,40 +299,13 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        mAndroidBlue.setOnDisconnect(new Runnable()
-        {
+        mAndroidBlue.setOnDisconnect(new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 mTopBar.setBluetooth(false);
             }
         });
     }
 
-    public static class WarningsFragment extends Fragment {
-        private ListView warningsList;
-        private ArrayAdapter<Warning> warningsAdapter;
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            mTopBar.setMenuName("Warnings");
-
-            View view = inflater.inflate(R.layout.fragment_warnings, container, false);
-            warningsList = (ListView) view.findViewById(R.id.warningslist);
-            warningsAdapter = mAndroidBlue.getWarnings();
-            warningsList.setAdapter(warningsAdapter);
-
-            warningsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    currentFragment = warningsAdapter.getItem(position).getFragment();
-                    mFragmentManager.beginTransaction()
-                            .setCustomAnimations(R.anim.slide_in_down, R.anim.slide_out_down)
-                            .replace(R.id.container, swipeFragment(currentFragment))
-                            .commit();
-                }
-            });
-            return view;
-        }
-    }
 }
