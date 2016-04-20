@@ -9,28 +9,34 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 
 import com.haloproject.bluetooth.AndroidBlue;
+import com.haloproject.projectspartanv2.FragmentSelector;
 import com.haloproject.projectspartanv2.MainActivity;
 import com.haloproject.projectspartanv2.R;
 import com.haloproject.projectspartanv2.view.TopBar;
 
+import java.io.Serializable;
+
 /**
  * Created by Tyler on 8/2/2015.
  */
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment { //TODO: at some point in this classes lifecycle redraw the sound and voice buttons
     private LinearLayout mainMenu;
     private HorizontalScrollView scrollView;
 
     private AndroidBlue mAndroidBlue;
+    private FragmentSelector mFragmentSelector;
     private TopBar mTopBar;
 
     private static final String ANDROID_BLUE_KEY = "androidBlue";
+    private static final String FRAGMENT_SELECTOR_KEY = "fragmentSelector";
 
-    public static MainFragment newInstance(AndroidBlue mAndroidBlue) {
+    public static MainFragment newInstance(AndroidBlue mAndroidBlue, FragmentSelector fragmentSelector) {
         MainFragment fragment = new MainFragment();
 
         final Bundle args = new Bundle();
 
         args.putSerializable(ANDROID_BLUE_KEY, mAndroidBlue);
+        args.putSerializable(FRAGMENT_SELECTOR_KEY, (Serializable)  fragmentSelector);
 
         fragment.setArguments(args);
 
@@ -42,9 +48,10 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mAndroidBlue = (AndroidBlue) getArguments().getSerializable(ANDROID_BLUE_KEY);
+        mFragmentSelector = (FragmentSelector) getArguments().getSerializable(FRAGMENT_SELECTOR_KEY);
         mTopBar = MainActivity.mTopBar;
 
-        MainActivity.setCurrentFragmentToMainMenu();
+        mFragmentSelector.setCurrentFragment(-1);
 
         mTopBar.setMenuName("Main Menu");
         // Inflate the layout for this fragment
