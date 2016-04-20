@@ -201,8 +201,13 @@ public class MainActivity extends ActionBarActivity {
             case 7:
                 return DebugFragment.newInstance(mAndroidBlue, DeviceHandlerCollection.getInstance(mAndroidBlue));
             default:
+                reDrawMainFragmentViewState();
                 return MainFragment.newInstance(mAndroidBlue);
         }
+    }
+
+    private static void reDrawMainFragmentViewState() {
+
     }
 
     private void openCurrentFragment() {
