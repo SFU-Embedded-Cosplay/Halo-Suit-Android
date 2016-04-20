@@ -11,7 +11,9 @@ import android.widget.LinearLayout;
 import com.haloproject.bluetooth.AndroidBlue;
 import com.haloproject.projectspartanv2.FragmentSelector;
 import com.haloproject.projectspartanv2.MainActivity;
+import com.haloproject.projectspartanv2.MicrophoneHandler;
 import com.haloproject.projectspartanv2.R;
+import com.haloproject.projectspartanv2.view.MainButton;
 import com.haloproject.projectspartanv2.view.TopBar;
 
 import java.io.Serializable;
@@ -58,6 +60,20 @@ public class MainFragment extends Fragment { //TODO: at some point in this class
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         mainMenu = (LinearLayout) view.findViewById(R.id.mainmenu);
         scrollView = (HorizontalScrollView) view.findViewById(R.id.scrollview);
+
+        MicrophoneHandler microphone = MicrophoneHandler.getInstance();
+        if(!microphone.isMicOn()) {
+            MainButton voiceButton = (MainButton) view.findViewById(R.id.menuButton9);
+            voiceButton.setIcon(getResources().getDrawable(R.drawable.speaker_off_icon));
+            voiceButton.invalidate();
+        }
+
+        if(!mAndroidBlue.isSoundOn()) {
+            MainButton voiceButton = (MainButton) view.findViewById(R.id.menuButton8);
+            voiceButton.setIcon(getResources().getDrawable(R.drawable.music_off_icon));
+            voiceButton.invalidate();
+        }
+
         return view;
     }
 
