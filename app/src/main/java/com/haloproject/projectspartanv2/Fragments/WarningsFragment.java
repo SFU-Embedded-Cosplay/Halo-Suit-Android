@@ -32,7 +32,6 @@ public class WarningsFragment extends Fragment {
     private FragmentSelector mFragmentSelector;
 
     private static final String ANDROID_BLUE_KEY = "androidBlue";
-    private static final String FRAGMENT_MANAGER_KEY = "fragmentManager";
     private static final String FRAGMENT_SELECTOR_KEY = "fragmentSelector";
 
     public static WarningsFragment newInstance(AndroidBlue androidBlue, FragmentManager fragmentManager, FragmentSelector fragmentSelector) {
@@ -41,7 +40,6 @@ public class WarningsFragment extends Fragment {
         final Bundle args = new Bundle();
 
         args.putSerializable(ANDROID_BLUE_KEY, androidBlue);
-        args.putSerializable(FRAGMENT_MANAGER_KEY, (Serializable) fragmentManager);
         args.putSerializable(FRAGMENT_SELECTOR_KEY, (Serializable) fragmentSelector);
 
         fragment.setArguments(args);
@@ -52,7 +50,7 @@ public class WarningsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mAndroidBlue = (AndroidBlue) getArguments().getSerializable(ANDROID_BLUE_KEY);
-        mFragmentManager = (FragmentManager) getArguments().getSerializable(FRAGMENT_MANAGER_KEY);
+        mFragmentManager = getActivity().getSupportFragmentManager();
         mFragmentSelector = (FragmentSelector) getArguments().getSerializable(FRAGMENT_SELECTOR_KEY);
         mTopBar = MainActivity.mTopBar;
 
