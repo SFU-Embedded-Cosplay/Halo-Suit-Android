@@ -64,7 +64,9 @@ public class WarningsFragment extends Fragment {
         warningsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int currentFragment = warningsAdapter.getItem(position).getFragment();
+                int newFragmentPosition = warningsAdapter.getItem(position).getFragment();
+                mFragmentSelector.setCurrentFragment(newFragmentPosition);
+
                 mFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_down, R.anim.slide_out_down)
                         .replace(R.id.container, mFragmentSelector.getSelectedFragment())
