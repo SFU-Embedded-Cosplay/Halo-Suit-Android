@@ -48,48 +48,62 @@ public class LightingFragment extends Fragment {
 
         mTopBar.setMenuName("Lighting");
         View view = inflater.inflate(R.layout.fragment_lighting, container, false);
-        view.findViewById(R.id.mainlightson).setOnClickListener(new View.OnClickListener() {
+
+        View mainLightsOn = view.findViewById(R.id.mainlightson);
+        View mainLightsOff = view.findViewById(R.id.mainlightsoff);
+        View mainLightsAuto = view.findViewById(R.id.mainlightsauto);
+
+        View redLightsOn = view.findViewById(R.id.redlightson);
+        View redLightsOff = view.findViewById(R.id.redlightsoff);
+
+        View whiteLightsOn = view.findViewById(R.id.whitelightson);
+        View whiteLightsOff = view.findViewById(R.id.whitelightsoff);
+
+        mainLightsOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDeviceHandlerCollection.mainLights.on();
             }
         });
-        view.findViewById(R.id.mainlightsoff).setOnClickListener(new View.OnClickListener() {
+        mainLightsOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDeviceHandlerCollection.mainLights.off();
             }
         });
-        view.findViewById(R.id.mainlightsauto).setOnClickListener(new View.OnClickListener() {
+        mainLightsAuto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDeviceHandlerCollection.mainLights.auto();
             }
         });
-        view.findViewById(R.id.redlightson).setOnClickListener(new View.OnClickListener() {
+
+        redLightsOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDeviceHandlerCollection.redHeadLight.on();
             }
         });
-        view.findViewById(R.id.redlightsoff).setOnClickListener(new View.OnClickListener() {
+        redLightsOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDeviceHandlerCollection.redHeadLight.off();
             }
         });
-        view.findViewById(R.id.whitelightson).setOnClickListener(new View.OnClickListener() {
+
+        whiteLightsOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDeviceHandlerCollection.whiteHeadLight.on();
             }
         });
-        view.findViewById(R.id.whitelightsoff).setOnClickListener(new View.OnClickListener() {
+        whiteLightsOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDeviceHandlerCollection.whiteHeadLight.off();
             }
         });
+
         return view;
     }
 }
