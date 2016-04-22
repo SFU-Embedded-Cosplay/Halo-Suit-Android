@@ -18,15 +18,18 @@ import com.haloproject.projectspartanv2.view.TopBar;
 public class LightingFragment extends Fragment {
     private TopBar mTopBar;
     private DeviceHandlerCollection mDeviceHandlerCollection;
+    private AndroidBlue mAndroidBlue;
 
+    private static final String ANDROID_BLUE_KEY = "androidBlue";
     private static final String DEVICE_HANDLER_COLLECTION_KEY = "deviceHandlerCollection";
 
-    public static LightingFragment newInstance(DeviceHandlerCollection mDeviceHandlerCollection) {
+    public static LightingFragment newInstance(AndroidBlue mAndroidBlue, DeviceHandlerCollection mDeviceHandlerCollection) {
         LightingFragment fragment = new LightingFragment();
 
         final Bundle args = new Bundle();
 
         args.putSerializable(DEVICE_HANDLER_COLLECTION_KEY, mDeviceHandlerCollection);
+        args.putSerializable(ANDROID_BLUE_KEY, mAndroidBlue);
 
         fragment.setArguments(args);
 
@@ -39,7 +42,8 @@ public class LightingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mTopBar = MainActivity.mTopBar;
-        mDeviceHandlerCollection =(DeviceHandlerCollection) getArguments().getSerializable(DEVICE_HANDLER_COLLECTION_KEY);
+        mDeviceHandlerCollection = (DeviceHandlerCollection) getArguments().getSerializable(DEVICE_HANDLER_COLLECTION_KEY);
+        mAndroidBlue = (AndroidBlue) getArguments().getSerializable(ANDROID_BLUE_KEY);
 
 
         mTopBar.setMenuName("Lighting");
