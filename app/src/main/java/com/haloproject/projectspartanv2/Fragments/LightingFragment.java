@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 
 import com.haloproject.bluetooth.AndroidBlue;
 import com.haloproject.bluetooth.DeviceHandlerCollection;
@@ -22,6 +23,16 @@ public class LightingFragment extends Fragment {
 
     private static final String ANDROID_BLUE_KEY = "androidBlue";
     private static final String DEVICE_HANDLER_COLLECTION_KEY = "deviceHandlerCollection";
+
+    RadioButton mainLightsOn;
+    RadioButton mainLightsOff;
+    RadioButton mainLightsAuto;
+
+    RadioButton redLightsOn;
+    RadioButton redLightsOff;
+
+    RadioButton whiteLightsOn;
+    RadioButton whiteLightsOff;
 
     public static LightingFragment newInstance(AndroidBlue mAndroidBlue, DeviceHandlerCollection mDeviceHandlerCollection) {
         LightingFragment fragment = new LightingFragment();
@@ -49,15 +60,15 @@ public class LightingFragment extends Fragment {
         mTopBar.setMenuName("Lighting");
         View view = inflater.inflate(R.layout.fragment_lighting, container, false);
 
-        View mainLightsOn = view.findViewById(R.id.mainlightson);
-        View mainLightsOff = view.findViewById(R.id.mainlightsoff);
-        View mainLightsAuto = view.findViewById(R.id.mainlightsauto);
+        mainLightsOn = (RadioButton) view.findViewById(R.id.mainlightson);
+        mainLightsOff = (RadioButton) view.findViewById(R.id.mainlightsoff);
+        mainLightsAuto = (RadioButton) view.findViewById(R.id.mainlightsauto);
 
-        View redLightsOn = view.findViewById(R.id.redlightson);
-        View redLightsOff = view.findViewById(R.id.redlightsoff);
+        redLightsOn = (RadioButton) view.findViewById(R.id.redlightson);
+        redLightsOff = (RadioButton) view.findViewById(R.id.redlightsoff);
 
-        View whiteLightsOn = view.findViewById(R.id.whitelightson);
-        View whiteLightsOff = view.findViewById(R.id.whitelightsoff);
+        whiteLightsOn = (RadioButton) view.findViewById(R.id.whitelightson);
+        whiteLightsOff = (RadioButton) view.findViewById(R.id.whitelightsoff);
 
         mainLightsOn.setOnClickListener(new View.OnClickListener() {
             @Override
