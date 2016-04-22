@@ -115,6 +115,21 @@ public class LightingFragment extends Fragment {
             }
         });
 
+        mAndroidBlue.setOnReceive(new Runnable() {
+            @Override
+            public void run() {
+                mainLightsOn.setChecked(mDeviceHandlerCollection.mainLights.isOn());
+                mainLightsOff.setChecked(mDeviceHandlerCollection.mainLights.isOff());
+                mainLightsAuto.setChecked(mDeviceHandlerCollection.mainLights.isAuto());
+
+                redLightsOn.setChecked(mDeviceHandlerCollection.redHeadLight.isOn());
+                redLightsOff.setChecked(mDeviceHandlerCollection.redHeadLight.isOff());
+
+                whiteLightsOn.setChecked(mDeviceHandlerCollection.whiteHeadLight.isOn());
+                whiteLightsOff.setChecked(mDeviceHandlerCollection.whiteHeadLight.isOff());
+            }
+        });
+
         return view;
     }
 }
