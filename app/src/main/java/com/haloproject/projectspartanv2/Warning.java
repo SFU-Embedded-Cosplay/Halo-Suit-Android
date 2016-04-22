@@ -15,10 +15,10 @@ public enum Warning {
     HIGH_WATER_TEMP("high water temperature", 1),
     LOW_WATER_TEMP("low water temperature", 1),
     LOW_WATER_FLOW("low water flow", 1),
-    HIGH_AMP_BATTERY_LOW("low 8AH battery warning", 5),
-    LOW_AMP_BATTERY_LOW("low 2AH battery warning", 5),
-    HUD_BATTERY_LOW("low hud battery warning", 5),
-    PHONE_BATTERY_LOW("low phone battery warning", 5);
+    HIGH_AMP_BATTERY_LOW("low 8AH battery warning", 4),
+    LOW_AMP_BATTERY_LOW("low 2AH battery warning", 4),
+    HUD_BATTERY_LOW("low hud battery warning", 4),
+    PHONE_BATTERY_LOW("low phone battery warning", 4);
 
 
 
