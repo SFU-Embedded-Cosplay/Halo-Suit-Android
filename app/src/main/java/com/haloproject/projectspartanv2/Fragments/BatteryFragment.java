@@ -67,6 +67,7 @@ public class BatteryFragment extends Fragment {
         mAndroidBlue.setOnReceive(new Runnable() {
             @Override
             public void run() {
+                android.setBatteryCharge(getBatteryLevel());
                 highAmp.setBatteryCharge(mDeviceHandlerCollection.battery8AH.getValue());
                 lowAmp.setBatteryCharge(mDeviceHandlerCollection.battery2AH.getValue());
                 glass.setBatteryCharge(mDeviceHandlerCollection.batteryGlass.getValue());
