@@ -272,6 +272,7 @@ public class AndroidBlue implements JSONCommunicationDevice, Serializable {
                     }
 
                     new Thread(new ConnectedRunnable()).start();
+                    new Thread(new BatteryRunnable()).start();
                 } catch (Exception e) {
 
                 }
