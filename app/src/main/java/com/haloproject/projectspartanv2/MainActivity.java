@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
@@ -24,7 +25,6 @@ public class MainActivity extends ActionBarActivity {
     private FragmentManager mFragmentManager;
     private static AndroidBlue mAndroidBlue;
 
-    public static final int TOTAL_SWIPE_FRAGMENTS = 7;
     private Animation onClickAnimation;
 
     private WindowManager.LayoutParams params;
@@ -149,7 +149,7 @@ public class MainActivity extends ActionBarActivity {
                                 .commit();
                     }
                 } else if (x1 - x2 > 600) {
-                    if (mFragmentSelector.getCurrentFragment() != -1 && mFragmentSelector.getCurrentFragment() < TOTAL_SWIPE_FRAGMENTS - 1) {
+                    if (mFragmentSelector.getCurrentFragment() != -1 && mFragmentSelector.getCurrentFragment() < FragmentSelector.TOTAL_FRAGMENTS - 1) {
                         //left to right
                         mFragmentSelector.setCurrentFragment(mFragmentSelector.getCurrentFragment() + 1);
                         mFragmentManager.beginTransaction()

@@ -21,6 +21,8 @@ import java.io.Serializable;
  * Created by Tyler on 4/19/2016.
  */
 public class FragmentSelector implements Serializable {
+    public static final int TOTAL_FRAGMENTS = 7;
+
     private int currentFragment; //-1 means its at main menu
 
     private AndroidBlue mAndroidBlue;
