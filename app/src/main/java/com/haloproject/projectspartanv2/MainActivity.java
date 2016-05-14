@@ -1,5 +1,7 @@
 package com.haloproject.projectspartanv2;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -98,6 +100,21 @@ public class MainActivity extends ActionBarActivity {
 
         if (!mAndroidBlue.isEnabled()) {
             mAndroidBlue.enableBluetooth(this);
+        }
+
+        // Inform user that they entered testing mode
+        if(mAndroidBlue.isTestingWithSocket()) {
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Warning")
+                    .setMessage("Switching to socket testing mode since you device does not support Bluetooth." +
+                            "\n\nCheck out the Halo-Suit-Testing-Server for more details.")
+                    .setCancelable(false)
+                    .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    }).create().show();
         }
 
         //set on warning

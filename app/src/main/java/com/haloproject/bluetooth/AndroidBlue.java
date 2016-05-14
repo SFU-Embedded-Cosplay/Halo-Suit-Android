@@ -14,7 +14,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import com.haloproject.bluetooth.BluetoothInterfaces.JSONCommunicationDevice;
 import com.haloproject.projectspartanv2.SoundMessageHandler;
