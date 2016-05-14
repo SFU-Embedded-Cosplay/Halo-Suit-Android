@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.haloproject.bluetooth.BluetoothInterfaces.JSONCommunicationDevice;
 import com.haloproject.projectspartanv2.SoundMessageHandler;
@@ -50,7 +51,7 @@ public class AndroidBlue implements JSONCommunicationDevice, Serializable {
 
     private Socket mTestSocket = new Socket();
     private InetSocketAddress mTestSocketAddress = new InetSocketAddress("10.0.2.2", 8080);
-    public static final boolean IS_TESTING_WITH_SOCKET = false;
+    private static boolean isTestingWithSocket = false;
     // use ctrl + F11 to rotate android emulator sideways
 
     private Runnable onConnect;
@@ -74,6 +75,13 @@ public class AndroidBlue implements JSONCommunicationDevice, Serializable {
         this.volume = volume;
 
         mAdapter = BluetoothAdapter.getDefaultAdapter();
+        if(mAdapter == null) {
+            // bluetooth is not supported for the device.
+            // this is likely an emulator, so switch to debug mode.
+            isTestingWithSocket = true;
+        }
+
+        // enableBluetooth();
 
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         mContext.registerReceiver(mReceiver, filter);
@@ -86,7 +94,7 @@ public class AndroidBlue implements JSONCommunicationDevice, Serializable {
     }
 
     public boolean isConnected() {
-        if(IS_TESTING_WITH_SOCKET) {
+        if(isTestingWithSocket) {
             if(mTestSocket != null) {
                 return mTestSocket.isConnected();
             }
@@ -96,6 +104,10 @@ public class AndroidBlue implements JSONCommunicationDevice, Serializable {
             return mSocket.isConnected();
         }
         return false;
+    }
+
+    public static boolean isTestingWithSocket() {
+        return isTestingWithSocket;
     }
 
     public boolean isSoundOn() {
@@ -129,7 +141,7 @@ public class AndroidBlue implements JSONCommunicationDevice, Serializable {
     }
 
     public boolean isEnabled() {
-        if(IS_TESTING_WITH_SOCKET) {
+        if(isTestingWithSocket) {
             return true;
         }
 
@@ -141,7 +153,7 @@ public class AndroidBlue implements JSONCommunicationDevice, Serializable {
         //TODO: find out what this does.
         //this does not appear to get called.
 
-        if(IS_TESTING_WITH_SOCKET) {
+        if(isTestingWithSocket) {
             return;
         }
 
@@ -152,7 +164,7 @@ public class AndroidBlue implements JSONCommunicationDevice, Serializable {
     }
 
     public void disableBluetooth() {
-        if(IS_TESTING_WITH_SOCKET) {
+        if(isTestingWithSocket) {
             return;
         }
 
@@ -163,7 +175,7 @@ public class AndroidBlue implements JSONCommunicationDevice, Serializable {
 
     public boolean startDiscovery() {
 
-        if(IS_TESTING_WITH_SOCKET) {
+        if(isTestingWithSocket) {
             connect();
             return true;
         }
@@ -183,7 +195,7 @@ public class AndroidBlue implements JSONCommunicationDevice, Serializable {
     }
 
     public boolean setBeagleBone(int pos) {
-        if(IS_TESTING_WITH_SOCKET) {
+        if(isTestingWithSocket) {
             return true;
         }
 
@@ -195,7 +207,7 @@ public class AndroidBlue implements JSONCommunicationDevice, Serializable {
     }
 
     public boolean setBeagleBone(String device) {
-        if(IS_TESTING_WITH_SOCKET) {
+        if(isTestingWithSocket) {
             return true;
         }
 
@@ -262,7 +274,7 @@ public class AndroidBlue implements JSONCommunicationDevice, Serializable {
 
             //if (mBeagleBone != null) { //probably not necessary
                 try {
-                    if(IS_TESTING_WITH_SOCKET) {
+                    if(isTestingWithSocket) {
                         mTestSocket.connect(mTestSocketAddress);
                     } else {
                         Method m = mBeagleBone.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
@@ -313,7 +325,7 @@ public class AndroidBlue implements JSONCommunicationDevice, Serializable {
             mHandler.post(onDisconnect);
             while (true) {
                 try {
-                    if(IS_TESTING_WITH_SOCKET) {
+                    if(isTestingWithSocket) {
                         mTestSocket.connect(mTestSocketAddress);
                     } else {
                         // question: why is this connecting agian???
@@ -360,7 +372,7 @@ public class AndroidBlue implements JSONCommunicationDevice, Serializable {
                 } catch (IOException e) {
                     try {
                         new Thread(new DisconnectedRunnable()).start();
-                        if(IS_TESTING_WITH_SOCKET) {
+                        if(isTestingWithSocket) {
                             mTestSocket.close();
                         } else {
                             mSocket.close();
@@ -460,7 +472,7 @@ public class AndroidBlue implements JSONCommunicationDevice, Serializable {
     }
 
     public OutputStream getOutputStream() throws IOException {
-        if(IS_TESTING_WITH_SOCKET) {
+        if(isTestingWithSocket) {
             return mTestSocket.getOutputStream();
         }
 
@@ -468,7 +480,7 @@ public class AndroidBlue implements JSONCommunicationDevice, Serializable {
     }
 
     public InputStream getInputStream() throws IOException {
-        if(IS_TESTING_WITH_SOCKET) {
+        if(isTestingWithSocket) {
             return mTestSocket.getInputStream();
         }
 
@@ -477,7 +489,7 @@ public class AndroidBlue implements JSONCommunicationDevice, Serializable {
     }
 
     private String getAdapterAddress() {
-        if(IS_TESTING_WITH_SOCKET) {
+        if(isTestingWithSocket) {
             return mTestSocketAddress.getAddress().toString();
         }
 
