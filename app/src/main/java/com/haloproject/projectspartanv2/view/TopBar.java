@@ -70,7 +70,7 @@ public class TopBar extends View {
         mPaintOff = new Paint();
         mPaintOff.setFlags(Paint.ANTI_ALIAS_FLAG);
 
-        if(AndroidBlue.IS_TESTING_WITH_SOCKET) {
+        if(AndroidBlue.isTestingWithSocket()) {
             mPaintOff.setColor(getResources().getColor(R.color.HaloYellow));
         } else {
             mPaintOff.setColor(getResources().getColor(R.color.HaloHotRed));
