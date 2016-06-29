@@ -8,6 +8,7 @@ import com.haloproject.bluetooth.DeviceHandlerCollection;
 import com.haloproject.projectspartanv2.Fragments.BatteryFragment;
 import com.haloproject.projectspartanv2.Fragments.CoolingFragment;
 import com.haloproject.projectspartanv2.Fragments.DebugFragment;
+import com.haloproject.projectspartanv2.Fragments.GunFragment;
 import com.haloproject.projectspartanv2.Fragments.LightingFragment;
 import com.haloproject.projectspartanv2.Fragments.MainFragment;
 import com.haloproject.projectspartanv2.Fragments.RadarFragment;
@@ -21,7 +22,7 @@ import java.io.Serializable;
  * Created by Tyler on 4/19/2016.
  */
 public class FragmentSelector implements Serializable {
-    public static final int TOTAL_FRAGMENTS = 7;
+    public static final int TOTAL_FRAGMENTS = 8;
 
     private int currentFragment; //-1 means its at main menu
 
@@ -59,6 +60,8 @@ public class FragmentSelector implements Serializable {
                 return SettingsFragment.newInstance(mAndroidBlue);
             case 7:
                 return DebugFragment.newInstance(mAndroidBlue, DeviceHandlerCollection.getInstance(mAndroidBlue));
+            case 8:
+                return GunFragment.newInstance(mAndroidBlue, DeviceHandlerCollection.getInstance(mAndroidBlue));
             default:
                 return MainFragment.newInstance(mAndroidBlue, this);
         }

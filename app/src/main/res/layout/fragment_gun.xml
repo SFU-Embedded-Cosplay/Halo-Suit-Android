@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="800px"
+        android:layout_height="fill_parent">
+
+        <view
+            class="com.haloproject.projectspartanv2.view.MainButton"
+            app:Text="Reload"
+            app:Icon="@drawable/empty_battery"
+            android:layout_width="800px"
+            android:layout_height="1000px"
+            android:paddingRight="30px"
+            android:paddingTop="20px"
+
+            android:id="@+id/reloadButton" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical">
+
+        <view
+            class="com.haloproject.projectspartanv2.view.MainButton"
+            app:Text="Single Shot"
+            app:Icon="@drawable/speaker_off_icon"
+            android:layout_width="800px"
+            android:layout_height="1000px"
+            android:paddingRight="30px"
+            android:paddingTop="20px"
+            android:id="@+id/singleShotButton" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical">
+
+        <view
+            class="com.haloproject.projectspartanv2.view.MainButton"
+            app:Text="Full Auto"
+            app:Icon="@drawable/speaker_on_icon"
+            android:layout_width="800px"
+            android:layout_height="1000px"
+            android:paddingRight="30px"
+            android:paddingTop="20px"
+            android:id="@+id/fullAutoButton" />
+
+    </LinearLayout>
+
+</LinearLayout>
