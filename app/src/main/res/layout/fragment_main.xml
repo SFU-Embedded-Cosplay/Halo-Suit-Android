@@ -73,6 +73,17 @@
 
             <view
                 class="com.haloproject.projectspartanv2.view.MainButton"
+                app:Text="GUN"
+                app:Icon="@drawable/radar_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="30px"
+                android:paddingTop="20px"
+                android:id="@+id/menuButton11"
+                android:onClick="gun" />
+
+            <view
+                class="com.haloproject.projectspartanv2.view.MainButton"
                 app:Text="RADAR"
                 app:Icon="@drawable/radar_icon"
                 android:layout_width="wrap_content"

@@ -243,6 +243,12 @@ public class MainActivity extends ActionBarActivity {
         openCurrentFragment();
     }
 
+    public void gun(View view) {
+        view.startAnimation(onClickAnimation);
+        mFragmentSelector.setCurrentFragment(8);
+        openCurrentFragment();
+    }
+
     public void radar(View view) {
         view.startAnimation(onClickAnimation);
         mFragmentSelector.setCurrentFragment(3);
