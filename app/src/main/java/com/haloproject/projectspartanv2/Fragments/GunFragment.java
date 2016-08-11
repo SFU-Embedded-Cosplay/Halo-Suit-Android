@@ -13,6 +13,7 @@ import com.haloproject.bluetooth.AndroidBlueUart;
 import com.haloproject.bluetooth.DeviceHandlerCollection;
 import com.haloproject.projectspartanv2.MainActivity;
 import com.haloproject.projectspartanv2.R;
+import com.haloproject.projectspartanv2.view.MainButton;
 import com.haloproject.projectspartanv2.view.TopBar;
 
 import java.util.ArrayList;
@@ -28,6 +29,9 @@ public class GunFragment extends Fragment implements AndroidBlueUart.Callback {
 
     private static final String ANDROID_BLUE_UART_KEY = "androidBlueUart";
     private static final String DEVICE_HANDLER_COLLECTION_KEY = "deviceHandlerCollection";
+
+    // false for full auto, true for single shot
+    private boolean firingMode = false;
 
     public static GunFragment newInstance(DeviceHandlerCollection mDeviceHandlerCollection) {
         GunFragment fragment = new GunFragment();
@@ -56,28 +60,31 @@ public class GunFragment extends Fragment implements AndroidBlueUart.Callback {
         reloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("GunFragment", "Reload clicked");
-                //TODO: send "Reload" text command
+                Log.d("GunFragment", "Reload");
                 sendString("Reload");
             }
         });
 
-        View singleShotButton = view.findViewById(R.id.singleShotButton);
-        singleShotButton.setOnClickListener(new View.OnClickListener() {
+        View firingModeButton = view.findViewById(R.id.firingModeButton);
+        firingModeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("GunFragment", "Single shot clicked");
-                //TODO: send Single Shot Mode text command
-                sendString("FiringMode");
-            }
-        });
+                MainButton button = (MainButton) v;
+                if (firingMode) {
+                    firingMode = false;
+                    sendString("FullAuto");
+                    button.setIcon(getResources().getDrawable(R.drawable.speaker_on_icon));
+                    button.invalidate();
+                    Log.d("GunFragment", "Full auto");
+                }
+                else {
+                    firingMode = true;
+                    sendString("SingleShot");
+                    button.setIcon(getResources().getDrawable(R.drawable.speaker_off_icon));
+                    button.invalidate();
+                    Log.d("GunFragment", "Single shot");
+                }
 
-        View fullAutoButton = view.findViewById(R.id.fullAutoButton);
-        fullAutoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("GunFragment", "Full auto clicked");
-                //TODO: send Full Auto Mode text command
             }
         });
 

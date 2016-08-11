@@ -30,31 +30,13 @@
 
         <view
             class="com.haloproject.projectspartanv2.view.MainButton"
-            app:Text="Single Shot"
-            app:Icon="@drawable/speaker_off_icon"
-            android:layout_width="800px"
-            android:layout_height="1000px"
-            android:paddingRight="30px"
-            android:paddingTop="20px"
-            android:id="@+id/singleShotButton" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical">
-
-        <view
-            class="com.haloproject.projectspartanv2.view.MainButton"
-            app:Text="Full Auto"
+            app:Text="Firing Mode"
             app:Icon="@drawable/speaker_on_icon"
             android:layout_width="800px"
             android:layout_height="1000px"
             android:paddingRight="30px"
             android:paddingTop="20px"
-            android:id="@+id/fullAutoButton" />
+            android:id="@+id/firingModeButton" />
 
     </LinearLayout>
 
