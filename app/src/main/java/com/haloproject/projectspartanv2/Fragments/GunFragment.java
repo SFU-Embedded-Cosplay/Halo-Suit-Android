@@ -8,35 +8,29 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.haloproject.bluetooth.AndroidBlue;
 import com.haloproject.bluetooth.AndroidBlueUart;
 import com.haloproject.bluetooth.DeviceHandlerCollection;
 import com.haloproject.projectspartanv2.MainActivity;
 import com.haloproject.projectspartanv2.R;
 import com.haloproject.projectspartanv2.view.TopBar;
 
-import org.json.JSONException;
-
 /**
  * Created by AlexLand on 2016-01-12.
  */
 public class GunFragment extends Fragment implements AndroidBlueUart.Callback {
     private TopBar mTopBar;
-    private AndroidBlue mAndroidBlue;
+    private AndroidBlueUart mAndroidBlueUart;
     private DeviceHandlerCollection mDeviceHandlerCollection;
-    private AndroidBlueUart mUart;
 
-    private static final String ANDROID_BLUE_KEY = "androidBlue";
+    private static final String ANDROID_BLUE_UART_KEY = "androidBlueUart";
     private static final String DEVICE_HANDLER_COLLECTION_KEY = "deviceHandlerCollection";
 
-    public static GunFragment newInstance(AndroidBlue mAndroidBlue, DeviceHandlerCollection mDeviceHandlerCollection) {
+    public static GunFragment newInstance(DeviceHandlerCollection mDeviceHandlerCollection) {
         GunFragment fragment = new GunFragment();
 
         final Bundle args = new Bundle();
 
-        args.putSerializable(ANDROID_BLUE_KEY, mAndroidBlue);
         args.putSerializable(DEVICE_HANDLER_COLLECTION_KEY, mDeviceHandlerCollection);
 
         fragment.setArguments(args);
@@ -48,10 +42,8 @@ public class GunFragment extends Fragment implements AndroidBlueUart.Callback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mTopBar = MainActivity.mTopBar;
 
-        mAndroidBlue = (AndroidBlue) getArguments().getSerializable(ANDROID_BLUE_KEY);
+        mAndroidBlueUart = new AndroidBlueUart(getActivity());
         mDeviceHandlerCollection = (DeviceHandlerCollection) getArguments().getSerializable(DEVICE_HANDLER_COLLECTION_KEY);
-
-        mUart = new AndroidBlueUart(getActivity());
 
         mTopBar.setMenuName("Gun");
 
@@ -106,25 +98,25 @@ public class GunFragment extends Fragment implements AndroidBlueUart.Callback {
                 stringBuilder.append(message.toCharArray(), pos, len);
                 len = 0;
             }
-            mUart.send(stringBuilder.toString());
+            mAndroidBlueUart.send(stringBuilder.toString());
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mUart.registerCallback(this);
+        mAndroidBlueUart.registerCallback(this);
 
         // Scan will automatically connect to BT adapter based on address defined at
         // AndroidBlueUart.BLE_UART_ADAPTER_ADDRESS
-        mUart.startScan();
+        mAndroidBlueUart.startScan();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        mUart.unregisterCallback(this);
-        mUart.disconnect();
+        mAndroidBlueUart.unregisterCallback(this);
+        mAndroidBlueUart.disconnect();
     }
 
     @Override
@@ -154,6 +146,6 @@ public class GunFragment extends Fragment implements AndroidBlueUart.Callback {
 
     @Override
     public void onDeviceInfoAvailable() {
-        Log.d("GunFragment", "Device info: " + mUart.getDeviceInfo());
+        Log.d("GunFragment", "Device info: " + mAndroidBlueUart.getDeviceInfo());
     }
 }
