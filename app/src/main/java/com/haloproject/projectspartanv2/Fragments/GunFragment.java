@@ -15,6 +15,9 @@ import com.haloproject.projectspartanv2.MainActivity;
 import com.haloproject.projectspartanv2.R;
 import com.haloproject.projectspartanv2.view.TopBar;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by AlexLand on 2016-01-12.
  */
@@ -65,6 +68,7 @@ public class GunFragment extends Fragment implements AndroidBlueUart.Callback {
             public void onClick(View v) {
                 Log.d("GunFragment", "Single shot clicked");
                 //TODO: send Single Shot Mode text command
+                sendString("FiringMode");
             }
         });
 
@@ -85,8 +89,10 @@ public class GunFragment extends Fragment implements AndroidBlueUart.Callback {
 
         // We can only send 20 bytes per packet, so break longer messages
         // up into 20 byte payloads
+        final List<String> payloads = new ArrayList<>();
         int len = message.length();
         int pos = 0;
+
         while(len != 0) {
             stringBuilder.setLength(0);
             if (len>=20) {
@@ -98,8 +104,18 @@ public class GunFragment extends Fragment implements AndroidBlueUart.Callback {
                 stringBuilder.append(message.toCharArray(), pos, len);
                 len = 0;
             }
-            mAndroidBlueUart.send(stringBuilder.toString());
+            payloads.add(stringBuilder.toString());
         }
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (String payload : payloads) {
+                    mAndroidBlueUart.send(payload);
+                }
+            }
+        });
+        thread.start();
     }
 
     @Override
