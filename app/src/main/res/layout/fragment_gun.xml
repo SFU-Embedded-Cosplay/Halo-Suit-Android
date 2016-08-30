@@ -11,7 +11,7 @@
 
         <view
             class="com.haloproject.projectspartanv2.view.MainButton"
-            app:Text="Reload"
+            app:Text="@string/gun_fragment_ammo_title"
             app:Icon="@drawable/empty_battery"
             android:layout_width="800px"
             android:layout_height="1000px"
@@ -30,7 +30,7 @@
 
         <view
             class="com.haloproject.projectspartanv2.view.MainButton"
-            app:Text="Firing Mode"
+            app:Text="@string/gun_fragment_firing_mode_title"
             app:Icon="@drawable/speaker_on_icon"
             android:layout_width="800px"
             android:layout_height="1000px"
