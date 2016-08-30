@@ -10,5 +10,7 @@
     <string name="menu_item_3">Radar</string>
     <string name="menu_item_4">Settings</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="gun_fragment_ammo_title">AMMO</string>
+    <string name="gun_fragment_firing_mode_title">FIRING MODE</string>
 
 </resources>
