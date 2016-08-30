@@ -14,10 +14,8 @@ import com.haloproject.bluetooth.DeviceHandlerCollection;
 import com.haloproject.projectspartanv2.MainActivity;
 import com.haloproject.projectspartanv2.R;
 import com.haloproject.projectspartanv2.view.MainButton;
+import com.haloproject.projectspartanv2.view.TextDrawable;
 import com.haloproject.projectspartanv2.view.TopBar;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by AlexLand on 2016-01-12.
@@ -26,6 +24,7 @@ public class GunFragment extends Fragment implements AndroidBlueUart.Callback {
     private TopBar mTopBar;
     private AndroidBlueUart mAndroidBlueUart;
     private DeviceHandlerCollection mDeviceHandlerCollection;
+    private MainButton mReloadButton;
 
     private static final String ANDROID_BLUE_UART_KEY = "androidBlueUart";
     private static final String DEVICE_HANDLER_COLLECTION_KEY = "deviceHandlerCollection";
@@ -56,12 +55,12 @@ public class GunFragment extends Fragment implements AndroidBlueUart.Callback {
 
         View view = inflater.inflate(R.layout.fragment_gun, container, false);
 
-        View reloadButton = view.findViewById(R.id.reloadButton);
-        reloadButton.setOnClickListener(new View.OnClickListener() {
+        mReloadButton = (MainButton) view.findViewById(R.id.reloadButton);
+        mReloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("GunFragment", "Reload");
-                sendString("Reload");
+                mAndroidBlueUart.sendString("Reload");
             }
         });
 
@@ -72,14 +71,14 @@ public class GunFragment extends Fragment implements AndroidBlueUart.Callback {
                 MainButton button = (MainButton) v;
                 if (firingMode) {
                     firingMode = false;
-                    sendString("FullAuto");
+                    mAndroidBlueUart.sendString("FullAuto");
                     button.setIcon(getResources().getDrawable(R.drawable.speaker_on_icon));
                     button.invalidate();
                     Log.d("GunFragment", "Full auto");
                 }
                 else {
                     firingMode = true;
-                    sendString("SingleShot");
+                    mAndroidBlueUart.sendString("SingleShot");
                     button.setIcon(getResources().getDrawable(R.drawable.speaker_off_icon));
                     button.invalidate();
                     Log.d("GunFragment", "Single shot");
@@ -89,40 +88,6 @@ public class GunFragment extends Fragment implements AndroidBlueUart.Callback {
         });
 
         return view;
-    }
-
-    private void sendString(String message) {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        // We can only send 20 bytes per packet, so break longer messages
-        // up into 20 byte payloads
-        final List<String> payloads = new ArrayList<>();
-        int len = message.length();
-        int pos = 0;
-
-        while(len != 0) {
-            stringBuilder.setLength(0);
-            if (len>=20) {
-                stringBuilder.append(message.toCharArray(), pos, 20 );
-                len-=20;
-                pos+=20;
-            }
-            else {
-                stringBuilder.append(message.toCharArray(), pos, len);
-                len = 0;
-            }
-            payloads.add(stringBuilder.toString());
-        }
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (String payload : payloads) {
-                    mAndroidBlueUart.send(payload);
-                }
-            }
-        });
-        thread.start();
     }
 
     @Override
@@ -159,16 +124,28 @@ public class GunFragment extends Fragment implements AndroidBlueUart.Callback {
 
     @Override
     public void onReceive(AndroidBlueUart uart, BluetoothGattCharacteristic rx) {
-        Log.d("GunFragment", "Received: " + rx.getStringValue(0));
+        final String receivedMessage = rx.getStringValue(0).trim();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                changeAmmo(receivedMessage);
+            }
+        });
+        Log.v("GunFragment", "Received: " + receivedMessage);
     }
 
     @Override
     public void onDeviceFound(BluetoothDevice device) {
-        Log.d("GunFragment", "Found device:\nName: " + device.getName() + "\nAddress:  " + device.getAddress() + "\n");
+        Log.v("GunFragment", "Found device:\nName: " + device.getName() + "\nAddress:  " + device.getAddress() + "\n");
     }
 
     @Override
     public void onDeviceInfoAvailable() {
-        Log.d("GunFragment", "Device info: " + mAndroidBlueUart.getDeviceInfo());
+        Log.v("GunFragment", "Device info: " + mAndroidBlueUart.getDeviceInfo());
+    }
+
+    private void changeAmmo(String ammoCount) {
+        mReloadButton.setIcon(new TextDrawable(getResources(), ammoCount));
+        mReloadButton.invalidate();
     }
 }
