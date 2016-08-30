@@ -116,7 +116,7 @@ public class AndroidBlueUart extends BluetoothGattCallback implements BluetoothA
     public boolean deviceInfoAvailable() { return disAvailable; }
 
     // Send data to connected UART device.
-    public void send(byte[] data) {
+    private void send(byte[] data) {
         if (tx == null || data == null || data.length == 0) {
             // Do nothing if there is no connection or message to send.
             return;
@@ -130,9 +130,43 @@ public class AndroidBlueUart extends BluetoothGattCallback implements BluetoothA
     }
 
     // Send data to connected UART device.
-    public void send(String data) {
+    private void send(String data) {
         if (data != null && !data.isEmpty()) {
             send(data.getBytes(Charset.forName("UTF-8")));
+        }
+    }
+
+    // Send a string by breaking it up into 20 byte packets
+    public void sendString(String message) {
+        if (message != null && !message.isEmpty()) {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            final List<String> payloads = new ArrayList<>();
+            int len = message.length();
+            int pos = 0;
+
+            while (len != 0) {
+                stringBuilder.setLength(0);
+                if (len >= 20) {
+                    stringBuilder.append(message.toCharArray(), pos, 20);
+                    len -= 20;
+                    pos += 20;
+                } else {
+                    stringBuilder.append(message.toCharArray(), pos, len);
+                    len = 0;
+                }
+                payloads.add(stringBuilder.toString());
+            }
+
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (String payload : payloads) {
+                        send(payload);
+                    }
+                }
+            });
+            thread.start();
         }
     }
 
