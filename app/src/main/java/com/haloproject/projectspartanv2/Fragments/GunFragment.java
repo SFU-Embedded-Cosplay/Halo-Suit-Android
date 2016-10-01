@@ -2,6 +2,7 @@ package com.haloproject.projectspartanv2.Fragments;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -25,6 +26,8 @@ public class GunFragment extends Fragment implements AndroidBlueUart.Callback {
     private AndroidBlueUart mAndroidBlueUart;
     private DeviceHandlerCollection mDeviceHandlerCollection;
     private MainButton mReloadButton;
+    private MediaPlayer mShotMediaPlayer;
+    private MediaPlayer mReloadMediaPlayer;
 
     private static final String ANDROID_BLUE_UART_KEY = "androidBlueUart";
     private static final String DEVICE_HANDLER_COLLECTION_KEY = "deviceHandlerCollection";
@@ -50,6 +53,9 @@ public class GunFragment extends Fragment implements AndroidBlueUart.Callback {
 
         mAndroidBlueUart = new AndroidBlueUart(getActivity());
         mDeviceHandlerCollection = (DeviceHandlerCollection) getArguments().getSerializable(DEVICE_HANDLER_COLLECTION_KEY);
+
+        mShotMediaPlayer = MediaPlayer.create(getActivity(), R.raw.assault_rifle_shot);
+        mReloadMediaPlayer = MediaPlayer.create(getActivity(), R.raw.assault_rifle_reload);
 
         mTopBar.setMenuName("Gun");
 
@@ -146,6 +152,21 @@ public class GunFragment extends Fragment implements AndroidBlueUart.Callback {
 
     private void changeAmmo(String ammoCount) {
         mReloadButton.setIcon(new TextDrawable(getResources(), ammoCount));
+
+        // Don't play the shot sound after the gun is reloaded.
+        // ie when the gun reloads, it sets ammo to 30, and should not shoot
+        if (!ammoCount.equals("30")) {
+            if (mShotMediaPlayer.isPlaying()) {
+                mShotMediaPlayer.pause();
+                mShotMediaPlayer.seekTo(0);
+            }
+            mShotMediaPlayer.start();
+        }
+
+        if (ammoCount.equals("0")) {
+            mReloadMediaPlayer.start();
+        }
+
         mReloadButton.invalidate();
     }
 }
