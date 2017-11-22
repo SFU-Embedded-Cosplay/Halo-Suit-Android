@@ -74,7 +74,7 @@
             <view
                 class="com.haloproject.projectspartanv2.view.MainButton"
                 app:Text="GUN"
-                app:Icon="@drawable/radar_icon"
+                app:Icon="@drawable/halo_magnum_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingRight="30px"

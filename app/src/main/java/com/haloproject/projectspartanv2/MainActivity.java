@@ -224,7 +224,7 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    //TODO: do these need to accept a view?
+    //TODO(Tyler Rubenuik): do these need to accept a view?
     public void vitals(View view) {
         view.startAnimation(onClickAnimation);
         mFragmentSelector.setCurrentFragment(0);
