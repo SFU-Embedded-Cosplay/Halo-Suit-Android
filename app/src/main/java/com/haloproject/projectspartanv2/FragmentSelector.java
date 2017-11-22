@@ -62,8 +62,6 @@ public class FragmentSelector implements Serializable {
                 return SettingsFragment.newInstance(mAndroidBlue);
             case 8:
                 return DebugFragment.newInstance(mAndroidBlue, DeviceHandlerCollection.getInstance(mAndroidBlue));
-            case 8:
-                return GunFragment.newInstance(DeviceHandlerCollection.getInstance(mAndroidBlue));
             default:
                 return MainFragment.newInstance(mAndroidBlue, this);
         }

@@ -245,37 +245,37 @@ public class MainActivity extends ActionBarActivity {
 
     public void gun(View view) {
         view.startAnimation(onClickAnimation);
-        mFragmentSelector.setCurrentFragment(8);
+        mFragmentSelector.setCurrentFragment(3);
         openCurrentFragment();
     }
 
     public void radar(View view) {
         view.startAnimation(onClickAnimation);
-        mFragmentSelector.setCurrentFragment(3);
+        mFragmentSelector.setCurrentFragment(4);
         openCurrentFragment();
     }
 
     public void batteries(View view) {
         view.startAnimation(onClickAnimation);
-        mFragmentSelector.setCurrentFragment(4);
+        mFragmentSelector.setCurrentFragment(5);
         openCurrentFragment();
     }
 
     public void warnings(View view) {
         view.startAnimation(onClickAnimation);
-        mFragmentSelector.setCurrentFragment(5);
+        mFragmentSelector.setCurrentFragment(6);
         openCurrentFragment();
     }
 
     public void settings(View view) {
         view.startAnimation(onClickAnimation);
-        mFragmentSelector.setCurrentFragment(6);
+        mFragmentSelector.setCurrentFragment(7);
         openCurrentFragment();
     }
 
     public void debug(View view) {
         view.startAnimation(onClickAnimation);
-        mFragmentSelector.setCurrentFragment(7);
+        mFragmentSelector.setCurrentFragment(8);
         openCurrentFragment();
     }
 
