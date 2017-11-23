@@ -111,8 +111,10 @@ public class GunFragment extends Fragment {
     }
 
     private void sendReloadCommand() {
-        commandCharacteristic.setValue(new byte[] {RELOAD_COMMAND});
-        mAndroidBlueLe.writeCharacteristic(commandCharacteristic);
+        if (commandCharacteristic != null) {
+            commandCharacteristic.setValue(new byte[]{RELOAD_COMMAND});
+            mAndroidBlueLe.writeCharacteristic(commandCharacteristic);
+        }
     }
 
     private void connectToGunBleService() {
@@ -164,7 +166,6 @@ public class GunFragment extends Fragment {
         return new BluetoothGattCallback() {
             @Override
             public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-                String intentAction;
                 if (newState == BluetoothProfile.STATE_CONNECTED) {
                     mAndroidBlueLe.setConnectionState(BluetoothProfile.STATE_CONNECTED);
                     Log.i(TAG, "Connected to GATT server.");
@@ -175,6 +176,8 @@ public class GunFragment extends Fragment {
                 } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                     mAndroidBlueLe.setConnectionState(BluetoothProfile.STATE_DISCONNECTED);
                     Log.i(TAG, "Disconnected from GATT server.");
+                    mAndroidBlueLe.close();
+                    mAndroidBlueLe.connect(BLE_DEVICE_ADDRESS);
                 }
             }
 
